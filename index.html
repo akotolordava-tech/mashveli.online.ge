@@ -304,7 +304,7 @@
             font-size: 13px;
         }
 
-        /* Modal Styles */
+        /* საერთო მოდი-ფანჯრის სტილები */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -318,23 +318,62 @@
         .modal-content {
             background: #fff;
             padding: 40px;
-            border-radius: 20px;
-            max-width: 450px;
+            border-radius: 25px;
+            max-width: 500px;
             width: 100%;
             position: relative;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
         .modal-close {
             position: absolute;
-            top: 15px; right: 20px;
-            background: none; border: none;
-            font-size: 24px; cursor: pointer;
+            top: 20px; right: 20px;
+            background: #f2f4ef; border: none;
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            font-size: 22px; cursor: pointer;
+            color: #0d231a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover {
+            background: #e2e8e4;
+        }
+
+        /* მისასალმებელი ფანჯრის სპეციალური სტილები */
+        #welcomeModal .modal-content {
+            background: #ffffff;
             color: #0d231a;
         }
-        .modal-content h3 {
+        .welcome-icon {
+            background-color: #d9f96b;
+            width: 50px; height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             margin-bottom: 20px;
-            color: #0d231a;
         }
+        .welcome-subtitle {
+            font-size: 14px;
+            color: #556660;
+            margin-bottom: 5px;
+        }
+        .welcome-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #0d231a;
+            margin-bottom: 15px;
+        }
+        .welcome-desc {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* შეკვეთის ფორმის სტილები */
         .form-group {
             margin-bottom: 15px;
         }
@@ -381,6 +420,19 @@
     </style>
 </head>
 <body>
+
+    <!-- მისასალმებელი ფანჯარა (იხსნება ავტომატურად საიტის გახსნისთანავე) -->
+    <div class="modal-overlay" id="welcomeModal" style="display: flex;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeWelcomeModal()">&times;</button>
+            <div class="welcome-icon">🚗</div>
+            <div class="welcome-subtitle" data-key="wel_sub">კეთილი იყოს თქვენი მობრძანება</div>
+            <div class="welcome-title" data-key="wel_title">მოგესალმებით!</div>
+            <div class="welcome-desc" data-key="wel_desc">
+                მოგესალმებით! ჩვენს პლატფორმაზე მარტივად შეძლებთ შეარჩიოთ თქვენთვის სასურველი პაკეტი, რომელიც დაგეხმარებათ ოპერატიულად შეამოწმოთ მიმდინარე ჯარიმები და მუდმივად აკონტროლოთ ტექნიკური ინსპექტირების გავლის ვადები.
+            </div>
+        </div>
+    </div>
 
     <header>
         <a href="#" class="logo">mashveli.online.ge</a>
@@ -499,7 +551,7 @@
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h3 id="modalTitle">მოთხოვნის შევსება</h3>
+            <h3 id="modalTitle" style="margin-bottom: 20px; color: #0d231a;">მოთხოვნის შევსება</h3>
             <form id="telegramForm" onsubmit="submitToTelegram(event)">
                 <input type="hidden" id="selectedPackage">
                 <div class="form-group">
@@ -548,6 +600,9 @@
     <script>
         const translations = {
             ge: {
+                wel_sub: "კეთილი იყოს თქვენი მობრძანება",
+                wel_title: "მოგესალმებით!",
+                wel_desc: "მოგესალმებით! ჩვენს პლატფორმაზე მარტივად შეძლებთ შეარჩიოთ თქვენთვის სასურველი პაკეტი, რომელიც დაგეხმარებათ ოპერატიულად შეამოწმოთ მიმდინარე ჯარიმები და მუდმივად აკონტროლოთ ტექნიკური ინსპექტირების გავლის ვადები.",
                 badge_text: "ავტომობილის მხარდაჭერა ყოველდღე",
                 hero_title: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან",
                 hero_desc: "მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
@@ -590,6 +645,9 @@
                 success_msg: "ტექსტური შეტყობინების სახით მოგივათ შეტყობინება, გთხოვთ გაეცანით მიღებულ ინფორმაციას."
             },
             en: {
+                wel_sub: "Welcome",
+                wel_title: "Welcome!",
+                wel_desc: "Welcome! On our platform you can easily choose the desired package that will help you promptly check current fines and continuously monitor technical inspection deadlines.",
                 badge_text: "Daily Car Support",
                 hero_title: "Driver Assistant — A peaceful journey starts here",
                 hero_desc: "Simple support for drivers: fill out a request, choose your preferred package, and proceed in a secure communication channel.",
@@ -632,6 +690,9 @@
                 success_msg: "You will receive a text message, please review the received information."
             },
             ru: {
+                wel_sub: "Добро пожаловать",
+                wel_title: "Добро пожаловать!",
+                wel_desc: "Добро пожаловать! На нашей платформе вы легко сможете выбрать желаемый пакет, который поможет вам оперативно проверять текущие штрафы и постоянно контролировать сроки техосмотра.",
                 badge_text: "Поддержка автомобилей каждый день",
                 hero_title: "Помощник водителя — спокойный путь начинается здесь",
                 hero_desc: "Простая поддержка для водителей: заполни заявку, выбери удобный пакет и продолжи в защищенном канале связи.",
@@ -693,6 +754,11 @@
             if (urlParams.get('paid') === 'true') {
                 document.getElementById('successMessage').style.display = 'block';
             }
+        }
+
+        // მისასალმებელი ფანჯრის დახურვა
+        function closeWelcomeModal() {
+            document.getElementById('welcomeModal').style.display = 'none';
         }
 
         function openModal(packageName) {
