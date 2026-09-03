@@ -505,7 +505,7 @@
                     <h3 id="t-s1-title">ევაკუატორი 24/7</h3>
                     <p id="t-s1-desc">სწრაფი და სანდო საევაკუატორო მომსახურება.</p>
                 </div>
-                <button class="btn-select" onclick="selectPackage('ევაკუატორი 24/7')" id="t-sel-btn-1">არჩევა / შევსება</button>
+                <a href="https://wa.me/995568965674" target="_blank" class="btn-select" id="t-sel-btn-1">არჩევა / შევსება</a>
             </div>
 
             <div class="service-box">
@@ -514,7 +514,7 @@
                     <h3 id="t-s2-title">ცხოველების ტაქსი</h3>
                     <p id="t-s2-desc">შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
                 </div>
-                <button class="btn-select" onclick="selectPackage('ცხოველების ტაქსი')" id="t-sel-btn-2">არჩევა / შევსება</button>
+                <a href="https://wa.me/995568112350" target="_blank" class="btn-select" id="t-sel-btn-2">არჩევა / შევსება</a>
             </div>
 
             <div class="service-box">
@@ -523,7 +523,7 @@
                     <h3 id="t-s3-title">ფხიზელი მძღოლი</h3>
                     <p id="t-s3-desc">თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
                 </div>
-                <button class="btn-select" onclick="selectPackage('ფხიზელი მძღოლი')" id="t-sel-btn-3">არჩევა / შევსება</button>
+                <a href="https://wa.me/995568965674" target="_blank" class="btn-select" id="t-sel-btn-3">არჩევა / შევსება</a>
             </div>
 
             <div class="service-box">
@@ -532,7 +532,7 @@
                     <h3 id="t-s4-title">პირადი მძღოლი</h3>
                     <p id="t-s4-desc">პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
                 </div>
-                <button class="btn-select" onclick="selectPackage('პირადი მძღოლი')" id="t-sel-btn-4">არჩევა / შევსება</button>
+                <a href="https://wa.me/995568965674" target="_blank" class="btn-select" id="t-sel-btn-4">არჩევა / შევსება</a>
             </div>
 
             <div class="service-box">
@@ -541,7 +541,7 @@
                     <h3 id="t-s5-title">ავტომობილის დაქოქვა</h3>
                     <p id="t-s5-desc">დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
                 </div>
-                <button class="btn-select" onclick="selectPackage('ავტომობილის დაქოქვა')" id="t-sel-btn-5">არჩევა / შევსება</button>
+                <a href="https://wa.me/995568965674" target="_blank" class="btn-select" id="t-sel-btn-5">არჩევა / შევსება</a>
             </div>
         </div>
     </section>
@@ -761,63 +761,6 @@
             formSection.style.display = 'block';
             document.getElementById('selectedPackageInput').value = packageName;
             formSection.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function submitForm(e) {
-            e.preventDefault();
-
-            // მონაცემების შეგროვება ფორმიდან
-            const fullName = document.getElementById('fullName').value;
-            const personalId = document.getElementById('personalId').value;
-            const phoneNumber = document.getElementById('phone').value;
-            const carPlate = document.getElementById('carNumber').value;
-            const techPassport = document.getElementById('techPassport').value;
-            const selectedPackage = document.getElementById('selectedPackageInput').value;
-
-            // შეტყობინების ტექსტის ფორმატირება თქვენი მოთხოვნის მიხედვით
-            const message = `🚗 ახალი განაცხადი საიტიდან:\n\n` +
-                            `👤 სახელი: ${fullName}\n` +
-                            `🆔 პირადი ნომერი: ${personalId}\n` +
-                            `📞 ტელეფონი: ${phoneNumber}\n` +
-                            `🚙 სახელმწიფო ნომერი: ${carPlate}\n` +
-                            `📄 ტექპასპორტი: ${techPassport}\n` +
-                            `📦 არჩეული პაკეტი: ${selectedPackage}\n` +
-                            `🔗 გადამოწმების ბმულები:\n\n` +
-                            `• PTI (ინსპექტირება):\nhttps://pti.ge\n\n` +
-                            `• Protocols (ისტორია):\nhttps://protocols.ge\n\n` +
-                            `• Police Videos (ჯარიმები):\nhttps://videos.police.ge\n` +
-                            `✅ თანხმობა: true`;
-
-            // Telegram ბოტის მონაცემები
-            const botToken = '8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4';
-            const chatId = '8233255349';
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
-            // მოთხოვნის გაგზავნა Telegram API-ში
-            fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.ok) {
-                    alert('მოთხოვნა წარმატებით გაიგზავნა!');
-                    document.getElementById('driverForm').reset();
-                    document.getElementById('request-form').style.display = 'none';
-                } else {
-                    alert('შეცდომა გაგზავნისას. სცადეთ თავიდან.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('კავშირის შეცდომა.');
-            });
         }
     </script>
 </body>
