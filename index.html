@@ -304,7 +304,7 @@
             font-size: 13px;
         }
 
-        /* საერთო მოდი-ფანჯრის სტილები */
+        /* მოდი-ფანჯრის სტილები */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -341,11 +341,7 @@
             background: #e2e8e4;
         }
 
-        /* მისასალმებელი ფანჯრის სპეციალური სტილები */
-        #welcomeModal .modal-content {
-            background: #ffffff;
-            color: #0d231a;
-        }
+        /* მისასალმებელი ფანჯარა */
         .welcome-icon {
             background-color: #d9f96b;
             width: 50px; height: 50px;
@@ -404,7 +400,6 @@
             margin-top: 10px;
         }
 
-        /* Success Message Box */
         .success-banner {
             display: none;
             background: #d9f96b;
@@ -421,7 +416,7 @@
 </head>
 <body>
 
-    <!-- მისასალმებელი ფანჯარა (იხსნება ავტომატურად საიტის გახსნისთანავე) -->
+    <!-- მისასალმებელი ფანჯარა -->
     <div class="modal-overlay" id="welcomeModal" style="display: flex;">
         <div class="modal-content">
             <button class="modal-close" onclick="closeWelcomeModal()">&times;</button>
@@ -443,7 +438,6 @@
         </div>
     </header>
 
-    <!-- გადახდის შემდგომი შეტყობინება -->
     <div class="container" style="padding-bottom: 0;">
         <div id="successMessage" class="success-banner" data-key="success_msg">
             ტექსტური შეტყობინების სახით მოგივათ შეტყობინება, გთხოვთ გაეცანით მიღებულ ინფორმაციას.
@@ -500,7 +494,6 @@
         </div>
 
         <div class="services-grid">
-            <!-- ევაკუატორი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv1_title">🚚 ევაკუატორი 24/7</h3>
@@ -509,7 +502,6 @@
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
             
-            <!-- ცხოველების ტაქსი -> 568 11 23 50 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv2_title">🐾 ცხოველების ტაქსი</h3>
@@ -518,7 +510,6 @@
                 <a href="https://wa.me/995568112350" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
-            <!-- ფხიზელი მძღოლი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv3_title">🛡️ ფხიზელი მძღოლი</h3>
@@ -527,7 +518,6 @@
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
-            <!-- პირადი მძღოლი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv4_title">👤 პირადი მძღოლი</h3>
@@ -536,7 +526,6 @@
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
-            <!-- ავტომობილის დაქოქვა -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv5_title">🔑 ავტომობილის დაქოქვა</h3>
@@ -756,7 +745,6 @@
             }
         }
 
-        // მისასალმებელი ფანჯრის დახურვა
         function closeWelcomeModal() {
             document.getElementById('welcomeModal').style.display = 'none';
         }
