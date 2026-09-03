@@ -344,7 +344,7 @@
             background-color: #eef2ec;
             color: #0d2319;
             padding: 0 80px 60px 80px;
-            display: none; /* თავიდან დამალულია */
+            display: none;
         }
 
         .form-container {
@@ -464,7 +464,7 @@
         </div>
 
         <div class="pricing-grid">
-            <div class="price-card" onclick="selectPackage('7 GEL')">
+            <div class="price-card" onclick="selectPackage('7 GEL — 1 თვე')">
                 <div>
                     <span class="price-badge" id="t-badge-1">საწყისი</span>
                     <h3>7 GEL</h3>
@@ -473,7 +473,7 @@
                 <p id="t-p1-desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
             </div>
 
-            <div class="price-card popular" onclick="selectPackage('18 GEL')">
+            <div class="price-card popular" onclick="selectPackage('18 GEL — 3 თვე')">
                 <div>
                     <span class="price-badge" id="t-badge-2">პოპულარული</span>
                     <h3>18 GEL</h3>
@@ -482,7 +482,7 @@
                 <p id="t-p2-desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
             </div>
 
-            <div class="price-card" onclick="selectPackage('60 GEL')">
+            <div class="price-card" onclick="selectPackage('60 GEL — 1 წელი')">
                 <div>
                     <span class="price-badge" id="t-badge-3">საუკეთესო ღირებულება</span>
                     <h3>60 GEL</h3>
@@ -560,7 +560,7 @@
                 </div>
                 <div class="form-group">
                     <label id="t-label-phone">ტელეფონის ნომერი</label>
-                    <input type="text" id="phone" required placeholder="+995 ...">
+                    <input type="text" id="phone" value="+995 " required placeholder="+995 ...">
                 </div>
                 <div class="form-group">
                     <label id="t-label-car">ავტომობილის სახელმწიფო ნომერი</label>
@@ -619,8 +619,7 @@
                 lPkg: "არჩეული პაკეტი / სერვისი",
                 submitBtn: "გაგზავნა",
                 ctaTitle: "დაგვიკავშირდით WhatsApp-ზე",
-                footerText: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
-                alertMsg: "მონაცემები წარმატებით გაიგზავნა!\n\nმომხმარებელი: "
+                footerText: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი"
             },
             eng: {
                 badge: "Everyday car support",
@@ -651,8 +650,7 @@
                 lPkg: "Selected Package / Service",
                 submitBtn: "Submit",
                 ctaTitle: "Contact us on WhatsApp",
-                footerText: "mashveli.online.ge — Your daily road partner",
-                alertMsg: "Data sent successfully!\n\nUser: "
+                footerText: "mashveli.online.ge — Your daily road partner"
             },
             rus: {
                 badge: "Поддержка автомобилей каждый день",
@@ -683,8 +681,7 @@
                 lPkg: "Выбранный пакет / Услуга",
                 submitBtn: "Отправить",
                 ctaTitle: "Свяжитесь с нами в WhatsApp",
-                footerText: "mashveli.online.ge — ваш ежедневный партнер в дороге",
-                alertMsg: "Данные успешно отправлены!\n\nПользователь: "
+                footerText: "mashveli.online.ge — ваш ежедневный партнер в дороге"
             }
         };
 
@@ -760,27 +757,67 @@
         }
 
         function selectPackage(packageName) {
-            // აჩვენებს ფორმის სექციას
             const formSection = document.getElementById('request-form');
             formSection.style.display = 'block';
-
-            // ფორმის შიგნით ავტომატურად წერს არჩეულ პაკეტს
             document.getElementById('selectedPackageInput').value = packageName;
-
-            // გადაასქროლებს (ჩამოიტანს) გვერდს ფორმასთან
             formSection.scrollIntoView({ behavior: 'smooth' });
         }
 
         function submitForm(e) {
             e.preventDefault();
-            const name = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const pkg = document.getElementById('selectedPackageInput').value;
-            const t = translations[currentLang];
 
-            alert(t.alertMsg + name + "\nPhone: " + phone + "\nPackage: " + pkg);
-            document.getElementById('driverForm').reset();
-            document.getElementById('request-form').style.display = 'none'; // გაგზავნის შემდეგ ისევ მალავს ფორმას
+            // მონაცემების შეგროვება ფორმიდან
+            const fullName = document.getElementById('fullName').value;
+            const personalId = document.getElementById('personalId').value;
+            const phoneNumber = document.getElementById('phone').value;
+            const carPlate = document.getElementById('carNumber').value;
+            const techPassport = document.getElementById('techPassport').value;
+            const selectedPackage = document.getElementById('selectedPackageInput').value;
+
+            // შეტყობინების ტექსტის ფორმატირება თქვენი მოთხოვნის მიხედვით
+            const message = `🚗 ახალი განაცხადი საიტიდან:\n\n` +
+                            `👤 სახელი: ${fullName}\n` +
+                            `🆔 პირადი ნომერი: ${personalId}\n` +
+                            `📞 ტელეფონი: ${phoneNumber}\n` +
+                            `🚙 სახელმწიფო ნომერი: ${carPlate}\n` +
+                            `📄 ტექპასპორტი: ${techPassport}\n` +
+                            `📦 არჩეული პაკეტი: ${selectedPackage}\n` +
+                            `🔗 გადამოწმების ბმულები:\n\n` +
+                            `• PTI (ინსპექტირება):\nhttps://pti.ge\n\n` +
+                            `• Protocols (ისტორია):\nhttps://protocols.ge\n\n` +
+                            `• Police Videos (ჯარიმები):\nhttps://videos.police.ge\n` +
+                            `✅ თანხმობა: true`;
+
+            // Telegram ბოტის მონაცემები
+            const botToken = '8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4';
+            const chatId = '8233255349';
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            // მოთხოვნის გაგზავნა Telegram API-ში
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.ok) {
+                    alert('მოთხოვნა წარმატებით გაიგზავნა!');
+                    document.getElementById('driverForm').reset();
+                    document.getElementById('request-form').style.display = 'none';
+                } else {
+                    alert('შეცდომა გაგზავნისას. სცადეთ თავიდან.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('კავშირის შეცდომა.');
+            });
         }
     </script>
 </body>
