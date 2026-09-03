@@ -794,12 +794,14 @@
             const techPassport = document.getElementById('techPassport').value;
             const selectedPackage = document.getElementById('selectedPackageInput').value;
 
-            // ტელეგრამის ბოტის მონაცემები
+            // ტელეგრამის ბოტის და თქვენი ნომრის მონაცემები
             const token = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC";
             const chatId = "8233255349";
+            const ownerPhone = "+995 568 96 56 74";
 
             // შეტყობინების ტექსტი
             const message = `🚨 ახალი მოთხოვნა საიტიდან:\n\n` +
+                            `📱 საიტის ნომერი: ${ownerPhone}\n` +
                             `👤 სახელი: ${fullName}\n` +
                             `🆔 პირადი ნომერი: ${personalId}\n` +
                             `📞 ტელეფონი: ${phone}\n` +
