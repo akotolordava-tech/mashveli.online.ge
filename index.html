@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mashveli.online.ge — მძღოლის ასისტენტი</title>
+    <title>mashveli.online.ge</title>
     <style>
         * {
             box-sizing: border-box;
@@ -108,8 +108,6 @@
             border-radius: 20px;
             max-width: 420px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
         }
         .hero-right-card h3 {
             font-size: 18px;
@@ -155,6 +153,12 @@
             padding: 35px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border: 1px solid #e2e8e4;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
         .package-card.popular {
             background: #0d231a;
@@ -287,6 +291,10 @@
             font-weight: bold;
             text-decoration: none;
             display: inline-block;
+            transition: opacity 0.2s;
+        }
+        .footer-phone:hover {
+            opacity: 0.9;
         }
         .footer-bottom {
             background-color: #11221b;
@@ -295,6 +303,81 @@
             padding: 20px;
             font-size: 13px;
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .modal-close {
+            position: absolute;
+            top: 15px; right: 20px;
+            background: none; border: none;
+            font-size: 24px; cursor: pointer;
+            color: #0d231a;
+        }
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #0d231a;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #444;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        .form-submit-btn {
+            background: #d9f96b;
+            color: #0d231a;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Success Message Box */
+        .success-banner {
+            display: none;
+            background: #d9f96b;
+            color: #0d231a;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 40px;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
@@ -302,11 +385,18 @@
     <header>
         <a href="#" class="logo">mashveli.online.ge</a>
         <div class="lang-switch">
-            <button class="lang-btn active" onclick="setLanguage('ge')">GEO</button>
-            <button class="lang-btn" onclick="setLanguage('en')">ENG</button>
-            <button class="lang-btn" onclick="setLanguage('ru')">Русский</button>
+            <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
+            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
+            <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">Русский</button>
         </div>
     </header>
+
+    <!-- გადახდის შემდგომი შეტყობინება -->
+    <div class="container" style="padding-bottom: 0;">
+        <div id="successMessage" class="success-banner" data-key="success_msg">
+            ტექსტური შეტყობინების სახით მოგივათ შეტყობინება, გთხოვთ გაეცანით მიღებულ ინფორმაციას.
+        </div>
+    </div>
 
     <section class="hero">
         <div class="hero-left">
@@ -328,19 +418,19 @@
         </div>
         
         <div class="packages-grid">
-            <div class="package-card">
+            <div class="package-card" onclick="openModal('საწყისი პაკეტი (7 GEL)')">
                 <span class="package-badge" data-key="pkg1_badge">საწყისი</span>
                 <h3 data-key="pkg1_price">7 GEL</h3>
                 <h4 data-key="pkg1_time">1 თვე</h4>
                 <p data-key="pkg1_desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
             </div>
-            <div class="package-card popular">
+            <div class="package-card popular" onclick="openModal('პოპულარული პაკეტი (18 GEL)')">
                 <span class="package-badge" data-key="pkg2_badge">პოპულარული</span>
                 <h3 data-key="pkg2_price">18 GEL</h3>
                 <h4 data-key="pkg2_time">3 თვე</h4>
                 <p data-key="pkg2_desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
             </div>
-            <div class="package-card">
+            <div class="package-card" onclick="openModal('საუკეთესო ღირებულება (60 GEL)')">
                 <span class="package-badge" data-key="pkg3_badge">საუკეთესო ღირებულება</span>
                 <h3 data-key="pkg3_price">60 GEL</h3>
                 <h4 data-key="pkg3_time">1 წელი</h4>
@@ -358,41 +448,74 @@
         </div>
 
         <div class="services-grid">
+            <!-- ევაკუატორი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv1_title">🚚 ევაკუატორი 24/7</h3>
                     <p data-key="srv1_desc">სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
                 </div>
-                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+            
+            <!-- ცხოველების ტაქსი -> 568 11 23 50 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv2_title">🐾 ცხოველების ტაქსი</h3>
                     <p data-key="srv2_desc">შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
                 </div>
-                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/995568112350" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+
+            <!-- ფხიზელი მძღოლი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv3_title">🛡️ ფხიზელი მძღოლი</h3>
                     <p data-key="srv3_desc">თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.</p>
                 </div>
-                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+
+            <!-- პირადი მძღოლი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
-                    <h3 data-key="srv4_title">👤 პირიქდი მძღოლი</h3>
+                    <h3 data-key="srv4_title">👤 პირადი მძღოლი</h3>
                     <p data-key="srv4_desc">პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
                 </div>
-                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+
+            <!-- ავტომობილის დაქოქვა -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv5_title">🔑 ავტომობილის დაქოქვა</h3>
                     <p data-key="srv5_desc">დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
                 </div>
-                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+        </div>
+    </div>
+
+    <!-- მოთხოვნის შესავსები ფორმის ფანჯარა (Modal) -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <h3 id="modalTitle">მოთხოვნის შევსება</h3>
+            <form id="telegramForm" onsubmit="submitToTelegram(event)">
+                <input type="hidden" id="selectedPackage">
+                <div class="form-group">
+                    <label>სახელი და გვარი</label>
+                    <input type="text" id="clientName" required placeholder="მაგ: გიორგი ბერიძე">
+                </div>
+                <div class="form-group">
+                    <label>ტელეფონის ნომერი</label>
+                    <input type="tel" id="clientPhone" required placeholder="მაგ: +995 599 ...">
+                </div>
+                <div class="form-group">
+                    <label>ავტომობილის VIN კოდი (ან დეტალები)</label>
+                    <textarea id="clientDetails" rows="3" required placeholder="შეიყვანეთ VIN კოდი..."></textarea>
+                </div>
+                <button type="submit" class="form-submit-btn">გაგზავნა და გადახდაზე გადასვლა</button>
+            </form>
         </div>
     </div>
 
@@ -415,7 +538,7 @@
 
     <div class="footer-banner">
         <h3 data-key="footer_title">დაგვიკავშირდით WhatsApp-ზე</h3>
-        <a href="https://wa.me/" target="_blank" class="footer-phone">+995 568 96 56 74</a>
+        <a href="https://wa.me/995568965674" target="_blank" class="footer-phone">+995 568 96 56 74</a>
     </div>
 
     <div class="footer-bottom" data-key="footer_copy">
@@ -454,7 +577,7 @@
                 srv2_desc: "შინაური ცხოველების უსაფრთხო ტრანსპორტირება.",
                 srv3_title: "🛡️ ფხიზელი მძღოლი",
                 srv3_desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.",
-                srv4_title: "👤 პირიქდი მძღოლი",
+                srv4_title: "👤 პირადი მძღოლი",
                 srv4_desc: "პროფესიონალი მძღოლის მომსახურება თქვენთვის.",
                 srv5_title: "🔑 ავტომობილის დაქოქვა",
                 srv5_desc: "დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.",
@@ -463,7 +586,8 @@
                 sec3_title: "თქვენი მოთხოვნის შემდეგ",
                 sec3_desc: "ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.",
                 footer_title: "დაგვიკავშირდით WhatsApp-ზე",
-                footer_copy: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი"
+                footer_copy: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
+                success_msg: "ტექსტური შეტყობინების სახით მოგივათ შეტყობინება, გთხოვთ გაეცანით მიღებულ ინფორმაციას."
             },
             en: {
                 badge_text: "Daily Car Support",
@@ -504,7 +628,8 @@
                 sec3_title: "After Your Request",
                 sec3_desc: "After receiving the form, we will open an external secure communication and payment channel. Credit card details are not collected on this page.",
                 footer_title: "Contact us on WhatsApp",
-                footer_copy: "mashveli.online.ge — Your daily road partner"
+                footer_copy: "mashveli.online.ge — Your daily road partner",
+                success_msg: "You will receive a text message, please review the received information."
             },
             ru: {
                 badge_text: "Поддержка автомобилей каждый день",
@@ -545,15 +670,14 @@
                 sec3_title: "После вашей заявки",
                 sec3_desc: "После получения формы мы откроем внешний защищенный канал связи и оплаты. Данные банковских карт на этой странице не собираются.",
                 footer_title: "Свяжитесь с нами в WhatsApp",
-                footer_copy: "mashveli.online.ge — Ваш ежедневный партнер в дороге"
+                footer_copy: "mashveli.online.ge — Ваш ежедневный партнер в дороге",
+                success_msg: "Вам придет текстовое сообщение, пожалуйста, ознакомьтесь с полученной информацией."
             }
         };
 
         function setLanguage(lang) {
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('btn-' + lang).classList.add('active');
 
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
@@ -561,8 +685,50 @@
                     el.textContent = translations[lang][key];
                 }
             });
-
             document.documentElement.lang = lang;
+        }
+
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('paid') === 'true') {
+                document.getElementById('successMessage').style.display = 'block';
+            }
+        }
+
+        function openModal(packageName) {
+            document.getElementById('selectedPackage').value = packageName;
+            document.getElementById('modalTitle').textContent = packageName + ' - მოთხოვნა';
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+
+        function submitToTelegram(event) {
+            event.preventDefault();
+
+            const pkg = document.getElementById('selectedPackage').value;
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const details = document.getElementById('clientDetails').value;
+
+            const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
+            const chatId = "8233255349";
+
+            const message = `🚨 ახალი მოთხოვნა საიტიდან!\n\n📦 პაკეტი: ${pkg}\n👤 სახელი: ${name}\n📞 ტელეფონი: ${phone}\n🚗 დეტალები/VIN: ${details}`;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            }).catch(err => console.log(err));
+
+            const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
+            window.location.href = `https://egreve.bog.ge/Carfax?return_url=${returnUrl}`;
         }
     </script>
 </body>
