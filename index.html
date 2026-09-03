@@ -475,6 +475,7 @@
         </div>
     </section>
 
+    <!-- Pricing Section: 7, 18, 60 GEL packages -->
     <section class="pricing-section" id="pricing-section-id">
         <div class="section-header">
             <span id="t-packages-sub">სერვისის პაკეტები</span>
@@ -785,7 +786,7 @@
         function submitFormAndPay(event) {
             event.preventDefault();
             
-            // ფორმის მონაცემების შეგროვება (შეგიძლიათ აქ ჩასვათ თქვენი Telegram-ში გაგზავნის კოდიც)
+            // ფორმის მონაცემების შეგროვება (აქ შეგიძლიათ მიაბათ Telegram-ში ან სერვერზე გაგზავნა)
             const formData = {
                 fullName: document.getElementById('fullName').value,
                 personalId: document.getElementById('personalId').value,
@@ -796,17 +797,17 @@
             };
             console.log("ფორმის მონაცემები გაიგზავნა:", formData);
 
-            // კონტეინერში ვცვლით ფორმას გადახდის ინსტრუქციით / ბმულით
+            // მომხმარებელს ეხსნება გადახდის ველი და ბმული: https://egreve.bog.ge/Carfax
             const container = document.getElementById('formContainerContent');
             container.innerHTML = `
                 <div class="success-box">
-                    <h3>გადაიხადეთ ბარათით</h3>
-                    <p>მოთხოვნა წარმატებით მიღებულია. გთხოვთ გადახდის დასასრულებლად გადახვიდეთ ბმულზე:</p>
+                    <h3>გადახდის ველი</h3>
+                    <p>მოთხოვნა წარმატებით მიღებულია. ბარათის მონაცემების შესაყვანად და გადახდისთვის გთხოვთ გადახვიდეთ ბმულზე:</p>
                     <a href="https://egreve.bog.ge/Carfax" target="_blank" class="btn-primary" style="margin-bottom: 20px; display: inline-flex;">
                         გადახდის გვერდზე გადასვლა ↗
                     </a>
                     <hr style="border:0; border-top:1px solid #ddd; margin: 20px 0;">
-                    <p style="font-size: 14px; color: #666;">გადახდის დასრულების შემდეგ (ან სიმულაციისთვის დააჭირეთ ქვემოთ):</p>
+                    <p style="font-size: 14px; color: #666;">გადახდის დასრულების შემდეგ დააჭირეთ ქვემოთ მოცემულ ღილაკს:</p>
                     <button onclick="showFinalSuccessMessage()" class="btn-select" style="margin: 0 auto; background-color: #113523;">
                         გადახდის დასრულება ✓
                     </button>
