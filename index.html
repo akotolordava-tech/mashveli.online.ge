@@ -12,88 +12,267 @@
         }
         body {
             font-family: Arial, sans-serif;
-            background-color: #fff;
-            color: #111;
-            padding: 40px 20px;
+            background-color: #12372A;
+            color: #fff;
+        }
+        header {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            min-height: 100vh;
+            padding: 25px 50px;
         }
-        .main-wrapper {
-            max-width: 650px;
-            width: 100%;
-        }
-        .form-title {
-            font-size: 24px;
+        .logo {
+            font-size: 20px;
             font-weight: bold;
-            color: #111;
-            margin-bottom: 25px;
-            line-height: 1.3;
+            color: #fff;
+            text-decoration: none;
         }
-        /* Packages Cards Section */
-        .packages-container {
+        .lang-switch {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 6px 15px;
             display: flex;
             gap: 15px;
-            margin-bottom: 35px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .lang-switch span {
+            color: #aaa;
+        }
+        .lang-switch span.active {
+            color: #D4E79E;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px;
+            gap: 40px;
+        }
+        .hero-left {
+            max-width: 600px;
+        }
+        .hero-tag {
+            background-color: #D4E79E;
+            color: #12372A;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .hero p {
+            font-size: 16px;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background-color: #D4E79E;
+            color: #12372A;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+        .hero-right {
+            background: #FBFADA;
+            color: #12372A;
+            padding: 30px;
+            border-radius: 24px;
+            max-width: 450px;
             width: 100%;
         }
-        .card {
-            background: #fff;
+        .hero-right-icon {
+            background: #D4E79E;
+            width: 50px;
+            height: 50px;
             border-radius: 12px;
-            padding: 20px 15px;
-            flex: 1;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 1px solid #eaeaea;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
         }
-        .card:hover {
-            transform: translateY(-3px);
-            border-color: #000;
-        }
-        .card.popular {
-            background: #111f17;
-            color: #fff;
-            border-color: #111f17;
-        }
-        .badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: bold;
+        .hero-right h3 {
+            font-size: 18px;
             margin-bottom: 10px;
         }
-        .card:not(.popular) .badge {
-            background: #eef2e2;
-            color: #3b5323;
-        }
-        .card.popular .badge {
-            background: #cff85c;
-            color: #111;
-        }
-        .price {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 3px;
-        }
-        .duration {
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        .desc {
-            font-size: 11px;
+        .hero-right p {
+            font-size: 14px;
+            color: #444;
             line-height: 1.4;
-            color: #666;
         }
-        .card.popular .desc {
+
+        /* Sections with light bg */
+        .light-section {
+            background-color: #F4F6EE;
+            color: #12372A;
+            padding: 80px 50px;
+        }
+        .section-title-wrapper {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-title-wrapper small {
+            font-size: 14px;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .section-title-wrapper h2 {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        /* Packages Grid */
+        .packages-grid {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+        .pkg-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            width: 320px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .pkg-card:hover {
+            transform: translateY(-5px);
+        }
+        .pkg-card.featured {
+            background: #12372A;
+            color: #fff;
+            border-color: #12372A;
+        }
+        .pkg-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .pkg-card:not(.featured) .pkg-badge {
+            background: #E8F0DC;
+            color: #12372A;
+        }
+        .pkg-card.featured .pkg-badge {
+            background: #D4E79E;
+            color: #12372A;
+        }
+        .pkg-price {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .pkg-duration {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .pkg-desc {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+        .pkg-card.featured .pkg-desc {
             color: #ccc;
         }
 
-        /* Form Styles */
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #e0e0e0;
+        }
+        .service-icon {
+            background: #E8F0DC;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        .service-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .service-card p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        .btn-whatsapp {
+            background: #12372A;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        /* Form Container Modal/Section */
+        .form-section {
+            background: #F4F6EE;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+        }
+        .form-box {
+            background: #fff;
+            max-width: 650px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 24px;
+            color: #12372A;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
         .form-group {
             margin-bottom: 22px;
         }
@@ -101,182 +280,234 @@
             display: block;
             font-size: 14px;
             font-weight: bold;
-            color: #111;
             margin-bottom: 8px;
         }
-        .form-group input[type="text"],
-        .form-group input[type="tel"] {
+        .form-group input {
             width: 100%;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border: 1px solid #ccc;
-            border-radius: 6px;
+            border-radius: 10px;
             font-size: 14px;
-            color: #555;
-            background: #fff;
-        }
-        .form-group input:focus {
-            outline: none;
-            border-color: #000;
         }
         .tech-passport-img {
             width: 100%;
-            max-width: 100%;
-            border-radius: 6px;
+            border-radius: 10px;
             margin-bottom: 10px;
-            border: 1px solid #e0e0e0;
-            display: block;
+            border: 1px solid #ddd;
         }
         .package-options {
             display: flex;
-            flex-direction: column;
             gap: 10px;
+            flex-wrap: wrap;
         }
         .package-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             border: 1px solid #ccc;
-            padding: 8px 14px;
-            border-radius: 6px;
-            width: fit-content;
-            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
             font-size: 14px;
             font-weight: bold;
-            background: #fff;
-        }
-        .package-option input {
-            accent-color: #000;
-        }
-        .consent-group {
+            cursor: pointer;
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            margin-top: 25px;
-            margin-bottom: 25px;
-        }
-        .consent-group input {
-            margin-top: 3px;
-            accent-color: #000;
-            width: 16px;
-            height: 16px;
-        }
-        .consent-group label {
-            font-size: 13px;
-            color: #333;
-            line-height: 1.4;
-            font-weight: normal;
+            gap: 8px;
+            align-items: center;
         }
         .submit-btn {
-            background-color: #000;
+            background-color: #12372A;
             color: #fff;
-            padding: 10px 24px;
+            width: 100%;
+            padding: 14px;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 16px;
             cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+            margin-top: 10px;
         }
-        .submit-btn:hover {
-            opacity: 0.85;
+
+        /* Footer banner */
+        .footer-banner {
+            background: #D4E79E;
+            color: #12372A;
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .footer-banner h3 {
+            margin-bottom: 15px;
+        }
+        .phone-badge {
+            background: #12372A;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        footer {
+            background: #0d281e;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            color: #888;
         }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper">
-        <div class="form-title">
-            მაშველი - მძღოლის დამხმარე /<br>
-            Mashveli - Driver Assistance
+    <header>
+        <a href="#" class="logo">mashveli.online.ge</a>
+        <div class="lang-switch">
+            <span class="active">GEO</span>
+            <span>ENG</span>
+            <span>Русский</span>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-tag">ავტომობილის მხარდაჭერა ყოველდღე</div>
+            <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქიდან</h1>
+            <p>მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+            <a href="#orderForm" class="btn-primary">↓ დაიწყეთ მოთხოვნა</a>
+        </div>
+        <div class="hero-right">
+            <div class="hero-right-icon">🛡️</div>
+            <h3>ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
+            <p>ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.</p>
+        </div>
+    </section>
+
+    <section class="light-section">
+        <div class="section-title-wrapper">
+            <small>სერვისის პაკეტები</small>
+            <h2>აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
         </div>
 
-        <!-- პაკეტების ბარათები თავში -->
-        <div class="packages-container">
-            <div class="card" onclick="selectPackage('7 GEL')">
-                <span class="badge">საწყისი</span>
-                <div class="price">7 GEL</div>
-                <div class="duration">1 თვე</div>
-                <div class="desc">მოკლევადიანი მხარდაჭერა.</div>
+        <div class="packages-grid">
+            <div class="pkg-card" onclick="selectPkg('7 GEL')">
+                <span class="pkg-badge">საწყისი</span>
+                <div class="pkg-price">7 GEL</div>
+                <div class="pkg-duration">1 თვე</div>
+                <div class="pkg-desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</div>
             </div>
 
-            <div class="card popular" onclick="selectPackage('18 GEL')">
-                <span class="badge">პოპულარული</span>
-                <div class="price">18 GEL</div>
-                <div class="duration">3 თვე</div>
-                <div class="desc">მუდმივი დახმარებისთვის.</div>
+            <div class="pkg-card featured" onclick="selectPkg('18 GEL')">
+                <span class="pkg-badge">პოპულარული</span>
+                <div class="pkg-price">18 GEL</div>
+                <div class="pkg-duration">3 თვე</div>
+                <div class="pkg-desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</div>
             </div>
 
-            <div class="card" onclick="selectPackage('60 GEL')">
-                <span class="badge">საუკეთესო</span>
-                <div class="price">60 GEL</div>
-                <div class="duration">1 წელი</div>
-                <div class="desc">მთელი წლის განმავლობაში.</div>
+            <div class="pkg-card" onclick="selectPkg('60 GEL')">
+                <span class="pkg-badge">საუკეთესო ღირებულება</span>
+                <div class="pkg-price">60 GEL</div>
+                <div class="pkg-duration">1 წელი</div>
+                <div class="pkg-desc">გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</div>
             </div>
         </div>
 
-        <form id="telegramForm" onsubmit="submitToTelegram(event)">
-            
-            <div class="form-group">
-                <label>სრული სახელი / Full Name</label>
-                <input type="text" id="clientName" required placeholder="აკაკი თოლორდავა">
-            </div>
+        <div class="section-title-wrapper" style="margin-top: 60px;">
+            <h2>თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი</h2>
+        </div>
 
-            <div class="form-group">
-                <label>პირადი ნომერი / Personal ID *</label>
-                <input type="text" id="personalId" required placeholder="11223344556">
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🚚</div>
+                <h3>ევაკუატორი 24/7</h3>
+                <p>სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
+                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-
-            <div class="form-group">
-                <label>ტელეფონის ნომერი / Phone Number *</label>
-                <input type="tel" id="clientPhone" required value="+995">
+            <div class="service-card">
+                <div class="service-icon">🐾</div>
+                <h3>ცხოველების ტაქსი</h3>
+                <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
+                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-
-            <div class="form-group">
-                <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number *</label>
-                <input type="text" id="carPlate" required placeholder="AT011OL">
+            <div class="service-card">
+                <div class="service-icon">🛡️</div>
+                <h3>ფხიზელი მძღოლი</h3>
+                <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
+                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-
-            <div class="form-group">
-                <label>ტექპასპორტის ნომერი / Tech Passport Number *</label>
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" data-real-src="შენი სურათის ლინკი" alt="Tech Passport Sample" class="tech-passport-img" id="passportImg">
-                <input type="text" id="techPassport" required placeholder="AA1234567">
+            <div class="service-card">
+                <div class="service-icon">👤</div>
+                <h3>პირიდი მძღოლი</h3>
+                <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
+                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+            <div class="service-card">
+                <div class="service-icon">🔑</div>
+                <h3>ავტომობილის დაქოქვა</h3>
+                <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
+                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+        </div>
+    </section>
 
-            <div class="form-group">
-                <label>არჩეული პაკეტი / Selected Package *</label>
-                <div class="package-options">
-                    <label class="package-option"><input type="radio" name="package" value="7 GEL" required> 🛈 7 GEL</label>
-                    <label class="package-option"><input type="radio" name="package" value="18 GEL"> 🛈 18 GEL</label>
-                    <label class="package-option"><input type="radio" name="package" value="60 GEL"> 🛈 60 GEL</label>
+    <!-- Form Section -->
+    <section class="form-section" id="orderForm">
+        <div class="form-box">
+            <h2 style="margin-bottom: 25px;">მოთხოვნის ფორმა / Form</h2>
+            <form id="telegramForm" onsubmit="submitToTelegram(event)">
+                <div class="form-group">
+                    <label>სრული სახელი / Full Name</label>
+                    <input type="text" id="clientName" required placeholder="აკაკი თოლორდავა">
                 </div>
-            </div>
 
-            <div class="consent-group">
-                <input type="checkbox" id="consent" required>
-                <label for="consent">ვეთანხმები რომ ავტომობილისა და საკონტაქტო მონაცემების დამუშავებას ჯარიმებისა და ტექინსპექტირების ვადების შესამოწმებლად.</label>
-            </div>
+                <div class="form-group">
+                    <label>პირადი ნომერი / Personal ID *</label>
+                    <input type="text" id="personalId" required placeholder="11223344556">
+                </div>
 
-            <button type="submit" class="submit-btn">შემოწმება / Submit →</button>
-        </form>
+                <div class="form-group">
+                    <label>ტელეფონის ნომერი / Phone Number *</label>
+                    <input type="tel" id="clientPhone" required value="+995">
+                </div>
+
+                <div class="form-group">
+                    <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number *</label>
+                    <input type="text" id="carPlate" required placeholder="AT011OL">
+                </div>
+
+                <div class="form-group">
+                    <label>ტექპასპორტის ნომერი / Tech Passport Number *</label>
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="Tech Passport" class="tech-passport-img">
+                    <input type="text" id="techPassport" required placeholder="AA1234567">
+                </div>
+
+                <div class="form-group">
+                    <label>არჩეული პაკეტი / Selected Package *</label>
+                    <div class="package-options">
+                        <label class="package-option"><input type="radio" name="package" value="7 GEL" required> 7 GEL</label>
+                        <label class="package-option"><input type="radio" name="package" value="18 GEL"> 18 GEL</label>
+                        <label class="package-option"><input type="radio" name="package" value="60 GEL"> 60 GEL</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">შემოწმება / Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="footer-banner">
+        <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
+        <a href="https://wa.me/995568965674" class="phone-badge">+995 568 96 56 74</a>
     </div>
 
-    <script>
-        // ბარათებზე დაჭერისას ავტომატურად მონიშნავს შესაბამის რადიო ღილაკს და ჩამოასხამს ფორმაზე
-        function selectPackage(pkgValue) {
-            const radios = document.querySelectorAll('input[name="package"]');
-            radios.forEach(radio => {
-                if (radio.value === pkgValue) {
-                    radio.checked = true;
-                }
-            });
-            // გადაიტანს ყურადღებას ფორმაზე
-            document.getElementById('telegramForm').scrollIntoView({ behavior: 'smooth' });
-        }
-    </script>
+    <footer>
+        mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
+    </footer>
 
     <script>
+        function selectPkg(val) {
+            const radios = document.querySelectorAll('input[name="package"]');
+            radios.forEach(r => {
+                if(r.value === val) r.checked = true;
+            });
+            document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
         function submitToTelegram(event) {
             event.preventDefault();
 
@@ -285,7 +516,6 @@
             const phone = document.getElementById('clientPhone').value;
             const carPlate = document.getElementById('carPlate').value;
             const techPassport = document.getElementById('techPassport').value;
-            
             const selectedPkg = document.querySelector('input[name="package"]:checked').value;
 
             const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
@@ -302,10 +532,7 @@
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chatId,
-                    text: message
-                })
+                body: JSON.stringify({ chat_id: chatId, text: message })
             }).catch(err => console.log(err));
 
             const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
