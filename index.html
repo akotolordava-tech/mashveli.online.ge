@@ -323,7 +323,7 @@
             width: fit-content;
         }
 
-        /* Form Section (ვიდეოდან) */
+        /* Form Section */
         .form-section {
             background-color: #eef2ec;
             color: #0d2319;
@@ -366,44 +366,6 @@
             outline: none;
         }
 
-        /* Secure Process Section */
-        .secure-process {
-            background-color: #eef2ec;
-            padding: 0 80px 80px 80px;
-        }
-
-        .secure-box {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .secure-icon {
-            background: #d4f367;
-            width: 55px;
-            height: 55px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .secure-content h3 {
-            font-size: 18px;
-            color: #0d2319;
-            margin-bottom: 5px;
-        }
-
-        .secure-content p {
-            font-size: 14px;
-            color: #66706b;
-        }
-
         /* CTA Banner */
         .cta-banner {
             background-color: #d4f367;
@@ -439,7 +401,7 @@
         }
 
         @media(max-width: 900px) {
-            .hero, .pricing-section, .services-section, .form-section, .secure-process, .cta-banner, footer {
+            .hero, .pricing-section, .services-section, .form-section, .cta-banner, footer {
                 padding-left: 20px;
                 padding-right: 20px;
             }
@@ -457,7 +419,7 @@
             <div class="lang-switch">
                 <span class="active" onclick="setLang('geo')">GEO</span>
                 <span onclick="setLang('eng')">ENG</span>
-                <span onclick="setLang('rus')">Русский</span>
+                <span onclick="setLang('rus')">RUS</span>
             </div>
         </div>
 
@@ -487,33 +449,33 @@
         <div class="pricing-grid">
             <div class="price-card">
                 <div>
-                    <span class="price-badge">საწყისი</span>
+                    <span class="price-badge" id="t-badge-1">საწყისი</span>
                     <h3>7 GEL</h3>
-                    <h4>1 თვე</h4>
+                    <h4 id="t-p1-time">1 თვე</h4>
                 </div>
-                <p>მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
+                <p id="t-p1-desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
             </div>
 
             <div class="price-card popular">
                 <div>
-                    <span class="price-badge">პოპულარული</span>
+                    <span class="price-badge" id="t-badge-2">პოპულარული</span>
                     <h3>18 GEL</h3>
-                    <h4>3 თვე</h4>
+                    <h4 id="t-p2-time">3 თვე</h4>
                 </div>
-                <p>დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
+                <p id="t-p2-desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
             </div>
 
             <div class="price-card">
                 <div>
-                    <span class="price-badge">საუკეთესო ღირებულება</span>
+                    <span class="price-badge" id="t-badge-3">საუკეთესო ღირებულება</span>
                     <h3>60 GEL</h3>
-                    <h4>1 წელი</h4>
+                    <h4 id="t-p3-time">1 წელი</h4>
                 </div>
-                <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
+                <p id="t-p3-desc">გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
             </div>
         </div>
 
-        <div class="extra-services-banner">
+        <div class="extra-services-banner" id="t-extra-banner">
             თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
         </div>
     </section>
@@ -523,133 +485,254 @@
             <div class="service-box">
                 <div>
                     <div class="service-icon">🚚</div>
-                    <h3>ევაკუატორი 24/7</h3>
-                    <p>სწრაფი და სანდო საევაკუატორო მომსახურება.</p>
+                    <h3 id="t-s1-title">ევაკუატორი 24/7</h3>
+                    <p id="t-s1-desc">სწრაფი და სანდო საევაკუატორო მომსახურება.</p>
                 </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/" class="btn-whatsapp" id="t-wa-btn-1">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
             <div class="service-box">
                 <div>
                     <div class="service-icon">🐾</div>
-                    <h3>ცხოველების ტაქსი</h3>
-                    <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
+                    <h3 id="t-s2-title">ცხოველების ტაქსი</h3>
+                    <p id="t-s2-desc">შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
                 </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/" class="btn-whatsapp" id="t-wa-btn-2">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
             <div class="service-box">
                 <div>
                     <div class="service-icon">🛡️</div>
-                    <h3>ფხიზელი მძღოლი</h3>
-                    <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
+                    <h3 id="t-s3-title">ფხიზელი მძღოლი</h3>
+                    <p id="t-s3-desc">თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
                 </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/" class="btn-whatsapp" id="t-wa-btn-3">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
             <div class="service-box">
                 <div>
                     <div class="service-icon">👤</div>
-                    <h3>პირადი მძღოლი</h3>
-                    <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
+                    <h3 id="t-s4-title">პირადი მძღოლი</h3>
+                    <p id="t-s4-desc">პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
                 </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/" class="btn-whatsapp" id="t-wa-btn-4">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
             <div class="service-box">
                 <div>
                     <div class="service-icon">🔑</div>
-                    <h3>ავტომობილის დაქოქვა</h3>
-                    <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
+                    <h3 id="t-s5-title">ავტომობილის დაქოქვა</h3>
+                    <p id="t-s5-desc">დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
                 </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+                <a href="https://wa.me/" class="btn-whatsapp" id="t-wa-btn-5">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
         </div>
     </section>
 
     <section class="form-section" id="request-form">
         <div class="form-container">
-            <h2>მომხმარებლის მოთხოვნა</h2>
+            <h2 id="t-form-title">მომხმარებლის მოთხოვნა</h2>
             <form id="driverForm" onsubmit="submitForm(event)">
                 <div class="form-group">
-                    <label>სრული სახელი / Full Name</label>
+                    <label id="t-label-name">სრული სახელი</label>
                     <input type="text" id="fullName" required placeholder="შეიყვანეთ სახელი და გვარი">
                 </div>
                 <div class="form-group">
-                    <label>პირადი ნომერი / Personal ID</label>
+                    <label id="t-label-pid">პირადი ნომერი</label>
                     <input type="text" id="personalId" required placeholder="11 ციფრიანი პირადი ნომერი">
                 </div>
                 <div class="form-group">
-                    <label>ტელეფონის ნომერი / Phone Number</label>
+                    <label id="t-label-phone">ტელეფონის ნომერი</label>
                     <input type="text" id="phone" required placeholder="+995 ...">
                 </div>
                 <div class="form-group">
-                    <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number</label>
+                    <label id="t-label-car">ავტომობილის სახელმწიფო ნომერი</label>
                     <input type="text" id="carNumber" required placeholder="მაგ: AA011OI">
                 </div>
                 <div class="form-group">
-                    <label>ტექპასპორტის ნომერი / Tech Passport Number</label>
+                    <label id="t-label-tech">ტექპასპორტის ნომერი</label>
                     <input type="text" id="techPassport" required placeholder="მაგ: EVA0159681">
                 </div>
                 <div class="form-group">
-                    <label>არჩეული პაკეტი / Selected Package</label>
+                    <label id="t-label-pkg">არჩეული პაკეტი</label>
                     <select id="packageSelect">
-                        <option value="7 GEL (1 თვე)">7 GEL — 1 თვე</option>
-                        <option value="18 GEL (3 თვე)" selected>18 GEL — 3 თვე</option>
-                        <option value="60 GEL (1 წელი)">60 GEL — 1 წელი</option>
+                        <option value="7 GEL">7 GEL — <span id="opt-1">1 თვე</span></option>
+                        <option value="18 GEL" selected>18 GEL — <span id="opt-2">3 თვე</span></option>
+                        <option value="60 GEL">60 GEL — <span id="opt-3">1 წელი</span></option>
                     </select>
                 </div>
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">გაგზავნა / Submit</button>
+                <button type="submit" class="btn-primary" id="t-submit-btn" style="width: 100%; justify-content: center;">გაგზავნა</button>
             </form>
         </div>
     </section>
 
-    <section class="secure-process">
-        <div class="secure-box">
-            <div class="secure-icon">🔒</div>
-            <div class="secure-content">
-                <h3>თქვენი მოთხოვნის შემდეგ</h3>
-                <p>ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.</p>
-            </div>
-        </div>
-    </section>
-
     <section class="cta-banner">
-        <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
+        <h3 id="t-cta-title">დაგვიკავშირდით WhatsApp-ზე</h3>
         <a href="https://wa.me/995568965674" class="phone-number">+995 568 96 56 74</a>
     </section>
 
     <footer>
-        mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
+        <span id="t-footer">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</span>
     </footer>
 
     <script>
+        const translations = {
+            geo: {
+                badge: "ავტომობილის მხარდაჭერა ყოველდღე",
+                title: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან",
+                desc: "მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
+                btnText: "დაიწყეთ მოთხოვნა",
+                cardTitle: "ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.",
+                cardDesc: "ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.",
+                pkgSub: "სერვისის პაკეტები",
+                pkgTitle: "აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა",
+                b1: "საწყისი", b2: "პოპულარული", b3: "საუკეთესო ღირებულება",
+                p1Time: "1 თვე", p1Desc: "მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.",
+                p2Time: "3 თვე", p2Desc: "დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.",
+                p3Time: "1 წელი", p3Desc: "გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.",
+                extraBanner: "თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი",
+                s1Title: "ევაკუატორი 24/7", s1Desc: "სწრაფი და სანდო საევაკუატორო მომსახურება.",
+                s2Title: "ცხოველების ტაქსი", s2Desc: "შინაური ცხოველების უსაფრთხო ტრანსპორტირება.",
+                s3Title: "ფხიზელი მძღოლი", s3Desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.",
+                s4Title: "პირადი მძღოლი", s4Desc: "პროფესიონალი მძღოლის მომსახურება თქვენთვის.",
+                s5Title: "ავტომობილის დაქოქვა", s5Desc: "დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.",
+                waBtn: "💬 WhatsApp-ზე მოგვწერეთ",
+                formTitle: "მომხმარებლის მოთხოვნა",
+                lName: "სრული სახელი / Full Name",
+                lPid: "პირადი ნომერი / Personal ID",
+                lPhone: "ტელეფონის ნომერი / Phone Number",
+                lCar: "ავტომობილის სახელმწიფო ნომერი / Car Plate",
+                lTech: "ტექპასპორტის ნომერი / Tech Passport",
+                lPkg: "არჩეული პაკეტი / Selected Package",
+                submitBtn: "გაგზავნა / Submit",
+                ctaTitle: "დაგვიკავშირდით WhatsApp-ზე",
+                footerText: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
+                alertMsg: "მონაცემები წარმატებით გაიგზავნა!\n\nმომხმარებელი: "
+            },
+            eng: {
+                badge: "Everyday car support",
+                title: "Driver Assistant — A calmer road starts here",
+                desc: "Simple support for drivers: submit a request, choose your preferred package, and continue through a secure communication channel.",
+                btnText: "Start request",
+                cardTitle: "One space for drivers<br>Simple. Fast. Secure.",
+                cardDesc: "We collect only the essential information needed to connect with your request.",
+                pkgSub: "Service Packages",
+                pkgTitle: "Choose the support that suits you",
+                b1: "Starter", b2: "Popular", b3: "Best Value",
+                p1Time: "1 Month", p1Desc: "Flexible choice for short-term driver support.",
+                p2Time: "3 Months", p2Desc: "Balanced package for ongoing assistance.",
+                p3Time: "1 Year", p3Desc: "Long-term support throughout the year.",
+                extraBanner: "You can additionally choose your preferred service option",
+                s1Title: "Tow Truck 24/7", s1Desc: "Fast and reliable towing service.",
+                s2Title: "Pet Taxi", s2Desc: "Safe transportation for your pets.",
+                s3Title: "Sober Driver", s3Desc: "Your car safely driven to your destination.",
+                s4Title: "Personal Driver", s4Desc: "Professional driver service for you.",
+                s5Title: "Car Jump Start", s5Desc: "Help starting your car quickly and safely.",
+                waBtn: "💬 Contact on WhatsApp",
+                formTitle: "User Request",
+                lName: "Full Name",
+                lPid: "Personal ID",
+                lPhone: "Phone Number",
+                lCar: "Car Plate Number",
+                lTech: "Tech Passport Number",
+                lPkg: "Selected Package",
+                submitBtn: "Submit",
+                ctaTitle: "Contact us on WhatsApp",
+                footerText: "mashveli.online.ge — Your daily road partner",
+                alertMsg: "Data sent successfully!\n\nUser: "
+            },
+            rus: {
+                badge: "Поддержка автомобилей каждый день",
+                title: "Помощь водителям — спокойная дорога начинается здесь",
+                desc: "Простая поддержка для водителей: отправьте заявку, выберите пакет и продолжите в защищенном канале связи.",
+                btnText: "Начать заявку",
+                cardTitle: "Единое пространство для водителя<br>Просто. Быстро. Безопасно.",
+                cardDesc: "Мы собираем только ту основную информацию, которая необходима для связи по вашей заявке.",
+                pkgSub: "Пакеты услуг",
+                pkgTitle: "Выберите подходящую поддержку",
+                b1: "Начальный", b2: "Популярный", b3: "Лучшая цена",
+                p1Time: "1 Месяц", p1Desc: "Гибкий выбор для краткосрочной поддержки водителя.",
+                p2Time: "3 Месяца", p2Desc: "Сбалансированный пакет для постоянной помощи.",
+                p3Time: "1 Год", p3Desc: "Долгосрочная поддержка в течение всего года.",
+                extraBanner: "Вы можете дополнительно выбрать желаемую услугу",
+                s1Title: "Эвакуатор 24/7", s1Desc: "Быстрые и надежные услуги эвакуатора.",
+                s2Title: "Зоотакси", s2Desc: "Безопасная перевозка домашних животных.",
+                s3Title: "Трезвый водитель", s3Desc: "Безопасная доставка вашего автомобиля в пункт назначения.",
+                s4Title: "Личный водитель", s4Desc: "Услуги профессионального водителя для вас.",
+                s5Title: "Запуск двигателя", s5Desc: "Помощь в быстром и безопасном запуске автомобиля.",
+                waBtn: "💬 Написать в WhatsApp",
+                formTitle: "Заявка пользователя",
+                lName: "ФИО / Full Name",
+                lPid: "Личный номер / Personal ID",
+                lPhone: "Номер телефона / Phone",
+                lCar: "Гос. номер машины / Car Plate",
+                lTech: "Номер техпаспорта / Tech Passport",
+                lPkg: "Выбранный пакет / Package",
+                submitBtn: "Отправить / Submit",
+                ctaTitle: "Свяжитесь с нами в WhatsApp",
+                footerText: "mashveli.online.ge — ваш ежедневный партнер в дороге",
+                alertMsg: "Данные успешно отправлены!\n\nПользователь: "
+            }
+        };
+
+        let currentLang = 'geo';
+
         function setLang(lang) {
+            currentLang = lang;
             document.querySelectorAll('.lang-switch span').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
 
-            if(lang === 'eng') {
-                document.getElementById('t-badge').innerText = 'Everyday support for drivers';
-                document.getElementById('t-title').innerText = 'Driver assistance for a calmer road ahead';
-                document.getElementById('t-desc').innerText = 'Straightforward support for drivers: submit a request, choose a package, and continue through a secure communication channel.';
-                document.getElementById('t-btn').innerText = 'Start your request';
-                document.getElementById('t-packages-sub').innerText = 'Service Packages';
-                document.getElementById('t-packages-title').innerText = 'Choose the support that suits you';
-            } else if(lang === 'rus') {
-                document.getElementById('t-badge').innerText = 'Поддержка автомобилей каждый день';
-                document.getElementById('t-title').innerText = 'Помощь водителям — спокойная дорога начинается здесь';
-                document.getElementById('t-desc').innerText = 'Простая поддержка для водителей: отправьте заявку, выберите пакет и продолжите в защищенном канале связи.';
-                document.getElementById('t-btn').innerText = 'Начать заявку';
-                document.getElementById('t-packages-sub').innerText = 'Пакеты услуг';
-                document.getElementById('t-packages-title').innerText = 'Выберите подходящую поддержку';
-            } else {
-                document.getElementById('t-badge').innerText = 'ავტომობილის მხარდაჭერა ყოველდღე';
-                document.getElementById('t-title').innerText = 'მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან';
-                document.getElementById('t-desc').innerText = 'მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.';
-                document.getElementById('t-btn').innerText = 'დაიწყეთ მოთხოვნა';
-                document.getElementById('t-packages-sub').innerText = 'სერვისის პაკეტები';
-                document.getElementById('t-packages-title').innerText = 'აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა';
+            const t = translations[lang];
+
+            document.getElementById('t-badge').innerText = t.badge;
+            document.getElementById('t-title').innerText = t.title;
+            document.getElementById('t-desc').innerText = t.desc;
+            document.getElementById('t-btn').innerText = t.btnText;
+            document.getElementById('t-card-title').innerHTML = t.cardTitle;
+            document.getElementById('t-card-desc').innerText = t.cardDesc;
+
+            document.getElementById('t-packages-sub').innerText = t.pkgSub;
+            document.getElementById('t-packages-title').innerText = t.pkgTitle;
+
+            document.getElementById('t-badge-1').innerText = t.b1;
+            document.getElementById('t-p1-time').innerText = t.p1Time;
+            document.getElementById('t-p1-desc').innerText = t.p1Desc;
+
+            document.getElementById('t-badge-2').innerText = t.b2;
+            document.getElementById('t-p2-time').innerText = t.p2Time;
+            document.getElementById('t-p2-desc').innerText = t.p2Desc;
+
+            document.getElementById('t-badge-3').innerText = t.b3;
+            document.getElementById('t-p3-time').innerText = t.p3Time;
+            document.getElementById('t-p3-desc').innerText = t.p3Desc;
+
+            document.getElementById('t-extra-banner').innerText = t.extraBanner;
+
+            document.getElementById('t-s1-title').innerText = t.s1Title;
+            document.getElementById('t-s1-desc').innerText = t.s1Desc;
+            document.getElementById('t-s2-title').innerText = t.s2Title;
+            document.getElementById('t-s2-desc').innerText = t.s2Desc;
+            document.getElementById('t-s3-title').innerText = t.s3Title;
+            document.getElementById('t-s3-desc').innerText = t.s3Desc;
+            document.getElementById('t-s4-title').innerText = t.s4Title;
+            document.getElementById('t-s4-desc').innerText = t.s4Desc;
+            document.getElementById('t-s5-title').innerText = t.s5Title;
+            document.getElementById('t-s5-desc').innerText = t.s5Desc;
+
+            for(let i=1; i<=5; i++) {
+                document.getElementById('t-wa-btn-' + i).innerText = t.waBtn;
             }
+
+            document.getElementById('t-form-title').innerText = t.formTitle;
+            document.getElementById('t-label-name').innerText = t.lName;
+            document.getElementById('t-label-pid').innerText = t.lPid;
+            document.getElementById('t-label-phone').innerText = t.lPhone;
+            document.getElementById('t-label-car').innerText = t.lCar;
+            document.getElementById('t-label-tech').innerText = t.lTech;
+            document.getElementById('t-label-pkg').innerText = t.lPkg;
+            document.getElementById('t-submit-btn').innerText = t.submitBtn;
+            document.getElementById('t-cta-title').innerText = t.ctaTitle;
+            document.getElementById('t-footer').innerText = t.footerText;
         }
 
         function submitForm(e) {
@@ -657,8 +740,9 @@
             const name = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
             const pkg = document.getElementById('packageSelect').value;
+            const t = translations[currentLang];
 
-            alert(`მონაცემები წარმატებით გაიგზავნა!\n\nმომხმარებელი: ${name}\nპაკეტი: ${pkg}\nტელეფონი: ${phone}`);
+            alert(t.alertMsg + name + "\nPhone: " + phone + "\nPackage: " + pkg);
             document.getElementById('driverForm').reset();
         }
     </script>
