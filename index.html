@@ -3,107 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mashveli.online.ge - Driver Assistance</title>
+    <title>mashveli.online.ge — მძღოლის ასისტენტი</title>
+    <link href="https://fonts.googleapis.com/css2?family=BPG+Banner+LG:wght@400;700&family=Fira+GO:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Fira GO', sans-serif;
         }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #12372A;
-            color: #fff;
+            background-color: #0d2319;
+            color: #ffffff;
+            overflow-x: hidden;
         }
-        header {
+
+        /* Header / Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0d2319 0%, #133827 100%);
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            padding: 40px 80px;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .navbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 25px 50px;
         }
+
         .logo {
-            font-size: 20px;
-            font-weight: bold;
-            color: #fff;
-            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.5px;
         }
+
         .lang-switch {
             background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 6px 15px;
+            padding: 6px 16px;
+            border-radius: 30px;
             display: flex;
             gap: 15px;
             font-size: 14px;
-            cursor: pointer;
-        }
-        .lang-switch span {
-            color: #aaa;
-        }
-        .lang-switch span.active {
-            color: #D4E79E;
-            font-weight: bold;
         }
 
-        /* Hero Section */
-        .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 50px;
-            gap: 40px;
+        .lang-switch span {
+            cursor: pointer;
+            opacity: 0.7;
         }
-        .hero-left {
-            max-width: 600px;
-        }
-        .hero-tag {
-            background-color: #D4E79E;
-            color: #12372A;
-            padding: 8px 16px;
+
+        .lang-switch span.active {
+            background: #d4f367;
+            color: #0d2319;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 14px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
+            opacity: 1;
+            font-weight: 600;
         }
-        .hero h1 {
-            font-size: 42px;
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 50px;
+            align-items: center;
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+
+        .badge {
+            background-color: #d4f367;
+            color: #0d2319;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .hero-text h1 {
+            font-size: 44px;
             line-height: 1.2;
             margin-bottom: 20px;
+            font-weight: 700;
         }
-        .hero p {
+
+        .hero-text p {
             font-size: 16px;
-            color: #ccc;
-            line-height: 1.5;
-            margin-bottom: 30px;
+            color: #d1d8d5;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            max-width: 550px;
         }
+
         .btn-primary {
-            background-color: #D4E79E;
-            color: #12372A;
+            background-color: #d4f367;
+            color: #0d2319;
             padding: 14px 28px;
             border-radius: 12px;
-            font-weight: bold;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            text-decoration: none;
+            transition: 0.3s;
         }
+
         .btn-primary:hover {
-            opacity: 0.9;
+            background-color: #c2e250;
+            transform: translateY(-2px);
         }
-        .hero-right {
-            background: #FBFADA;
-            color: #12372A;
-            padding: 30px;
+
+        .hero-card {
+            background: #eef2ec;
+            color: #0d2319;
+            padding: 40px;
             border-radius: 24px;
-            max-width: 450px;
-            width: 100%;
+            position: relative;
+            overflow: hidden;
         }
-        .hero-right-icon {
-            background: #D4E79E;
+
+        .hero-card-icon {
+            background: #d4f367;
             width: 50px;
             height: 50px;
             border-radius: 12px;
@@ -111,433 +139,429 @@
             align-items: center;
             justify-content: center;
             font-size: 24px;
-            margin-bottom: 15px;
-        }
-        .hero-right h3 {
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-        .hero-right p {
-            font-size: 14px;
-            color: #444;
-            line-height: 1.4;
-        }
-
-        /* Sections with light bg */
-        .light-section {
-            background-color: #F4F6EE;
-            color: #12372A;
-            padding: 80px 50px;
-        }
-        .section-title-wrapper {
-            text-align: center;
-            margin-bottom: 50px;
-        }
-        .section-title-wrapper small {
-            font-size: 14px;
-            color: #555;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .section-title-wrapper h2 {
-            font-size: 32px;
-            font-weight: bold;
-        }
-
-        /* Packages Grid */
-        .packages-grid {
-            display: flex;
-            justify-content: center;
-            gap: 25px;
-            margin-bottom: 50px;
-            flex-wrap: wrap;
-        }
-        .pkg-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 30px;
-            width: 320px;
-            border: 1px solid #e0e0e0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .pkg-card:hover {
-            transform: translateY(-5px);
-        }
-        .pkg-card.featured {
-            background: #12372A;
-            color: #fff;
-            border-color: #12372A;
-        }
-        .pkg-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
             margin-bottom: 20px;
         }
-        .pkg-card:not(.featured) .pkg-badge {
-            background: #E8F0DC;
-            color: #12372A;
-        }
-        .pkg-card.featured .pkg-badge {
-            background: #D4E79E;
-            color: #12372A;
-        }
-        .pkg-price {
-            font-size: 36px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .pkg-duration {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        .pkg-desc {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.4;
-        }
-        .pkg-card.featured .pkg-desc {
-            color: #ccc;
+
+        .hero-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
-        /* Services Grid */
+        .hero-card p {
+            font-size: 14px;
+            color: #4a5550;
+            line-height: 1.5;
+        }
+
+        .card-decor {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            display: flex;
+            gap: 4px;
+        }
+
+        .card-decor span {
+            width: 15px;
+            height: 40px;
+            background: #d4f367;
+            transform: skewX(-30deg);
+        }
+
+        /* Section: Pricing */
+        .pricing-section {
+            background-color: #eef2ec;
+            color: #0d2319;
+            padding: 80px;
+        }
+
+        .section-header {
+            margin-bottom: 50px;
+        }
+
+        .section-header span {
+            font-size: 13px;
+            color: #556b60;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .section-header h2 {
+            font-size: 32px;
+            color: #0d2319;
+            margin-top: 8px;
+            font-weight: 700;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .price-card {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .price-card.popular {
+            background: #113523;
+            color: #ffffff;
+        }
+
+        .price-badge {
+            background: #e2e8df;
+            color: #2d3732;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            width: fit-content;
+            margin-bottom: 20px;
+        }
+
+        .price-card.popular .price-badge {
+            background: #d4f367;
+            color: #0d2319;
+        }
+
+        .price-card h3 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0d2319;
+            margin-bottom: 5px;
+        }
+
+        .price-card.popular h3 {
+            color: #d4f367;
+        }
+
+        .price-card h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .price-card p {
+            font-size: 14px;
+            color: #66706b;
+            line-height: 1.5;
+        }
+
+        .price-card.popular p {
+            color: #cbd5d0;
+        }
+
+        .extra-services-banner {
+            border-top: 1px solid #d0d9cd;
+            border-bottom: 1px solid #d0d9cd;
+            padding: 25px 0;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #22382e;
+            position: relative;
+        }
+
+        /* Services Grid Section */
+        .services-section {
+            background-color: #eef2ec;
+            color: #0d2319;
+            padding: 0 80px 80px 80px;
+        }
+
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            max-width: 1100px;
-            margin: 0 auto;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
         }
-        .service-card {
-            background: #fff;
+
+        .service-box {
+            background: #ffffff;
+            padding: 35px;
             border-radius: 20px;
-            padding: 30px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+
         .service-icon {
-            background: #E8F0DC;
+            background: #edf5ea;
             width: 45px;
             height: 45px;
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 20px;
             margin-bottom: 20px;
-            font-size: 20px;
         }
-        .service-card h3 {
-            font-size: 20px;
+
+        .service-box h3 {
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 10px;
         }
-        .service-card p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 20px;
-            line-height: 1.4;
-        }
-        .btn-whatsapp {
-            background: #12372A;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
+
+        .service-box p {
             font-size: 13px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
+            color: #66706b;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .btn-whatsapp {
+            background: #113523;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            text-decoration: none;
+            width: fit-content;
+            transition: 0.3s;
         }
 
-        /* Form Container Modal/Section */
-        .form-section {
-            background: #F4F6EE;
-            padding: 50px;
-            display: flex;
-            justify-content: center;
+        .btn-whatsapp:hover {
+            background: #194d33;
         }
-        .form-box {
-            background: #fff;
-            max-width: 650px;
-            width: 100%;
+
+        /* Bottom Info & Footer */
+        .secure-process {
+            background-color: #eef2ec;
+            padding: 0 80px 80px 80px;
+        }
+
+        .secure-box {
+            background: #ffffff;
             padding: 40px;
-            border-radius: 24px;
-            color: #12372A;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-        .form-group {
-            margin-bottom: 22px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-        .tech-passport-img {
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-        }
-        .package-options {
+            border-radius: 20px;
             display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .package-option {
-            border: 1px solid #ccc;
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            gap: 8px;
             align-items: center;
-        }
-        .submit-btn {
-            background-color: #12372A;
-            color: #fff;
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
+            gap: 30px;
         }
 
-        /* Footer banner */
-        .footer-banner {
-            background: #D4E79E;
-            color: #12372A;
-            text-align: center;
-            padding: 60px 20px;
+        .secure-icon {
+            background: #d4f367;
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
         }
-        .footer-banner h3 {
+
+        .secure-content h3 {
+            font-size: 18px;
+            color: #0d2319;
+            margin-bottom: 5px;
+        }
+
+        .secure-content p {
+            font-size: 14px;
+            color: #66706b;
+        }
+
+        .cta-banner {
+            background-color: #d4f367;
+            color: #0d2319;
+            padding: 60px 80px;
+            text-align: center;
+        }
+
+        .cta-banner h3 {
+            font-size: 18px;
+            font-weight: 700;
             margin-bottom: 15px;
         }
-        .phone-badge {
-            background: #12372A;
-            color: #fff;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-weight: bold;
+
+        .phone-number {
+            background: #113523;
+            color: #d4f367;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
             display: inline-block;
             text-decoration: none;
-            font-size: 18px;
         }
+
         footer {
-            background: #0d281e;
+            background-color: #0d2319;
+            color: #8b9991;
+            padding: 30px 80px;
             text-align: center;
-            padding: 25px;
             font-size: 13px;
-            color: #888;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Responsive */
+        @media(max-width: 900px) {
+            .hero, .pricing-section, .services-section, .secure-process, .cta-banner, footer {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+            .hero-content, .pricing-grid, .services-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="#" class="logo">mashveli.online.ge</a>
-        <div class="lang-switch">
-            <span class="active">GEO</span>
-            <span>ENG</span>
-            <span>Русский</span>
-        </div>
-    </header>
-
     <section class="hero">
-        <div class="hero-left">
-            <div class="hero-tag">ავტომობილის მხარდაჭერა ყოველდღე</div>
-            <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქიდან</h1>
-            <p>მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
-            <a href="#orderForm" class="btn-primary">↓ დაიწყეთ მოთხოვნა</a>
+        <div class="navbar">
+            <div class="logo">mashveli.online.ge</div>
+            <div class="lang-switch">
+                <span class="active">GEO</span>
+                <span>ENG</span>
+                <span>Русский</span>
+            </div>
         </div>
-        <div class="hero-right">
-            <div class="hero-right-icon">🛡️</div>
-            <h3>ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
-            <p>ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.</p>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
+                <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან</h1>
+                <p>მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+                <a href="#pricing" class="btn-primary">
+                    <span>↘</span> დაიწყეთ მოთხოვნა
+                </a>
+            </div>
+            <div class="hero-card">
+                <div class="hero-card-icon">🛡️</div>
+                <h3>ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
+                <p>ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.</p>
+                <div class="card-decor">
+                    <span></span><span></span><span></span><span></span>
+                </div>
+            </div>
         </div>
     </section>
 
-    <section class="light-section">
-        <div class="section-title-wrapper">
-            <small>სერვისის პაკეტები</small>
+    <section class="pricing-section" id="pricing">
+        <div class="section-header">
+            <span>სერვისის პაკეტები</span>
             <h2>აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
         </div>
 
-        <div class="packages-grid">
-            <div class="pkg-card" onclick="selectPkg('7 GEL')">
-                <span class="pkg-badge">საწყისი</span>
-                <div class="pkg-price">7 GEL</div>
-                <div class="pkg-duration">1 თვე</div>
-                <div class="pkg-desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</div>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <div>
+                    <span class="price-badge">საწყისი</span>
+                    <h3>7 GEL</h3>
+                    <h4>1 თვე</h4>
+                </div>
+                <p>მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
             </div>
 
-            <div class="pkg-card featured" onclick="selectPkg('18 GEL')">
-                <span class="pkg-badge">პოპულარული</span>
-                <div class="pkg-price">18 GEL</div>
-                <div class="pkg-duration">3 თვე</div>
-                <div class="pkg-desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</div>
+            <div class="price-card popular">
+                <div>
+                    <span class="price-badge">პოპულარული</span>
+                    <h3>18 GEL</h3>
+                    <h4>3 თვე</h4>
+                </div>
+                <p>დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
             </div>
 
-            <div class="pkg-card" onclick="selectPkg('60 GEL')">
-                <span class="pkg-badge">საუკეთესო ღირებულება</span>
-                <div class="pkg-price">60 GEL</div>
-                <div class="pkg-duration">1 წელი</div>
-                <div class="pkg-desc">გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</div>
+            <div class="price-card">
+                <div>
+                    <span class="price-badge">საუკეთესო ღირებულება</span>
+                    <h3>60 GEL</h3>
+                    <h4>1 წელი</h4>
+                </div>
+                <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
             </div>
         </div>
 
-        <div class="section-title-wrapper" style="margin-top: 60px;">
-            <h2>თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი</h2>
+        <div class="extra-services-banner">
+            თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
         </div>
+    </section>
 
+    <section class="services-section">
         <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">🚚</div>
-                <h3>ევაკუატორი 24/7</h3>
-                <p>სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
-                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">🚚</div>
+                    <h3>ევაკუატორი 24/7</h3>
+                    <p>სწრაფი და სანდო საევაკუატორო მომსახურება.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-            <div class="service-card">
-                <div class="service-icon">🐾</div>
-                <h3>ცხოველების ტაქსი</h3>
-                <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
-                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">🐾</div>
+                    <h3>ცხოველების ტაქსი</h3>
+                    <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-            <div class="service-card">
-                <div class="service-icon">🛡️</div>
-                <h3>ფხიზელი მძღოლი</h3>
-                <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
-                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">🛡️</div>
+                    <h3>ფხიზელი მძღოლი</h3>
+                    <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-            <div class="service-card">
-                <div class="service-icon">👤</div>
-                <h3>პირიდი მძღოლი</h3>
-                <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
-                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">👤</div>
+                    <h3>პირადი მძღოლი</h3>
+                    <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-            <div class="service-card">
-                <div class="service-icon">🔑</div>
-                <h3>ავტომობილის დაქოქვა</h3>
-                <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
-                <a href="https://wa.me/995568965674" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">🔑</div>
+                    <h3>ავტომობილის დაქოქვა</h3>
+                    <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
         </div>
     </section>
 
-    <!-- Form Section -->
-    <section class="form-section" id="orderForm">
-        <div class="form-box">
-            <h2 style="margin-bottom: 25px;">მოთხოვნის ფორმა / Form</h2>
-            <form id="telegramForm" onsubmit="submitToTelegram(event)">
-                <div class="form-group">
-                    <label>სრული სახელი / Full Name</label>
-                    <input type="text" id="clientName" required placeholder="აკაკი თოლორდავა">
-                </div>
-
-                <div class="form-group">
-                    <label>პირადი ნომერი / Personal ID *</label>
-                    <input type="text" id="personalId" required placeholder="11223344556">
-                </div>
-
-                <div class="form-group">
-                    <label>ტელეფონის ნომერი / Phone Number *</label>
-                    <input type="tel" id="clientPhone" required value="+995">
-                </div>
-
-                <div class="form-group">
-                    <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number *</label>
-                    <input type="text" id="carPlate" required placeholder="AT011OL">
-                </div>
-
-                <div class="form-group">
-                    <label>ტექპასპორტის ნომერი / Tech Passport Number *</label>
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="Tech Passport" class="tech-passport-img">
-                    <input type="text" id="techPassport" required placeholder="AA1234567">
-                </div>
-
-                <div class="form-group">
-                    <label>არჩეული პაკეტი / Selected Package *</label>
-                    <div class="package-options">
-                        <label class="package-option"><input type="radio" name="package" value="7 GEL" required> 7 GEL</label>
-                        <label class="package-option"><input type="radio" name="package" value="18 GEL"> 18 GEL</label>
-                        <label class="package-option"><input type="radio" name="package" value="60 GEL"> 60 GEL</label>
-                    </div>
-                </div>
-
-                <button type="submit" class="submit-btn">შემოწმება / Submit</button>
-            </form>
+    <section class="secure-process">
+        <div class="secure-box">
+            <div class="secure-icon">🔒</div>
+            <div class="secure-content">
+                <h3>თქვენი მოთხოვნის შემდეგ</h3>
+                <p>ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.</p>
+            </div>
         </div>
     </section>
 
-    <div class="footer-banner">
+    <section class="cta-banner">
         <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
-        <a href="https://wa.me/995568965674" class="phone-badge">+995 568 96 56 74</a>
-    </div>
+        <a href="https://wa.me/995568965674" class="phone-number">+995 568 96 56 74</a>
+    </section>
 
     <footer>
         mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
     </footer>
 
-    <script>
-        function selectPkg(val) {
-            const radios = document.querySelectorAll('input[name="package"]');
-            radios.forEach(r => {
-                if(r.value === val) r.checked = true;
-            });
-            document.getElementById('orderForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function submitToTelegram(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('clientName').value;
-            const personalId = document.getElementById('personalId').value;
-            const phone = document.getElementById('clientPhone').value;
-            const carPlate = document.getElementById('carPlate').value;
-            const techPassport = document.getElementById('techPassport').value;
-            const selectedPkg = document.querySelector('input[name="package"]:checked').value;
-
-            const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
-            const chatId = "8233255349";
-
-            const message = `🚨 ახალი მოთხოვნა საიტიდან!\n\n` +
-                            `👤 სახელი: ${name}\n` +
-                            `🆔 პირადი ნომერი: ${personalId}\n` +
-                            `📞 ტელეფონი: ${phone}\n` +
-                            `🚗 მანქანის ნომერი: ${carPlate}\n` +
-                            `📄 ტექპასპორტის ნომერი: ${techPassport}\n` +
-                            `📦 არჩეული პაკეტი: ${selectedPkg}`;
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message })
-            }).catch(err => console.log(err));
-
-            const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
-            window.location.href = `https://egreve.bog.ge/Carfax?return_url=${returnUrl}`;
-        }
-    </script>
 </body>
 </html>
