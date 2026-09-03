@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mashveli.online.ge — მძღოლის ასისტენტი</title>
-    <link href="https://fonts.googleapis.com/css2?family=BPG+Banner+LG:wght@400;700&family=Fira+GO:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+GO:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        /* Header / Hero Section */
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, #0d2319 0%, #133827 100%);
             background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), 
@@ -57,13 +57,14 @@
         .lang-switch span {
             cursor: pointer;
             opacity: 0.7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            transition: 0.2s;
         }
 
         .lang-switch span.active {
             background: #d4f367;
             color: #0d2319;
-            padding: 4px 12px;
-            border-radius: 20px;
             opacity: 1;
             font-weight: 600;
         }
@@ -114,6 +115,9 @@
             align-items: center;
             gap: 10px;
             transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
         }
 
         .btn-primary:hover {
@@ -154,22 +158,7 @@
             line-height: 1.5;
         }
 
-        .card-decor {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            display: flex;
-            gap: 4px;
-        }
-
-        .card-decor span {
-            width: 15px;
-            height: 40px;
-            background: #d4f367;
-            transform: skewX(-30deg);
-        }
-
-        /* Section: Pricing */
+        /* Pricing Section */
         .pricing-section {
             background-color: #eef2ec;
             color: #0d2319;
@@ -226,7 +215,6 @@
             font-size: 12px;
             font-weight: 600;
             display: inline-block;
-            width: fit-content;
             margin-bottom: 20px;
         }
 
@@ -262,18 +250,56 @@
             color: #cbd5d0;
         }
 
-        .extra-services-banner {
+        /* Form Section (ვიდეოში რომ არის ნაჩვენები) */
+        .form-section {
+            background-color: #eef2ec;
+            color: #0d2319;
+            padding: 60px 80px;
             border-top: 1px solid #d0d9cd;
-            border-bottom: 1px solid #d0d9cd;
-            padding: 25px 0;
-            text-align: center;
-            font-size: 15px;
-            font-weight: 600;
-            color: #22382e;
-            position: relative;
         }
 
-        /* Services Grid Section */
+        .form-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .form-container h2 {
+            font-size: 26px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3732;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5d0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .form-group input:focus {
+            border-color: #113523;
+        }
+
+        /* Services Grid */
         .services-section {
             background-color: #eef2ec;
             color: #0d2319;
@@ -333,75 +359,9 @@
             align-items: center;
             gap: 8px;
             width: fit-content;
-            transition: 0.3s;
         }
 
-        .btn-whatsapp:hover {
-            background: #194d33;
-        }
-
-        /* Bottom Info & Footer */
-        .secure-process {
-            background-color: #eef2ec;
-            padding: 0 80px 80px 80px;
-        }
-
-        .secure-box {
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .secure-icon {
-            background: #d4f367;
-            width: 55px;
-            height: 55px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-
-        .secure-content h3 {
-            font-size: 18px;
-            color: #0d2319;
-            margin-bottom: 5px;
-        }
-
-        .secure-content p {
-            font-size: 14px;
-            color: #66706b;
-        }
-
-        .cta-banner {
-            background-color: #d4f367;
-            color: #0d2319;
-            padding: 60px 80px;
-            text-align: center;
-        }
-
-        .cta-banner h3 {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .phone-number {
-            background: #113523;
-            color: #d4f367;
-            padding: 12px 30px;
-            border-radius: 12px;
-            font-size: 20px;
-            font-weight: 700;
-            display: inline-block;
-            text-decoration: none;
-        }
-
+        /* Footer */
         footer {
             background-color: #0d2319;
             color: #8b9991;
@@ -411,9 +371,8 @@
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Responsive */
         @media(max-width: 900px) {
-            .hero, .pricing-section, .services-section, .secure-process, .cta-banner, footer {
+            .hero, .pricing-section, .services-section, .form-section {
                 padding-left: 20px;
                 padding-right: 20px;
             }
@@ -425,40 +384,39 @@
 </head>
 <body>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="navbar">
             <div class="logo">mashveli.online.ge</div>
             <div class="lang-switch">
-                <span class="active">GEO</span>
-                <span>ENG</span>
-                <span>Русский</span>
+                <span class="active" onclick="setLang('geo')">GEO</span>
+                <span onclick="setLang('eng')">ENG</span>
+                <span onclick="setLang('rus')">Русский</span>
             </div>
         </div>
 
         <div class="hero-content">
             <div class="hero-text">
-                <div class="badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
-                <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან</h1>
-                <p>მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
-                <a href="#pricing" class="btn-primary">
-                    <span>↘</span> დაიწყეთ მოთხოვნა
+                <div class="badge" id="t-badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
+                <h1 id="t-title">მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან</h1>
+                <p id="t-desc">მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+                <a href="#request-form" class="btn-primary">
+                    <span>↘</span> <span id="t-btn">დაიწყეთ მოთხოვნა</span>
                 </a>
             </div>
             <div class="hero-card">
                 <div class="hero-card-icon">🛡️</div>
-                <h3>ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
-                <p>ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.</p>
-                <div class="card-decor">
-                    <span></span><span></span><span></span><span></span>
-                </div>
+                <h3 id="t-card-title">ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
+                <p id="t-card-desc">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.</p>
             </div>
         </div>
     </section>
 
-    <section class="pricing-section" id="pricing">
+    <!-- Pricing Section -->
+    <section class="pricing-section">
         <div class="section-header">
-            <span>სერვისის პაკეტები</span>
-            <h2>აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
+            <span id="t-packages-sub">სერვისის პაკეტები</span>
+            <h2 id="t-packages-title">აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
         </div>
 
         <div class="pricing-grid">
@@ -489,13 +447,44 @@
                 <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
             </div>
         </div>
+    </section>
 
-        <div class="extra-services-banner">
-            თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
+    <!-- Request Form Section (ვიდეოდან) -->
+    <section class="form-section" id="request-form">
+        <div class="form-container">
+            <h2>მომხმარებლის მოთხოვნა</h2>
+            <form id="driverForm" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label>სრული სახელი / Full Name</label>
+                    <input type="text" id="fullName" required placeholder="შეიყვანეთ სახელი და გვარი">
+                </div>
+                <div class="form-group">
+                    <label>პირადი ნომერი / Personal ID</label>
+                    <input type="text" id="personalId" required placeholder="11 ციფრიანი პირადი ნომერი">
+                </div>
+                <div class="form-group">
+                    <label>ტელეფონის ნომერი / Phone Number</label>
+                    <input type="text" id="phone" required placeholder="+995 ...">
+                </div>
+                <div class="form-group">
+                    <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number</label>
+                    <input type="text" id="carNumber" required placeholder="მაგ: AA011OI">
+                </div>
+                <div class="form-group">
+                    <label>არჩეული პაკეტი / Selected Package</label>
+                    <select id="packageSelect">
+                        <option value="7 GEL (1 თვე)">7 GEL — 1 თვე</option>
+                        <option value="18 GEL (3 თვე)" selected>18 GEL — 3 თვე</option>
+                        <option value="60 GEL (1 წელი)">60 GEL — 1 წელი</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">გაგზავნა / Submit</button>
+            </form>
         </div>
     </section>
 
-    <section class="services-section">
+    <!-- Services Grid -->
+    <section class="services-section" style="padding-top: 80px;">
         <div class="services-grid">
             <div class="service-box">
                 <div>
@@ -523,45 +512,55 @@
                 </div>
                 <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
-
-            <div class="service-box">
-                <div>
-                    <div class="service-icon">👤</div>
-                    <h3>პირადი მძღოლი</h3>
-                    <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
-                </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
-            </div>
-
-            <div class="service-box">
-                <div>
-                    <div class="service-icon">🔑</div>
-                    <h3>ავტომობილის დაქოქვა</h3>
-                    <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
-                </div>
-                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
-            </div>
         </div>
-    </section>
-
-    <section class="secure-process">
-        <div class="secure-box">
-            <div class="secure-icon">🔒</div>
-            <div class="secure-content">
-                <h3>თქვენი მოთხოვნის შემდეგ</h3>
-                <p>ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta-banner">
-        <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
-        <a href="https://wa.me/995568965674" class="phone-number">+995 568 96 56 74</a>
     </section>
 
     <footer>
         mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
     </footer>
 
+    <script>
+        // ენების შეცვლის მარტივი ფუნქცია (GEO / ENG / RUS)
+        function setLang(lang) {
+            document.querySelectorAll('.lang-switch span').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if(lang === 'eng') {
+                document.getElementById('t-badge').innerText = 'Everyday support for drivers';
+                document.getElementById('t-title').innerText = 'Driver assistance for a calmer road ahead';
+                document.getElementById('t-desc').innerText = 'Straightforward support for drivers: submit a request, choose a package, and continue through a secure communication channel.';
+                document.getElementById('t-btn').innerText = 'Start your request';
+                document.getElementById('t-packages-sub').innerText = 'Service Packages';
+                document.getElementById('t-packages-title').innerText = 'Choose the support that suits you';
+            } else if(lang === 'rus') {
+                document.getElementById('t-badge').innerText = 'Поддержка автомобилей каждый день';
+                document.getElementById('t-title').innerText = 'Помощь водителям — спокойная дорога начинается здесь';
+                document.getElementById('t-desc').innerText = 'Простая поддержка для водителей: отправьте заявку, выберите пакет и продолжите в защищенном канале связи.';
+                document.getElementById('t-btn').innerText = 'Начать заявку';
+                document.getElementById('t-packages-sub').innerText = 'Пакеты услуг';
+                document.getElementById('t-packages-title').innerText = 'Выберите подходящую поддержку';
+            } else {
+                document.getElementById('t-badge').innerText = 'ავტომობილის მხარდაჭერა ყოველდღე';
+                document.getElementById('t-title').innerText = 'მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან';
+                document.getElementById('t-desc').innerText = 'მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.';
+                document.getElementById('t-btn').innerText = 'დაიწყეთ მოთხოვნა';
+                document.getElementById('t-packages-sub').innerText = 'სერვისის პაკეტები';
+                document.getElementById('t-packages-title').innerText = 'აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა';
+            }
+        }
+
+        // ფორმის გაგზავნის სიმულაცია (ვიდეოში რომ გიჩვენებთ გაგზავნის შედეგს)
+        function submitForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value;
+            const pid = document.getElementById('personalId').value;
+            const phone = document.getElementById('phone').value;
+            const car = document.getElementById('carNumber').value;
+            const pkg = document.getElementById('packageSelect').value;
+
+            alert(`მონაცემები წარმატებით გაიგზავნა!\n\nმომხმარებელი: ${name}\nპაკეტი: ${pkg}\nტელეფონი: ${phone}`);
+            document.getElementById('driverForm').reset();
+        }
+    </script>
 </body>
 </html>
