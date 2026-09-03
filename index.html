@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mashveli.online.ge - მძღოლის ასისტენტი</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #12281d;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: #0d1e15;
+            border-bottom: 1px solid #1e3d2e;
+        }
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .lang-switch {
+            background: #193828;
+            padding: 8px 15px;
+            border-radius: 30px;
+            display: flex;
+            gap: 15px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .lang-switch span {
+            cursor: pointer;
+            color: #b0c4b8;
+        }
+        .lang-switch span.active {
+            color: #d4fc79;
+            background: #234d38;
+            padding: 4px 10px;
+            border-radius: 15px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: #163827;
+            background-image: linear-gradient(rgba(22, 56, 39, 0.9), rgba(22, 56, 39, 0.9)), 
+                              linear-gradient(90deg, #1f4a34 1px, transparent 1px), 
+                              linear-gradient(0deg, #1f4a34 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            padding: 80px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .hero-content {
+            max-width: 600px;
+        }
+        .badge {
+            background: #d4fc79;
+            color: #12281d;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .hero h1 {
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+        .hero p {
+            font-size: 16px;
+            color: #d1ded5;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background: #d4fc79;
+            color: #12281d;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .btn-primary:hover {
+            background: #bfee55;
+        }
+        .hero-card {
+            background: #f4f6f0;
+            color: #12281d;
+            padding: 40px;
+            border-radius: 24px;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-card-icon {
+            background: #d4fc79;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .hero-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .hero-card p {
+            font-size: 14px;
+            color: #4a5a50;
+        }
+
+        /* Sections General */
+        .section {
+            background: #f4f6f0;
+            color: #12281d;
+            padding: 80px 50px;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .section-header span {
+            font-size: 14px;
+            font-weight: bold;
+            color: #3b5c48;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .section-header h2 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #12281d;
+            margin-top: 10px;
+        }
+
+        /* Pricing Cards */
+        .pricing-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .price-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            width: 330px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #e2e8df;
+        }
+        .price-card.popular {
+            background: #163827;
+            color: #ffffff;
+            border: none;
+        }
+        .price-badge {
+            background: #e5ebd9;
+            color: #163827;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            align-self: flex-start;
+            margin-bottom: 20px;
+        }
+        .price-card.popular .price-badge {
+            background: #d4fc79;
+            color: #163827;
+        }
+        .price-card h3 {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .price-card .duration {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .price-card p {
+            font-size: 14px;
+            color: #66786c;
+        }
+        .price-card.popular p {
+            color: #cbdad1;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .service-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            width: 330px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8df;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .service-icon {
+            background: #f0f4ec;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .service-card h3 {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .service-card p {
+            font-size: 14px;
+            color: #66786c;
+            margin-bottom: 20px;
+        }
+        .btn-bot {
+            background: #163827;
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .btn-bot:hover {
+            background: #234d38;
+        }
+
+        /* Footer / Contact */
+        .cta-section {
+            background: #d4fc79;
+            color: #12281d;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        .cta-section h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .phone-btn {
+            background: #163827;
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        footer {
+            background: #0d1e15;
+            color: #8da395;
+            text-align: center;
+            padding: 30px;
+            font-size: 14px;
+            border-top: 1px solid #1e3d2e;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="logo">mashveli.online.ge</div>
+        <div class="lang-switch">
+            <span class="active">GEO</span>
+            <span>ENG</span>
+            <span>Русский</span>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
+            <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქიდან</h1>
+            <p>მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+            <!-- Tally.so ფორმის ბმული -->
+            <a href="https://tally.so/r/w4LXXN" target="_blank" class="btn-primary"><span>↙</span> დაიწყეთ მოთხოვნა</a>
+        </div>
+        <div class="hero-card">
+            <div class="hero-card-icon">🛡️</div>
+            <h3>ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
+            <p>ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასავშირებლად.</p>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section">
+        <div class="section-header">
+            <span>სერვისის პაკეტები</span>
+            <h2>აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
+        </div>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <span class="price-badge">საწყისი</span>
+                <div>
+                    <h3>7 GEL</h3>
+                    <div class="duration">1 თვე</div>
+                    <p>მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
+                </div>
+            </div>
+            <div class="price-card popular">
+                <span class="price-badge">პოპულარული</span>
+                <div>
+                    <h3>18 GEL</h3>
+                    <div class="duration">3 თვე</div>
+                    <p>დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
+                </div>
+            </div>
+            <div class="price-card">
+                <span class="price-badge">საუკეთესო ღირებულება</span>
+                <div>
+                    <h3>60 GEL</h3>
+                    <div class="duration">1 წელი</div>
+                    <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section" style="background-color: #eaf0e6;">
+        <div class="section-header">
+            <h2>თქვენ შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი</h2>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div>
+                    <div class="service-icon">🚚</div>
+                    <h3>ევაკუატორი 24/7</h3>
+                    <p>სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
+                </div>
+                <!-- Telegram Bot ბმული -->
+                <a href="https://t.me/YOUR_BOT_USERNAME" target="_blank" class="btn-bot">💬 მოგვწერეთ ბოტში</a>
+            </div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon">🐾</div>
+                    <h3>ცხოველების ტაქსი</h3>
+                    <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
+                </div>
+                <a href="https://t.me/YOUR_BOT_USERNAME" target="_blank" class="btn-bot">💬 მოგვწერეთ ბოტში</a>
+            </div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon">🛡️</div>
+                    <h3>ფხიზელი მძღოლი</h3>
+                    <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავთ დანიშნულების ადგილზე.</p>
+                </div>
+                <a href="https://t.me/YOUR_BOT_USERNAME" target="_blank" class="btn-bot">💬 მოგვწერეთ ბოტში</a>
+            </div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon">👤</div>
+                    <h3>პირადი მძღოლი</h3>
+                    <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
+                </div>
+                <a href="https://t.me/YOUR_BOT_USERNAME" target="_blank" class="btn-bot">💬 მოგვწერეთ ბოტში</a>
+            </div>
+            <div class="service-card">
+                <div>
+                    <div class="service-icon">🔑</div>
+                    <h3>ავტომობილის დაქოქვა</h3>
+                    <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხო დაქოქვაში.</p>
+                </div>
+                <a href="https://t.me/YOUR_BOT_USERNAME" target="_blank" class="btn-bot">💬 მოგვწერეთ ბოტში</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Contact -->
+    <div class="cta-section">
+        <h3>დაგვიკავშირდით პირდაპირ</h3>
+        <a href="https://tally.so/r/w4LXXN" target="_blank" class="phone-btn">+995 568 96 56 74</a>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
+    </footer>
+
+</body>
+</html>
