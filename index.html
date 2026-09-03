@@ -339,7 +339,7 @@
             background: #1e5c3c;
         }
 
-        /* Form Section (Hidden by default) */
+        /* Form Section */
         .form-section {
             background-color: #eef2ec;
             color: #0d2319;
@@ -786,16 +786,47 @@
         function submitFormAndPay(event) {
             event.preventDefault();
             
-            // ფორმის მონაცემების შეგროვება (აქ შეგიძლიათ მიაბათ Telegram-ში ან სერვერზე გაგზავნა)
-            const formData = {
-                fullName: document.getElementById('fullName').value,
-                personalId: document.getElementById('personalId').value,
-                phone: document.getElementById('phone').value,
-                carNumber: document.getElementById('carNumber').value,
-                techPassport: document.getElementById('techPassport').value,
-                package: document.getElementById('selectedPackageInput').value
-            };
-            console.log("ფორმის მონაცემები გაიგზავნა:", formData);
+            // ფორმის მონაცემების შეგროვება
+            const fullName = document.getElementById('fullName').value;
+            const personalId = document.getElementById('personalId').value;
+            const phone = document.getElementById('phone').value;
+            const carNumber = document.getElementById('carNumber').value;
+            const techPassport = document.getElementById('techPassport').value;
+            const selectedPackage = document.getElementById('selectedPackageInput').value;
+
+            // ტელეგრამის ბოტის მონაცემები
+            const token = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC";
+            const chatId = "8233255349";
+
+            // შეტყობინების ტექსტი
+            const message = `🚨 ახალი მოთხოვნა საიტიდან:\n\n` +
+                            `👤 სახელი: ${fullName}\n` +
+                            `🆔 პირადი ნომერი: ${personalId}\n` +
+                            `📞 ტელეფონი: ${phone}\n` +
+                            `🚗 მანქანის ნომერი: ${carNumber}\n` +
+                            `📄 ტექპასპორტი: ${techPassport}\n` +
+                            `📦 არჩეული პაკეტი: ${selectedPackage}`;
+
+            // Telegram API-ს მოთხოვნა მონაცემების ავტომატურად გამოსაგზავნად
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("მონაცემები გაიგზავნა ტელეგრამში:", data);
+            })
+            .catch(error => {
+                console.error("შეცდომა გაგზავნისას:", error);
+            });
 
             // მომხმარებელს ეხსნება გადახდის ველი და ბმული: https://egreve.bog.ge/Carfax
             const container = document.getElementById('formContainerContent');
