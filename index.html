@@ -13,7 +13,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f4ef;
-            color: #11221b;
+            color: #0d231a;
         }
         header {
             background-color: #0d231a;
@@ -58,6 +58,10 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 40px;
+            background-image: linear-gradient(rgba(13, 35, 26, 0.95), rgba(13, 35, 26, 0.95)), 
+                              linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px), 
+                              linear-gradient(0deg, rgba(255,255,255,.03) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
         }
         .hero-left {
             max-width: 600px;
@@ -102,12 +106,14 @@
             color: #0d231a;
             padding: 30px;
             border-radius: 20px;
-            max-width: 400px;
+            max-width: 420px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
         }
         .hero-right-card h3 {
             font-size: 18px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -137,11 +143,70 @@
             color: #0d231a;
             margin-top: 5px;
         }
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        .package-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8e4;
+        }
+        .package-card.popular {
+            background: #0d231a;
+            color: #fff;
+        }
+        .package-badge {
+            background: #e6ebd3;
+            color: #0d231a;
+            padding: 6px 14px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .package-card.popular .package-badge {
+            background: #d9f96b;
+        }
+        .package-card h3 {
+            font-size: 36px;
+            margin-bottom: 5px;
+            color: #0d231a;
+        }
+        .package-card.popular h3 {
+            color: #d9f96b;
+        }
+        .package-card h4 {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .package-card p {
+            color: #667770;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .package-card.popular p {
+            color: #b0c2bc;
+        }
+        .sub-banner {
+            background: #e8ede4;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            font-weight: bold;
+            color: #0d231a;
+            border: 1px dashed #b5c4ad;
+            margin-bottom: 60px;
+        }
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 30px;
-            margin-top: 40px;
         }
         .service-card {
             background: #fff;
@@ -157,6 +222,9 @@
             font-size: 20px;
             margin-bottom: 10px;
             color: #0d231a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .service-info p {
             color: #667770;
@@ -177,11 +245,33 @@
             gap: 8px;
             font-size: 14px;
         }
+        .security-box-section {
+            background: #e8ede4;
+            padding: 60px 20px;
+        }
+        .security-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .security-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            max-width: 550px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
         .footer-banner {
             background-color: #d9f96b;
-            padding: 40px 20px;
+            padding: 50px 20px;
             text-align: center;
-            margin-top: 60px;
         }
         .footer-banner h3 {
             font-size: 20px;
@@ -198,6 +288,13 @@
             text-decoration: none;
             display: inline-block;
         }
+        .footer-bottom {
+            background-color: #11221b;
+            color: #889990;
+            text-align: center;
+            padding: 20px;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
@@ -213,120 +310,251 @@
 
     <section class="hero">
         <div class="hero-left">
-            <div class="badge" data-key="badge_text">ტექნიკური მხარდაჭერა გზებზე</div>
+            <div class="badge" data-key="badge_text">ავტომობილის მხარდაჭერა ყოველდღე</div>
             <h1 data-key="hero_title">მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან</h1>
-            <p data-key="hero_desc">მხარდაჭერა მძღოლებისათვის. მიიღეთ ოპერატიული დახმარება, ზუსტი და დროული გადაწყვეტილებები გზაზე.</p>
-            <a href="#services" class="btn-primary" data-key="hero_btn">↓ დაწყება მოთხოვნა</a>
+            <p data-key="hero_desc">მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+            <a href="#services" class="btn-primary" data-key="hero_btn">↓ დაიწყეთ მოთხოვნა</a>
         </div>
         <div class="hero-right-card">
-            <h3 data-key="card_title">🛡️ ერრთი სივრცე მძღოლებისათვის — მარტივი, სწრაფი, ცხსადური.</h3>
-            <p data-key="card_desc">ჩვენ ვზრუნავთ შენს უსაფრთხოებაზე გზაზე, ყოველდღიურად და ნებისმიერ ვითარებაში.</p>
+            <h3 data-key="card_title">🛡️ ერთი სივრცე მძღოლისთვის — მარტივი. სწრაფი. უსაფრთხო.</h3>
+            <p data-key="card_desc">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.</p>
         </div>
     </section>
 
     <div class="container" id="services">
         <div class="section-title">
-            <span data-key="sec_subtitle">სერვისების პაკეტები</span>
-            <h2 data-key="sec_title">აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
+            <span data-key="sec1_sub">სერვისის პაკეტები</span>
+            <h2 data-key="sec1_title">აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
         </div>
         
+        <div class="packages-grid">
+            <div class="package-card">
+                <span class="package-badge" data-key="pkg1_badge">საწყისი</span>
+                <h3 data-key="pkg1_price">7 GEL</h3>
+                <h4 data-key="pkg1_time">1 თვე</h4>
+                <p data-key="pkg1_desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
+            </div>
+            <div class="package-card popular">
+                <span class="package-badge" data-key="pkg2_badge">პოპულარული</span>
+                <h3 data-key="pkg2_price">18 GEL</h3>
+                <h4 data-key="pkg2_time">3 თვე</h4>
+                <p data-key="pkg2_desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
+            </div>
+            <div class="package-card">
+                <span class="package-badge" data-key="pkg3_badge">საუკეთესო ღირებულება</span>
+                <h3 data-key="pkg3_price">60 GEL</h3>
+                <h4 data-key="pkg3_time">1 წელი</h4>
+                <p data-key="pkg3_desc">გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
+            </div>
+        </div>
+
+        <div class="sub-banner" data-key="sub_banner_text">
+            თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
+        </div>
+
+        <div class="section-title" style="margin-top: 40px;">
+            <span data-key="sec2_sub">ინდივიდუალური სერვისები</span>
+            <h2 data-key="sec2_title">აირჩიეთ კონკრეტული სერვისი</h2>
+        </div>
+
         <div class="services-grid">
             <div class="service-card">
                 <div class="service-info">
-                    <h3 data-key="srv1_title">ევაკუატორი</h3>
-                    <p data-key="srv1_desc">სწრაფი და უსაფრთხო ევაკუაცია ნებისმიერ ლოკაციაზე.</p>
+                    <h3 data-key="srv1_title">🚚 ევაკუატორი 24/7</h3>
+                    <p data-key="srv1_desc">სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
                 </div>
-                <a href="#" class="whatsapp-btn" data-key="details_btn">დეტალები</a>
+                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
             <div class="service-card">
                 <div class="service-info">
-                    <h3 data-key="srv2_title">მობილური ვულკანიზაცია</h3>
-                    <p data-key="srv2_desc">საბურავების ადგილზე შეკეთება და გამოცვლა.</p>
+                    <h3 data-key="srv2_title">🐾 ცხოველების ტაქსი</h3>
+                    <p data-key="srv2_desc">შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
                 </div>
-                <a href="#" class="whatsapp-btn" data-key="details_btn">დეტალები</a>
+                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
             <div class="service-card">
                 <div class="service-info">
-                    <h3 data-key="srv3_title">საწვავის მიწოდება</h3>
-                    <p data-key="srv3_desc">საჭირო რაოდენობის საწვავის ოპერატიული მოტანა.</p>
+                    <h3 data-key="srv3_title">🛡️ ფხიზელი მძღოლი</h3>
+                    <p data-key="srv3_desc">თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.</p>
                 </div>
-                <a href="#" class="whatsapp-btn" data-key="details_btn">დეტალები</a>
+                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+            <div class="service-card">
+                <div class="service-info">
+                    <h3 data-key="srv4_title">👤 პირიქდი მძღოლი</h3>
+                    <p data-key="srv4_desc">პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
+                </div>
+                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+            <div class="service-card">
+                <div class="service-info">
+                    <h3 data-key="srv5_title">🔑 ავტომობილის დაქოქვა</h3>
+                    <p data-key="srv5_desc">დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
+                </div>
+                <a href="https://wa.me/" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="security-box-section">
+        <div class="security-content">
+            <div class="section-title" style="margin-bottom: 0;">
+                <span data-key="sec3_sub">უსაფრთხო პროცესი</span>
+                <h2 data-key="sec3_title">თქვენი მოთხოვნის შემდეგ</h2>
+            </div>
+            <div class="security-card">
+                <div style="font-size: 32px;">🔒</div>
+                <div>
+                    <p style="color: #444; font-size: 14px; line-height: 1.5;" data-key="sec3_desc">
+                        ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="footer-banner">
-        <h3 data-key="footer_title">გჭირდებათ დახმარება? დაგვიკავშირდით</h3>
-        <a href="tel:+995..." class="footer-phone">+995 599 ... ...</a>
+        <h3 data-key="footer_title">დაგვიკავშირდით WhatsApp-ზე</h3>
+        <a href="https://wa.me/" target="_blank" class="footer-phone">+995 568 96 56 74</a>
+    </div>
+
+    <div class="footer-bottom" data-key="footer_copy">
+        mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
     </div>
 
     <script>
-        // ლექსიკონი ენებისთვის
         const translations = {
             ge: {
-                badge_text: "ტექნიკური მხარდაჭერა გზებზე",
+                badge_text: "ავტომობილის მხარდაჭერა ყოველდღე",
                 hero_title: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან",
-                hero_desc: "მხარდაჭერა მძღოლებისათვის. მიიღეთ ოპერატიული დახმარება, ზუსტი და დროული გადაწყვეტილებები გზაზე.",
-                hero_btn: "↓ დაწყება მოთხოვნა",
-                card_title: "🛡️ ერთი სივრცე მძღოლებისათვის — მარტივი, სწრაფი, გასაგები.",
-                card_desc: "ჩვენ ვზრუნავთ შენს უსაფრთხოებაზე გზაზე, ყოველდღიურად და ნებისმიერ ვითარებაში.",
-                sec_subtitle: "სერვისების პაკეტები",
-                sec_title: "აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა",
-                srv1_title: "ევაკუატორი",
-                srv1_desc: "სწრაფი და უსაფრთხო ევაკუაცია ნებისმიერ ლოკაციაზე.",
-                srv2_title: "მობილური ვულკანიზაცია",
-                srv2_desc: "საბურავების ადგილზე შეკეთება და გამოცვლა.",
-                srv3_title: "საწვავის მიწოდება",
-                srv3_desc: "საჭირო რაოდენობის საწვავის ოპერატიული მოტანა.",
-                details_btn: "დეტალები",
-                footer_title: "გჭირდებათ დახმარება? დაგვიკავშირდით"
+                hero_desc: "მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
+                hero_btn: "↓ დაიწყეთ მოთხოვნა",
+                card_title: "🛡️ ერთი სივრცე მძღოლისთვის — მარტივი. სწრაფი. უსაფრთხო.",
+                card_desc: "ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.",
+                sec1_sub: "სერვისის პაკეტები",
+                sec1_title: "აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა",
+                pkg1_badge: "საწყისი",
+                pkg1_price: "7 GEL",
+                pkg1_time: "1 თვე",
+                pkg1_desc: "მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.",
+                pkg2_badge: "პოპულარული",
+                pkg2_price: "18 GEL",
+                pkg2_time: "3 თვე",
+                pkg2_desc: "დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.",
+                pkg3_badge: "საუკეთესო ღირებულება",
+                pkg3_price: "60 GEL",
+                pkg3_time: "1 წელი",
+                pkg3_desc: "გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.",
+                sub_banner_text: "თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი",
+                sec2_sub: "ინდივიდუალური სერვისები",
+                sec2_title: "აირჩიეთ კონკრეტული სერვისი",
+                srv1_title: "🚚 ევაკუატორი 24/7",
+                srv1_desc: "სწრაფი და სანდო საევაკუაციო მომსახურება.",
+                srv2_title: "🐾 ცხოველების ტაქსი",
+                srv2_desc: "შინაური ცხოველების უსაფრთხო ტრანსპორტირება.",
+                srv3_title: "🛡️ ფხიზელი მძღოლი",
+                srv3_desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.",
+                srv4_title: "👤 პირიქდი მძღოლი",
+                srv4_desc: "პროფესიონალი მძღოლის მომსახურება თქვენთვის.",
+                srv5_title: "🔑 ავტომობილის დაქოქვა",
+                srv5_desc: "დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.",
+                wa_btn: "💬 WhatsApp-ზე მოგვწერეთ",
+                sec3_sub: "უსაფრთხო პროცესი",
+                sec3_title: "თქვენი მოთხოვნის შემდეგ",
+                sec3_desc: "ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.",
+                footer_title: "დაგვიკავშირდით WhatsApp-ზე",
+                footer_copy: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი"
             },
             en: {
-                badge_text: "Roadside Technical Support",
+                badge_text: "Daily Car Support",
                 hero_title: "Driver Assistant — A peaceful journey starts here",
-                hero_desc: "Support for drivers. Get prompt assistance, accurate and timely solutions on the road.",
-                hero_btn: "↓ Request Assistance",
-                card_title: "🛡️ One space for drivers — simple, fast, clear.",
-                card_desc: "We care about your safety on the road, daily and in any situation.",
-                sec_subtitle: "Service Packages",
-                sec_title: "Choose the right support for you",
-                srv1_title: "Towing Service",
-                srv1_desc: "Fast and safe towing to any location.",
-                srv2_title: "Mobile Tire Service",
-                srv2_desc: "On-site tire repair and replacement.",
-                srv3_title: "Fuel Delivery",
-                srv3_desc: "Prompt delivery of the required amount of fuel.",
-                details_btn: "Details",
-                footer_title: "Need help? Contact us"
+                hero_desc: "Simple support for drivers: fill out a request, choose your preferred package, and proceed in a secure communication channel.",
+                hero_btn: "↓ Start Request",
+                card_title: "🛡️ One space for drivers — simple. fast. secure.",
+                card_desc: "We collect only the basic information needed to connect with your request.",
+                sec1_sub: "Service Packages",
+                sec1_title: "Choose the right support for you",
+                pkg1_badge: "Starter",
+                pkg1_price: "7 GEL",
+                pkg1_time: "1 Month",
+                pkg1_desc: "Flexible choice for short-term driver support.",
+                pkg2_badge: "Popular",
+                pkg2_price: "18 GEL",
+                pkg2_time: "3 Months",
+                pkg2_desc: "Balanced package for continuous assistance.",
+                pkg3_badge: "Best Value",
+                pkg3_price: "60 GEL",
+                pkg3_time: "1 Year",
+                pkg3_desc: "Long-term support throughout the year.",
+                sub_banner_text: "You can additionally choose your preferred service",
+                sec2_sub: "Individual Services",
+                sec2_title: "Choose a Specific Service",
+                srv1_title: "🚚 Towing 24/7",
+                srv1_desc: "Fast and reliable towing service.",
+                srv2_title: "🐾 Pet Taxi",
+                srv2_desc: "Safe transportation of pets.",
+                srv3_title: "🛡️ Sober Driver",
+                srv3_desc: "Safely driving your car to your destination.",
+                srv4_title: "👤 Personal Driver",
+                srv4_desc: "Professional driver service for you.",
+                srv5_title: "🔑 Jump Start",
+                srv5_desc: "Get help starting your car quickly and safely.",
+                wa_btn: "💬 Write to us on WhatsApp",
+                sec3_sub: "Secure Process",
+                sec3_title: "After Your Request",
+                sec3_desc: "After receiving the form, we will open an external secure communication and payment channel. Credit card details are not collected on this page.",
+                footer_title: "Contact us on WhatsApp",
+                footer_copy: "mashveli.online.ge — Your daily road partner"
             },
             ru: {
-                badge_text: "Техническая помощь на дороге",
+                badge_text: "Поддержка автомобилей каждый день",
                 hero_title: "Помощник водителя — спокойный путь начинается здесь",
-                hero_desc: "Поддержка для водителей. Получите оперативную помощь, точные и своевременные решения в дороге.",
-                hero_btn: "↓ Запросить помощь",
-                card_title: "🛡️ Единое пространство для водителей — просто, быстро, понятно.",
-                card_desc: "Мы заботимся о вашей безопасности на дороге, ежедневно и в любой ситуации.",
-                sec_subtitle: "Пакеты услуг",
-                sec_title: "Выберите подходящую для вас поддержку",
-                srv1_title: "Эвакуатор",
-                srv1_desc: "Быстрая и безопасная эвакуация в любую точку.",
-                srv2_title: "Мобильный шиномонтаж",
-                srv2_desc: "Ремонт и замена шин на месте.",
-                srv3_title: "Доставка топлива",
-                srv3_desc: "Оперативная доставка необходимого количества топлива.",
-                details_btn: "Подробнее",
-                footer_title: "Нужна помощь? Свяжитесь с нами"
+                hero_desc: "Простая поддержка для водителей: заполни заявку, выбери удобный пакет и продолжи в защищенном канале связи.",
+                hero_btn: "↓ Начать запрос",
+                card_title: "🛡️ Единое пространство для водителя — просто. быстро. надежно.",
+                card_desc: "Мы собираем только ту базовую информацию, которая необходима для связи по вашей заявке.",
+                sec1_sub: "Пакеты услуг",
+                sec1_title: "Выберите подходящую поддержку",
+                pkg1_badge: "Начальный",
+                pkg1_price: "7 GEL",
+                pkg1_time: "1 месяц",
+                pkg1_desc: "Гибкий выбор для краткосрочной поддержки водителей.",
+                pkg2_badge: "Популярный",
+                pkg2_price: "18 GEL",
+                pkg2_time: "3 месяца",
+                pkg2_desc: "Сбалансированный пакет для постоянной помощи.",
+                pkg3_badge: "Лучшая цена",
+                pkg3_price: "60 GEL",
+                pkg3_time: "1 год",
+                pkg3_desc: "Долгосрочная поддержка в течение всего года.",
+                sub_banner_text: "Вы можете дополнительно выбрать желаемую услугу",
+                sec2_sub: "Индивидуальные услуги",
+                sec2_title: "Выберите конкретную услугу",
+                srv1_title: "🚚 Эвакуатор 24/7",
+                srv1_desc: "Быстрый и надежный эвакуатор.",
+                srv2_title: "🐾 Пет-такси",
+                srv2_desc: "Безопасная перевозка домашних животных.",
+                srv3_title: "🛡️ Трезвый водитель",
+                srv3_desc: "Безопасная доставка вашего автомобиля до места назначения.",
+                srv4_title: "👤 Личный водитель",
+                srv4_desc: "Услуги профессионального водителя для вас.",
+                srv5_title: "🔑 Прикурить аккумулятор",
+                srv5_desc: "Помощь в быстрой и безопасной заводке авто.",
+                wa_btn: "💬 Напишите нам в WhatsApp",
+                sec3_sub: "Безопасный процесс",
+                sec3_title: "После вашей заявки",
+                sec3_desc: "После получения формы мы откроем внешний защищенный канал связи и оплаты. Данные банковских карт на этой странице не собираются.",
+                footer_title: "Свяжитесь с нами в WhatsApp",
+                footer_copy: "mashveli.online.ge — Ваш ежедневный партнер в дороге"
             }
         };
 
         function setLanguage(lang) {
-            // ღილაკების ვიზუალური აქტივაცია
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
 
-            // ტექსტების შეცვლა ატრიბუტების მიხედვით
             document.querySelectorAll('[data-key]').forEach(el => {
                 const key = el.getAttribute('data-key');
                 if (translations[lang] && translations[lang][key]) {
@@ -334,7 +562,6 @@
                 }
             });
 
-            // HTML lang ატრიბუტის შეცვლა სეო-სთვის
             document.documentElement.lang = lang;
         }
     </script>
