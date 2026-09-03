@@ -188,7 +188,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         .price-card {
@@ -250,60 +250,22 @@
             color: #cbd5d0;
         }
 
-        /* Form Section (ვიდეოში რომ არის ნაჩვენები) */
-        .form-section {
-            background-color: #eef2ec;
-            color: #0d2319;
-            padding: 60px 80px;
+        .extra-services-banner {
             border-top: 1px solid #d0d9cd;
-        }
-
-        .form-container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-        }
-
-        .form-container h2 {
-            font-size: 26px;
-            margin-bottom: 25px;
-            font-weight: 700;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2d3732;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #cbd5d0;
-            border-radius: 10px;
+            border-bottom: 1px solid #d0d9cd;
+            padding: 25px 0;
+            text-align: center;
             font-size: 15px;
-            outline: none;
-            transition: 0.2s;
-        }
-
-        .form-group input:focus {
-            border-color: #113523;
+            font-weight: 600;
+            color: #22382e;
+            margin-top: 40px;
         }
 
         /* Services Grid */
         .services-section {
             background-color: #eef2ec;
             color: #0d2319;
-            padding: 0 80px 80px 80px;
+            padding: 40px 80px 80px 80px;
         }
 
         .services-grid {
@@ -361,7 +323,112 @@
             width: fit-content;
         }
 
-        /* Footer */
+        /* Form Section (ვიდეოდან) */
+        .form-section {
+            background-color: #eef2ec;
+            color: #0d2319;
+            padding: 0 80px 60px 80px;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+        }
+
+        .form-container h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3732;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #cbd5d0;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        /* Secure Process Section */
+        .secure-process {
+            background-color: #eef2ec;
+            padding: 0 80px 80px 80px;
+        }
+
+        .secure-box {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .secure-icon {
+            background: #d4f367;
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .secure-content h3 {
+            font-size: 18px;
+            color: #0d2319;
+            margin-bottom: 5px;
+        }
+
+        .secure-content p {
+            font-size: 14px;
+            color: #66706b;
+        }
+
+        /* CTA Banner */
+        .cta-banner {
+            background-color: #d4f367;
+            color: #0d2319;
+            padding: 60px 80px;
+            text-align: center;
+        }
+
+        .cta-banner h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .phone-number {
+            background: #113523;
+            color: #d4f367;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            display: inline-block;
+            text-decoration: none;
+        }
+
         footer {
             background-color: #0d2319;
             color: #8b9991;
@@ -372,7 +439,7 @@
         }
 
         @media(max-width: 900px) {
-            .hero, .pricing-section, .services-section, .form-section {
+            .hero, .pricing-section, .services-section, .form-section, .secure-process, .cta-banner, footer {
                 padding-left: 20px;
                 padding-right: 20px;
             }
@@ -384,7 +451,6 @@
 </head>
 <body>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="navbar">
             <div class="logo">mashveli.online.ge</div>
@@ -412,7 +478,6 @@
         </div>
     </section>
 
-    <!-- Pricing Section -->
     <section class="pricing-section">
         <div class="section-header">
             <span id="t-packages-sub">სერვისის პაკეტები</span>
@@ -447,44 +512,13 @@
                 <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
             </div>
         </div>
-    </section>
 
-    <!-- Request Form Section (ვიდეოდან) -->
-    <section class="form-section" id="request-form">
-        <div class="form-container">
-            <h2>მომხმარებლის მოთხოვნა</h2>
-            <form id="driverForm" onsubmit="submitForm(event)">
-                <div class="form-group">
-                    <label>სრული სახელი / Full Name</label>
-                    <input type="text" id="fullName" required placeholder="შეიყვანეთ სახელი და გვარი">
-                </div>
-                <div class="form-group">
-                    <label>პირადი ნომერი / Personal ID</label>
-                    <input type="text" id="personalId" required placeholder="11 ციფრიანი პირადი ნომერი">
-                </div>
-                <div class="form-group">
-                    <label>ტელეფონის ნომერი / Phone Number</label>
-                    <input type="text" id="phone" required placeholder="+995 ...">
-                </div>
-                <div class="form-group">
-                    <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number</label>
-                    <input type="text" id="carNumber" required placeholder="მაგ: AA011OI">
-                </div>
-                <div class="form-group">
-                    <label>არჩეული პაკეტი / Selected Package</label>
-                    <select id="packageSelect">
-                        <option value="7 GEL (1 თვე)">7 GEL — 1 თვე</option>
-                        <option value="18 GEL (3 თვე)" selected>18 GEL — 3 თვე</option>
-                        <option value="60 GEL (1 წელი)">60 GEL — 1 წელი</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">გაგზავნა / Submit</button>
-            </form>
+        <div class="extra-services-banner">
+            თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
         </div>
     </section>
 
-    <!-- Services Grid -->
-    <section class="services-section" style="padding-top: 80px;">
+    <section class="services-section">
         <div class="services-grid">
             <div class="service-box">
                 <div>
@@ -512,7 +546,77 @@
                 </div>
                 <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">👤</div>
+                    <h3>პირადი მძღოლი</h3>
+                    <p>პროფესიონალი მძღოლის მომსახურება თქვენთვის.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+
+            <div class="service-box">
+                <div>
+                    <div class="service-icon">🔑</div>
+                    <h3>ავტომობილის დაქოქვა</h3>
+                    <p>დაგვეხმარეთ ავტომობილის სწრაფად და უსაფრთხოდ დაქოქვაში.</p>
+                </div>
+                <a href="https://wa.me/" class="btn-whatsapp">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
         </div>
+    </section>
+
+    <section class="form-section" id="request-form">
+        <div class="form-container">
+            <h2>მომხმარებლის მოთხოვნა</h2>
+            <form id="driverForm" onsubmit="submitForm(event)">
+                <div class="form-group">
+                    <label>სრული სახელი / Full Name</label>
+                    <input type="text" id="fullName" required placeholder="შეიყვანეთ სახელი და გვარი">
+                </div>
+                <div class="form-group">
+                    <label>პირადი ნომერი / Personal ID</label>
+                    <input type="text" id="personalId" required placeholder="11 ციფრიანი პირადი ნომერი">
+                </div>
+                <div class="form-group">
+                    <label>ტელეფონის ნომერი / Phone Number</label>
+                    <input type="text" id="phone" required placeholder="+995 ...">
+                </div>
+                <div class="form-group">
+                    <label>ავტომობილის სახელმწიფო ნომერი / Car Plate Number</label>
+                    <input type="text" id="carNumber" required placeholder="მაგ: AA011OI">
+                </div>
+                <div class="form-group">
+                    <label>ტექპასპორტის ნომერი / Tech Passport Number</label>
+                    <input type="text" id="techPassport" required placeholder="მაგ: EVA0159681">
+                </div>
+                <div class="form-group">
+                    <label>არჩეული პაკეტი / Selected Package</label>
+                    <select id="packageSelect">
+                        <option value="7 GEL (1 თვე)">7 GEL — 1 თვე</option>
+                        <option value="18 GEL (3 თვე)" selected>18 GEL — 3 თვე</option>
+                        <option value="60 GEL (1 წელი)">60 GEL — 1 წელი</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">გაგზავნა / Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="secure-process">
+        <div class="secure-box">
+            <div class="secure-icon">🔒</div>
+            <div class="secure-content">
+                <h3>თქვენი მოთხოვნის შემდეგ</h3>
+                <p>ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-banner">
+        <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
+        <a href="https://wa.me/995568965674" class="phone-number">+995 568 96 56 74</a>
     </section>
 
     <footer>
@@ -520,7 +624,6 @@
     </footer>
 
     <script>
-        // ენების შეცვლის მარტივი ფუნქცია (GEO / ENG / RUS)
         function setLang(lang) {
             document.querySelectorAll('.lang-switch span').forEach(el => el.classList.remove('active'));
             event.target.classList.add('active');
@@ -549,13 +652,10 @@
             }
         }
 
-        // ფორმის გაგზავნის სიმულაცია (ვიდეოში რომ გიჩვენებთ გაგზავნის შედეგს)
         function submitForm(e) {
             e.preventDefault();
             const name = document.getElementById('fullName').value;
-            const pid = document.getElementById('personalId').value;
             const phone = document.getElementById('phone').value;
-            const car = document.getElementById('carNumber').value;
             const pkg = document.getElementById('packageSelect').value;
 
             alert(`მონაცემები წარმატებით გაიგზავნა!\n\nმომხმარებელი: ${name}\nპაკეტი: ${pkg}\nტელეფონი: ${phone}`);
