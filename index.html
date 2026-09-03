@@ -137,61 +137,6 @@
             color: #0d231a;
             margin-top: 5px;
         }
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        .package-card {
-            background: #fff;
-            border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.2s;
-            border: 1px solid #e2e8e4;
-        }
-        .package-card:hover {
-            transform: translateY(-5px);
-        }
-        .package-card.popular {
-            background: #0d231a;
-            color: #fff;
-        }
-        .package-badge {
-            background: #e6ebd3;
-            color: #0d231a;
-            padding: 6px 14px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .package-card.popular .package-badge {
-            background: #d9f96b;
-        }
-        .package-card h3 {
-            font-size: 36px;
-            margin-bottom: 5px;
-            color: #0d231a;
-        }
-        .package-card.popular h3 {
-            color: #d9f96b;
-        }
-        .package-card h4 {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-        .package-card p {
-            color: #667770;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .package-card.popular p {
-            color: #b0c2bc;
-        }
         .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -232,35 +177,6 @@
             gap: 8px;
             font-size: 14px;
         }
-        .form-section {
-            display: none;
-            background: #fff;
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        .form-section.active {
-            display: block;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid #cbd5d0;
-            font-size: 15px;
-            outline: none;
-        }
         .footer-banner {
             background-color: #d9f96b;
             padding: 40px 20px;
@@ -279,4 +195,148 @@
             border-radius: 30px;
             font-size: 20px;
             font-weight: bold;
-            text-decoration
+            text-decoration: none;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo">mashveli.online.ge</a>
+        <div class="lang-switch">
+            <button class="lang-btn active" onclick="setLanguage('ge')">GEO</button>
+            <button class="lang-btn" onclick="setLanguage('en')">ENG</button>
+            <button class="lang-btn" onclick="setLanguage('ru')">Русский</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-left">
+            <div class="badge" data-key="badge_text">ტექნიკური მხარდაჭერა გზებზე</div>
+            <h1 data-key="hero_title">მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან</h1>
+            <p data-key="hero_desc">მხარდაჭერა მძღოლებისათვის. მიიღეთ ოპერატიული დახმარება, ზუსტი და დროული გადაწყვეტილებები გზაზე.</p>
+            <a href="#services" class="btn-primary" data-key="hero_btn">↓ დაწყება მოთხოვნა</a>
+        </div>
+        <div class="hero-right-card">
+            <h3 data-key="card_title">🛡️ ერრთი სივრცე მძღოლებისათვის — მარტივი, სწრაფი, ცხსადური.</h3>
+            <p data-key="card_desc">ჩვენ ვზრუნავთ შენს უსაფრთხოებაზე გზაზე, ყოველდღიურად და ნებისმიერ ვითარებაში.</p>
+        </div>
+    </section>
+
+    <div class="container" id="services">
+        <div class="section-title">
+            <span data-key="sec_subtitle">სერვისების პაკეტები</span>
+            <h2 data-key="sec_title">აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
+        </div>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-info">
+                    <h3 data-key="srv1_title">ევაკუატორი</h3>
+                    <p data-key="srv1_desc">სწრაფი და უსაფრთხო ევაკუაცია ნებისმიერ ლოკაციაზე.</p>
+                </div>
+                <a href="#" class="whatsapp-btn" data-key="details_btn">დეტალები</a>
+            </div>
+            <div class="service-card">
+                <div class="service-info">
+                    <h3 data-key="srv2_title">მობილური ვულკანიზაცია</h3>
+                    <p data-key="srv2_desc">საბურავების ადგილზე შეკეთება და გამოცვლა.</p>
+                </div>
+                <a href="#" class="whatsapp-btn" data-key="details_btn">დეტალები</a>
+            </div>
+            <div class="service-card">
+                <div class="service-info">
+                    <h3 data-key="srv3_title">საწვავის მიწოდება</h3>
+                    <p data-key="srv3_desc">საჭირო რაოდენობის საწვავის ოპერატიული მოტანა.</p>
+                </div>
+                <a href="#" class="whatsapp-btn" data-key="details_btn">დეტალები</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <h3 data-key="footer_title">გჭირდებათ დახმარება? დაგვიკავშირდით</h3>
+        <a href="tel:+995..." class="footer-phone">+995 599 ... ...</a>
+    </div>
+
+    <script>
+        // ლექსიკონი ენებისთვის
+        const translations = {
+            ge: {
+                badge_text: "ტექნიკური მხარდაჭერა გზებზე",
+                hero_title: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან",
+                hero_desc: "მხარდაჭერა მძღოლებისათვის. მიიღეთ ოპერატიული დახმარება, ზუსტი და დროული გადაწყვეტილებები გზაზე.",
+                hero_btn: "↓ დაწყება მოთხოვნა",
+                card_title: "🛡️ ერთი სივრცე მძღოლებისათვის — მარტივი, სწრაფი, გასაგები.",
+                card_desc: "ჩვენ ვზრუნავთ შენს უსაფრთხოებაზე გზაზე, ყოველდღიურად და ნებისმიერ ვითარებაში.",
+                sec_subtitle: "სერვისების პაკეტები",
+                sec_title: "აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა",
+                srv1_title: "ევაკუატორი",
+                srv1_desc: "სწრაფი და უსაფრთხო ევაკუაცია ნებისმიერ ლოკაციაზე.",
+                srv2_title: "მობილური ვულკანიზაცია",
+                srv2_desc: "საბურავების ადგილზე შეკეთება და გამოცვლა.",
+                srv3_title: "საწვავის მიწოდება",
+                srv3_desc: "საჭირო რაოდენობის საწვავის ოპერატიული მოტანა.",
+                details_btn: "დეტალები",
+                footer_title: "გჭირდებათ დახმარება? დაგვიკავშირდით"
+            },
+            en: {
+                badge_text: "Roadside Technical Support",
+                hero_title: "Driver Assistant — A peaceful journey starts here",
+                hero_desc: "Support for drivers. Get prompt assistance, accurate and timely solutions on the road.",
+                hero_btn: "↓ Request Assistance",
+                card_title: "🛡️ One space for drivers — simple, fast, clear.",
+                card_desc: "We care about your safety on the road, daily and in any situation.",
+                sec_subtitle: "Service Packages",
+                sec_title: "Choose the right support for you",
+                srv1_title: "Towing Service",
+                srv1_desc: "Fast and safe towing to any location.",
+                srv2_title: "Mobile Tire Service",
+                srv2_desc: "On-site tire repair and replacement.",
+                srv3_title: "Fuel Delivery",
+                srv3_desc: "Prompt delivery of the required amount of fuel.",
+                details_btn: "Details",
+                footer_title: "Need help? Contact us"
+            },
+            ru: {
+                badge_text: "Техническая помощь на дороге",
+                hero_title: "Помощник водителя — спокойный путь начинается здесь",
+                hero_desc: "Поддержка для водителей. Получите оперативную помощь, точные и своевременные решения в дороге.",
+                hero_btn: "↓ Запросить помощь",
+                card_title: "🛡️ Единое пространство для водителей — просто, быстро, понятно.",
+                card_desc: "Мы заботимся о вашей безопасности на дороге, ежедневно и в любой ситуации.",
+                sec_subtitle: "Пакеты услуг",
+                sec_title: "Выберите подходящую для вас поддержку",
+                srv1_title: "Эвакуатор",
+                srv1_desc: "Быстрая и безопасная эвакуация в любую точку.",
+                srv2_title: "Мобильный шиномонтаж",
+                srv2_desc: "Ремонт и замена шин на месте.",
+                srv3_title: "Доставка топлива",
+                srv3_desc: "Оперативная доставка необходимого количества топлива.",
+                details_btn: "Подробнее",
+                footer_title: "Нужна помощь? Свяжитесь с нами"
+            }
+        };
+
+        function setLanguage(lang) {
+            // ღილაკების ვიზუალური აქტივაცია
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // ტექსტების შეცვლა ატრიბუტების მიხედვით
+            document.querySelectorAll('[data-key]').forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang] && translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            // HTML lang ატრიბუტის შეცვლა სეო-სთვის
+            document.documentElement.lang = lang;
+        }
+    </script>
+</body>
+</html>
