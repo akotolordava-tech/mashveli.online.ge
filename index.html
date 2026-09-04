@@ -812,7 +812,7 @@
             // Telegram API-ს მოთხოვნა მონაცემების ავტომატურად გამოსაგზავნად
             const url = `https://api.telegram.org/bot${token}/sendMessage`;
             
-            await fetch(url, {
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
