@@ -450,7 +450,90 @@
             font-size: 14px;
         }
 
-        /* Modal Styling */
+        /* Welcome Popup Modal Styling */
+        .welcome-modal-overlay {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .welcome-modal-content {
+            background: #fbf9f4;
+            width: 100%;
+            max-width: 550px;
+            border-radius: 28px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            border: 1px solid #eae5d9;
+        }
+
+        .welcome-close-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border: 2px solid #d2f75a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #1b382b;
+            font-size: 20px;
+            transition: background 0.2s;
+        }
+
+        .welcome-close-btn:hover {
+            background: #d2f75a;
+        }
+
+        .welcome-icon-box {
+            width: 60px;
+            height: 60px;
+            background: #d2f75a;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 25px;
+        }
+
+        .welcome-subtitle-top {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #555;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .welcome-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1b382b;
+            margin-bottom: 20px;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Tally Form Modal Styling */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -495,6 +578,11 @@
             margin-bottom: 20px;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         @media (max-width: 900px) {
             .hero-grid, .packages-grid, .services-grid, .security-box-wrapper {
                 grid-template-columns: 1fr;
@@ -503,6 +591,19 @@
     </style>
 </head>
 <body>
+
+    <!-- Welcome Information Popup (Auto-opens on load, closed with X) -->
+    <div id="welcomeModal" class="welcome-modal-overlay">
+        <div class="welcome-modal-content">
+            <button class="welcome-close-btn" onclick="closeWelcomeModal()">&times;</button>
+            <div class="welcome-icon-box">🚗</div>
+            <div class="welcome-subtitle-top">კეთილი იყოს თქვენი მობრძანება</div>
+            <h2 class="welcome-title">მოგესალმებით!</h2>
+            <p class="welcome-text">
+                მოგესალმებით! კეთილი იყოს თქვენი მობრძანება mashveli.online.ge-ზე. ჩვენს პლატფორმაზე მარტივად შეძლებთ შეარჩიოთ თქვენთვის სასურველი პაკეტი, რომელიც დაგეხმარებათ ოპერატიულად შეამოწმოთ თქვენი ავტომობილის მიმდინარე ჯარიმები და ტექნიკური ინსპექტირების გავლის ვადები, აგრეთვე თქვენ დაგხვდებათ დამატებით მომსახურების სერვისი.
+            </p>
+        </div>
+    </div>
 
     <!-- Header Section -->
     <header class="site-header">
@@ -672,7 +773,7 @@
         </div>
     </div>
 
-    <!-- JavaScript for Translations & Modal -->
+    <!-- JavaScript for Translations & Modals -->
     <script>
         const translations = {
             geo: {
@@ -810,6 +911,12 @@
             document.getElementById('pageTitle').innerText = translations[lang].pageTitle;
         }
 
+        // Welcome Modal Functions
+        function closeWelcomeModal() {
+            document.getElementById('welcomeModal').style.display = 'none';
+        }
+
+        // Tally Form Modal Functions
         function openModal(packageName) {
             document.getElementById('selectedPkgName').innerText = packageName;
             const tallyUrl = `https://tally.so/embed/0QWLKN?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&package=${encodeURIComponent(packageName)}`;
@@ -825,8 +932,8 @@
         }
 
         window.onclick = function(event) {
-            var modal = document.getElementById('tallyModal');
-            if (event.target == modal) {
+            var tallyModal = document.getElementById('tallyModal');
+            if (event.target == tallyModal) {
                 closeModal();
             }
         }
