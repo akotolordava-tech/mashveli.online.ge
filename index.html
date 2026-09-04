@@ -4,9 +4,503 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="pageTitle">მძღოლის ასისტენტი — mashveli.online.ge</title>
-    <link rel="stylesheet" href="style.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+GO:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* General Reset & Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Fira GO', sans-serif;
+        }
+
+        body {
+            background-color: #1b382b;
+            color: #1b382b;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .site-header {
+            padding: 25px 0;
+        }
+
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 4px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .lang-btn {
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .lang-btn.active {
+            background-color: #d2f75a;
+            color: #1b382b;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 40px 0 80px 0;
+            background-image: linear-gradient(rgba(27, 56, 43, 0.95), rgba(27, 56, 43, 0.95)), 
+                              repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px),
+                              repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            color: #ffffff;
+            font-size: 38px;
+            line-height: 1.2;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            color: #d1dcd5;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .badge {
+            background-color: #d2f75a;
+            color: #1b382b;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .cta-btn {
+            background-color: #d2f75a;
+            color: #1b382b;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: transform 0.2s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background-color: #ffffff;
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 28px;
+            background: #d2f75a;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            margin-bottom: 25px;
+        }
+
+        .hero-card h3 {
+            font-size: 20px;
+            color: #1b382b;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .hero-card p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Packages Section */
+        .packages-section {
+            background-color: #f5f3ec;
+            padding: 80px 0;
+            border-radius: 40px 40px 0 0;
+        }
+
+        .section-title {
+            text-align: left;
+            margin-bottom: 50px;
+        }
+
+        .subtitle {
+            color: #4a6b5d;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .section-title h2 {
+            font-size: 32px;
+            color: #1b382b;
+            font-weight: 700;
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .package-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 35px;
+            border: 1px solid #e2ded4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
+        }
+
+        .package-card.popular {
+            background-color: #1b382b;
+            color: #ffffff;
+            border: none;
+        }
+
+        .pkg-badge {
+            background-color: #eae6db;
+            color: #1b382b;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .popular-badge {
+            background-color: #d2f75a;
+            color: #1b382b;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1b382b;
+            margin-bottom: 5px;
+        }
+
+        .package-card.popular .price {
+            color: #d2f75a;
+        }
+
+        .duration {
+            font-size: 15px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .package-card.popular .duration {
+            color: #d1dcd5;
+        }
+
+        .package-card p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .package-card.popular p {
+            color: #d1dcd5;
+        }
+
+        .select-pkg-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            background: transparent;
+            color: #1b382b;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .package-card:hover .select-pkg-btn {
+            background-color: #1b382b;
+            color: #fff;
+            border-color: #1b382b;
+        }
+
+        .popular-btn {
+            background-color: #d2f75a !important;
+            color: #1b382b !important;
+            border: none !important;
+        }
+
+        .additional-services-title {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid #e2ded4;
+            border-bottom: 1px solid #e2ded4;
+        }
+
+        .additional-services-title p {
+            color: #1b382b;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* Services Section */
+        .services-section {
+            background-color: #f5f3ec;
+            padding: 20px 0 80px 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .service-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #e2ded4;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .s-icon {
+            font-size: 24px;
+            background: #f5f3ec;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .service-box h3 {
+            font-size: 18px;
+            color: #1b382b;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .service-box p {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .wa-btn {
+            background-color: #1b382b;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .wa-btn:hover {
+            background-color: #2b5743;
+        }
+
+        /* Security Section */
+        .security-section {
+            background-color: #f5f3ec;
+            padding: 0 0 60px 0;
+        }
+
+        .security-box-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .security-info-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #e2ded4;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .lock-icon {
+            font-size: 24px;
+            background: #d2f75a;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .security-info-card p {
+            font-size: 14px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Lime WhatsApp Banner Section */
+        .whatsapp-banner-section {
+            background-color: #d2f75a;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .banner-title-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1b382b;
+            margin-bottom: 20px;
+        }
+
+        .phone-btn {
+            display: inline-block;
+            background-color: #1b382b;
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 700;
+            padding: 14px 35px;
+            border-radius: 14px;
+            text-decoration: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .phone-btn:hover {
+            transform: scale(1.03);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #152b21;
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        .footer-flex p {
+            color: #8da398;
+            font-size: 14px;
+        }
+
+        /* Modal Styling */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #1b382b;
+        }
+
+        .modal-header-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1b382b;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid, .packages-grid, .services-grid, .security-box-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -86,7 +580,7 @@
     <section class="services-section">
         <div class="container">
             <div class="services-grid">
-                <!-- ევაკუატორი 24/7 (+995 568 96 56 74) -->
+                <!-- ევაკუატორი 24/7 -->
                 <div class="service-box">
                     <div class="s-icon">🚚</div>
                     <h3 data-key="serv1Title">ევაკუატორი 24/7</h3>
@@ -94,7 +588,7 @@
                     <a href="https://wa.me/995568965674" target="_blank" class="wa-btn" data-key="waBtn">💬 WhatsApp-ზე მოგვწერეთ</a>
                 </div>
 
-                <!-- ცხოველების ტაქსი (+995 568 11 23 50) -->
+                <!-- ცხოველების ტაქსი -->
                 <div class="service-box">
                     <div class="s-icon">🐾</div>
                     <h3 data-key="serv2Title">ცხოველების ტაქსი</h3>
@@ -102,7 +596,7 @@
                     <a href="https://wa.me/995568112350" target="_blank" class="wa-btn" data-key="waBtn">💬 WhatsApp-ზე მოგვწერეთ</a>
                 </div>
 
-                <!-- ფხიზელი მძღოლი (+995 568 96 56 74) -->
+                <!-- ფხიზელი მძღოლი -->
                 <div class="service-box">
                     <div class="s-icon">🛡️</div>
                     <h3 data-key="serv3Title">ფხიზელი მძღოლი</h3>
@@ -110,7 +604,7 @@
                     <a href="https://wa.me/995568965674" target="_blank" class="wa-btn" data-key="waBtn">💬 WhatsApp-ზე მოგვწერეთ</a>
                 </div>
 
-                <!-- პირადი მძღოლი (+995 568 96 56 74) -->
+                <!-- პირადი მძღოლი -->
                 <div class="service-box">
                     <div class="s-icon">👤</div>
                     <h3 data-key="serv4Title">პირადი მძღოლი</h3>
@@ -118,7 +612,7 @@
                     <a href="https://wa.me/995568965674" target="_blank" class="wa-btn" data-key="waBtn">💬 WhatsApp-ზე მოგვწერეთ</a>
                 </div>
 
-                <!-- ავტომობილის დაქოქვა (+995 568 96 56 74) -->
+                <!-- ავტომობილის დაქოქვა -->
                 <div class="service-box">
                     <div class="s-icon">🔑</div>
                     <h3 data-key="serv5Title">ავტომობილის დაქოქვა</h3>
@@ -142,11 +636,14 @@
                     <p data-key="secCardDesc">ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.</p>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="whatsapp-contact-banner">
-                <p data-key="bannerText">დაგვიკავშირდით WhatsApp-ზე</p>
-                <a href="https://wa.me/995568965674" target="_blank" class="phone-btn">+995 568 96 56 74</a>
-            </div>
+    <!-- Lime Green WhatsApp Banner -->
+    <section class="whatsapp-banner-section">
+        <div class="container text-center">
+            <p data-key="bannerText" class="banner-title-text">დაგვიკავშირდით WhatsApp-ზე</p>
+            <a href="https://wa.me/995568965674" target="_blank" class="phone-btn">+995 568 96 56 74</a>
         </div>
     </section>
 
@@ -162,7 +659,7 @@
         <div class="modal-content">
             <button class="close-modal" onclick="closeModal()">&times;</button>
             <div class="modal-header-text"><span data-key="modalSelectedPkg">არჩეული პაკეტი</span>: <span id="selectedPkgName"></span></div>
-            <!-- Tally Embed Form with dynamic package passing -->
+            <!-- Tally Embed Form -->
             <iframe id="tallyIframe" 
                     src="" 
                     width="100%" 
@@ -184,7 +681,7 @@
                 heroTitle: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან",
                 heroDesc: "მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
                 heroBtn: "↗ დაიწყეთ მოთხოვნა",
-                cardHeader: "ერთი სივრცე მძღოლისთვის\nმარტივი. სწრაფი. უსაფრთხო.",
+                cardHeader: "ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.",
                 cardDesc: "ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.",
                 pkgSubtitle: "სერვისის პაკეტები",
                 pkgTitle: "აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა",
@@ -219,14 +716,14 @@
             },
             eng: {
                 pageTitle: "Driver Assistant — mashveli.online.ge",
-                heroBadge: "Car support every day",
-                heroTitle: "Driver Assistant — A calm journey starts here",
+                heroBadge: "Car Support Every Day",
+                heroTitle: "Driver Assistant — A Calm Journey Starts Here",
                 heroDesc: "Simple support for drivers: fill out a request, choose your preferred package, and proceed in a secure communication channel.",
                 heroBtn: "↗ Start Request",
-                cardHeader: "One space for the driver\nSimple. Fast. Secure.",
+                cardHeader: "One Space for the Driver<br>Simple. Fast. Secure.",
                 cardDesc: "We collect only the essential information needed to connect with your request.",
                 pkgSubtitle: "Service Packages",
-                pkgTitle: "Choose the right support for you",
+                pkgTitle: "Choose the Right Support for You",
                 pkg1Badge: "Starter",
                 pkg1Dur: "1 Month",
                 pkg1Desc: "Flexible choice for short-term driver support.",
@@ -250,10 +747,10 @@
                 serv5Desc: "Help us quickly and safely jump start your car.",
                 waBtn: "💬 Message on WhatsApp",
                 secSubtitle: "Secure Process",
-                secTitle: "After your request",
+                secTitle: "After Your Request",
                 secCardDesc: "Upon receiving the form, we will open an external secure communication and payment channel. Bank card details are not collected on this page.",
-                bannerText: "Contact us on WhatsApp",
-                footerText: "mashveli.online.ge — Your daily road partner",
+                bannerText: "Contact Us on WhatsApp",
+                footerText: "mashveli.online.ge — Your Daily Road Partner",
                 modalSelectedPkg: "Selected package"
             },
             rus: {
@@ -262,7 +759,7 @@
                 heroTitle: "Помощник водителя — Спокойный путь начинается здесь",
                 heroDesc: "Простая поддержка для водителей: заполните заявку, выберите подходящий пакет и продолжайте в защищенном канале связи.",
                 heroBtn: "↗ Начать запрос",
-                cardHeader: "Единое пространство для водителя\nПросто. Быстро. Безопасно.",
+                cardHeader: "Единое пространство для водителя<br>Просто. Быстро. Безопасно.",
                 cardDesc: "Мы собираем только ту основную информацию, которая необходима для связи по вашему запросу.",
                 pkgSubtitle: "Пакеты услуг",
                 pkgTitle: "Выберите подходящую для вас поддержку",
@@ -305,7 +802,7 @@
             const elements = document.querySelectorAll('[data-key]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-key');
-                if (translations[lang][key]) {
+                if (translations[lang] && translations[lang][key]) {
                     el.innerHTML = translations[lang][key];
                 }
             });
@@ -315,18 +812,15 @@
 
         function openModal(packageName) {
             document.getElementById('selectedPkgName').innerText = packageName;
-            
-            // Tally ლინკს ვუმატებთ არჩეულ პაკეტს, რომ Telegram-შიც გამოჩნდეს
             const tallyUrl = `https://tally.so/embed/0QWLKN?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&package=${encodeURIComponent(packageName)}`;
             document.getElementById('tallyIframe').src = tallyUrl;
-
             document.getElementById('tallyModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('tallyModal').style.display = 'none';
-            document.getElementById('tallyIframe').src = ''; // იფრეიმის გასუფთავება
+            document.getElementById('tallyIframe').src = '';
             document.body.style.overflow = 'auto';
         }
 
