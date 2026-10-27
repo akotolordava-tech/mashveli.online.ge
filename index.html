@@ -1,794 +1,369 @@
 <!DOCTYPE html>
-<html lang="ka" id="htmlRoot">
+<html lang="ka">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">მძღოლის ასისტენტი — mashveli.online.ge</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+GO:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+    <title>მაშველი - პირადი კაბინეტი</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Fira GO', sans-serif;
-        }
-
-        body {
-            background-color: #1b382b;
-            color: #1b382b;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Header */
-        .site-header {
-            padding: 25px 0;
-        }
-
-        .header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            color: #ffffff;
-            font-weight: 700;
-            font-size: 20px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .login-nav-btn {
-            background-color: #d2f75a;
-            color: #1b382b;
-            font-size: 13px;
-            font-weight: 700;
-            padding: 8px 18px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .login-nav-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(210, 247, 90, 0.3);
-        }
-
-        /* Language Switcher */
-        .lang-switch {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 4px;
-            display: flex;
-            gap: 4px;
-        }
-
-        .lang-btn {
-            color: #ffffff;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 6px 14px;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-
-        .lang-btn.active {
-            background-color: #d2f75a;
-            color: #1b382b;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            padding: 40px 0 80px 0;
-            background-image: linear-gradient(rgba(27, 56, 43, 0.95), rgba(27, 56, 43, 0.95)), 
-                              repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px),
-                              repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,255,255,0.03) 40px, rgba(255,255,255,0.03) 41px);
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 40px;
-            align-items: center;
-        }
-
-        .hero-content h1 {
-            color: #ffffff;
-            font-size: 38px;
-            line-height: 1.2;
-            margin: 20px 0;
-            font-weight: 700;
-        }
-
-        .hero-content p {
-            color: #d1dcd5;
-            font-size: 16px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-
-        .badge {
-            background-color: #d2f75a;
-            color: #1b382b;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            display: inline-block;
-        }
-
-        .cta-btn {
-            background-color: #d2f75a;
-            color: #1b382b;
-            padding: 14px 28px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            display: inline-block;
-            transition: transform 0.2s;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* Hero Card */
-        .hero-card {
-            background-color: #ffffff;
-            border-radius: 24px;
-            padding: 40px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        }
-
-        .card-icon {
-            font-size: 28px;
-            background: #d2f75a;
-            width: 55px;
-            height: 55px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 14px;
-            margin-bottom: 25px;
-        }
-
-        .hero-card h3 {
-            font-size: 20px;
-            color: #1b382b;
-            margin-bottom: 15px;
-            line-height: 1.4;
-        }
-
-        .hero-card p {
-            color: #555;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        /* Packages Section */
-        .packages-section {
-            background-color: #f5f3ec;
-            padding: 80px 0;
-            border-radius: 40px 40px 0 0;
-        }
-
-        .section-title {
-            text-align: left;
-            margin-bottom: 50px;
-        }
-
-        .subtitle {
-            color: #4a6b5d;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .section-title h2 {
-            font-size: 32px;
-            color: #1b382b;
-            font-weight: 700;
-        }
-
-        .packages-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        .package-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 35px;
-            border: 1px solid #e2ded4;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
-            position: relative;
-        }
-
-        .package-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.08);
-        }
-
-        .package-card.popular {
-            background-color: #1b382b;
-            color: #ffffff;
-            border: none;
-        }
-
-        .pkg-badge {
-            background-color: #eae6db;
-            color: #1b382b;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .popular-badge {
-            background-color: #d2f75a;
-            color: #1b382b;
-        }
-
-        .price {
-            font-size: 32px;
-            font-weight: 700;
-            color: #1b382b;
-            margin-bottom: 5px;
-        }
-
-        .package-card.popular .price {
-            color: #d2f75a;
-        }
-
-        .duration {
-            font-size: 15px;
-            font-weight: 600;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .package-card.popular .duration {
-            color: #d1dcd5;
-        }
-
-        .package-card p {
-            font-size: 14px;
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 30px;
-        }
-
-        .package-card.popular p {
-            color: #d1dcd5;
-        }
-
-        .select-pkg-btn {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            background: transparent;
-            color: #1b382b;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .package-card:hover .select-pkg-btn {
-            background-color: #1b382b;
-            color: #fff;
-            border-color: #1b382b;
-        }
-
-        .popular-btn {
-            background-color: #d2f75a !important;
-            color: #1b382b !important;
-            border: none !important;
-        }
-
-        /* Footer */
-        footer {
-            background-color: #152b21;
-            padding: 30px 0;
-            text-align: center;
-        }
-
-        .footer-flex p {
-            color: #8da398;
-            font-size: 14px;
-        }
-
-        /* Modals & Popups */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background: #ffffff;
-            width: 100%;
-            max-width: 600px;
-            border-radius: 20px;
-            padding: 30px;
-            position: relative;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 28px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #1b382b;
-        }
-
-        .modal-header-text {
-            font-size: 18px;
-            font-weight: 700;
-            color: #1b382b;
-            margin-bottom: 20px;
-        }
-
-        .auth-form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .auth-form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #1b382b;
-            margin-bottom: 5px;
-        }
-
-        .auth-form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        .auth-submit-btn {
-            width: 100%;
-            background-color: #1b382b;
-            color: #ffffff;
-            padding: 14px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .auth-submit-btn:hover {
-            background-color: #2b5743;
-        }
-
-        .waiting-box {
-            text-align: center;
-            padding: 30px 10px;
-        }
-
-        .spinner {
-            font-size: 36px;
-            margin-bottom: 15px;
-            display: inline-block;
-            animation: spin 2s infinite linear;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 900px) {
-            .hero-grid, .packages-grid {
-                grid-template-columns: 1fr;
-            }
-            .header-flex {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Fira+GO:wght@400;500;600;700&display=swap');
+        body { font-family: 'Fira GO', sans-serif; }
     </style>
 </head>
-<body>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
 
-    <!-- Header Section -->
-    <header class="site-header">
-        <div class="container header-flex">
-            <div class="logo">mashveli.online.ge</div>
-            <div class="header-right">
-                <button class="login-nav-btn" onclick="openAuthModal()">
-                    👤 <span data-key="loginBtn">პირადი კაბინეტი</span>
+    <!-- NAV BAR -->
+    <nav class="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🚨</span>
+                <span class="text-xl font-bold tracking-wide text-amber-500">MASHVELI<span class="text-xs text-gray-400 block -mt-1">ONLINE.GE</span></span>
+            </div>
+            <div id="userInfo" class="hidden flex items-center gap-4">
+                <span id="userPersonalId" class="text-sm bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-700 text-gray-300"></span>
+                <button onclick="logout()" class="text-sm bg-red-600/20 text-red-400 border border-red-500/30 px-3 py-1.5 rounded-lg hover:bg-red-600/30 transition">
+                    გამოსვლა
                 </button>
-                <div class="lang-switch">
-                    <span class="lang-btn active" onclick="changeLanguage('geo')">GEO</span>
-                    <span class="lang-btn" onclick="changeLanguage('eng')">ENG</span>
-                    <span class="lang-btn" onclick="changeLanguage('rus')">Русский</span>
-                </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container hero-grid">
-            <div class="hero-content">
-                <span class="badge" data-key="heroBadge">ავტომობილის მხარდაჭერა ყოველდღე</span>
-                <h1 data-key="heroTitle">მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან</h1>
-                <p data-key="heroDesc">მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
-                <a href="#packages" class="cta-btn" data-key="heroBtn">↗ დაიწყეთ მოთხოვნა</a>
+    <!-- AUTH SECTION (LOGIN / REGISTER) -->
+    <div id="authSection" class="max-w-md mx-auto mt-12 p-6 bg-gray-800/50 border border-gray-700 rounded-2xl shadow-xl">
+        <h2 id="authTitle" class="text-2xl font-bold text-center mb-6">პირად კაბინეტში შესვლა</h2>
+        
+        <form onsubmit="handleAuth(event)" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-300">პირადი ნომერი (11 ნიშნა)</label>
+                <input type="text" id="personalId" required maxlength="11" pattern="\d{11}" placeholder="010................"
+                    class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition">
             </div>
-            <div class="hero-card">
-                <div class="card-icon">🛡️</div>
-                <h3 data-key="cardHeader">ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.</h3>
-                <p data-key="cardDesc">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Packages Section -->
-    <section id="packages" class="packages-section">
-        <div class="container">
-            <div class="section-title">
-                <span class="subtitle" data-key="pkgSubtitle">სერვისის პაკეტები</span>
-                <h2 data-key="pkgTitle">აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
+            <div>
+                <label class="block text-sm font-medium mb-1 text-gray-300">პაროლი</label>
+                <input type="password" id="password" required placeholder="••••••••"
+                    class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 transition">
             </div>
 
-            <div class="packages-grid">
-                <div class="package-card" onclick="openTallyModal('7 GEL - საწყისი პაკეტი')">
-                    <span class="pkg-badge" data-key="pkg1Badge">საწყისი</span>
-                    <div class="price">7 GEL</div>
-                    <div class="duration" data-key="pkg1Dur">1 თვე</div>
-                    <p data-key="pkg1Desc">მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.</p>
-                    <button class="select-pkg-btn" data-key="selectBtn">არჩევა</button>
-                </div>
+            <button type="submit" id="authBtn" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-3 rounded-xl transition shadow-lg shadow-amber-500/20">
+                შესვლა
+            </button>
+        </form>
 
-                <div class="package-card popular" onclick="openTallyModal('18 GEL - პოპულარული პაკეტი')">
-                    <span class="pkg-badge popular-badge" data-key="pkg2Badge">პოპულარული</span>
-                    <div class="price">18 GEL</div>
-                    <div class="duration" data-key="pkg2Dur">3 თვე</div>
-                    <p data-key="pkg2Desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
-                    <button class="select-pkg-btn popular-btn" data-key="selectBtn">არჩევა</button>
-                </div>
-
-                <div class="package-card" onclick="openTallyModal('60 GEL - საუკეთესო ღირებულების პაკეტი')">
-                    <span class="pkg-badge" data-key="pkg3Badge">საუკეთესო ღირებულება</span>
-                    <div class="price">60 GEL</div>
-                    <div class="duration" data-key="pkg3Dur">1 წელი</div>
-                    <p data-key="pkg3Desc">გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
-                    <button class="select-pkg-btn" data-key="selectBtn">არჩევა</button>
-                </div>
-            </div>
+        <div class="mt-4 text-center">
+            <button onclick="toggleAuthMode()" id="toggleAuthBtn" class="text-sm text-gray-400 hover:text-white underline">
+                არ გაქვს ანგარიში? დარეგისტრირდი
+            </button>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container footer-flex">
-            <p data-key="footerText">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</p>
-        </div>
-    </footer>
-
-    <!-- Tally Form Modal -->
-    <div id="tallyModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeTallyModal()">&times;</button>
-            <div class="modal-header-text"><span data-key="modalSelectedPkg">არჩეული პაკეტი</span>: <span id="selectedPkgName"></span></div>
-            <iframe id="tallyIframe" src="" width="100%" height="400" frameborder="0" title="მძღოლის ასისტენტი ფორმა"></iframe>
-        </div>
+        <button onclick="fillDemoData()" class="w-full mt-6 bg-gray-700/50 hover:bg-gray-700 text-xs text-gray-300 py-2 rounded-lg border border-gray-600 border-dashed transition">
+            ⚡ დემო მონაცემებით შესვლა (ტესტირებისთვის)
+        </button>
     </div>
 
-    <!-- AUTH / CABINET MODAL OVERLAY -->
-    <div id="authModal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboardSection" class="hidden max-w-7xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- HEADER / PACKAGE STATUS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gray-800/40 border border-gray-700 p-6 rounded-2xl flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-400">აქტიური პაკეტი</p>
+                    <h3 id="currentPackageName" class="text-xl font-bold text-amber-500 mt-1">არ არის აქტიური</h3>
+                    <p id="packageExpiry" class="text-xs text-gray-500 mt-1"></p>
+                </div>
+                <button onclick="scrollToPackages()" class="bg-amber-500/10 text-amber-500 border border-amber-500/30 px-3 py-1.5 rounded-lg text-sm hover:bg-amber-500/20 transition">
+                    განახლება
+                </button>
+            </div>
+
+            <div class="bg-gray-800/40 border border-gray-700 p-6 rounded-2xl flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-400">რეგისტრირებული ავტომობილები</p>
+                    <h3 id="carCount" class="text-xl font-bold text-white mt-1">0 მანქანა</h3>
+                </div>
+                <button onclick="toggleCarModal()" class="bg-gray-700 text-white px-3 py-1.5 rounded-lg text-sm hover:bg-gray-600 transition">
+                    + დამატება
+                </button>
+            </div>
+
+            <div class="bg-gray-800/40 border border-gray-700 p-6 rounded-2xl flex justify-between items-center">
+                <div>
+                    <p class="text-sm text-gray-400">სულ დაფიქსირებული ჯარიმები</p>
+                    <h3 id="fineCount" class="text-xl font-bold text-red-400 mt-1">0 ჯარიმა</h3>
+                </div>
+                <span class="text-2xl">📸</span>
+            </div>
+        </div>
+
+        <!-- CARS LIST -->
+        <div class="bg-gray-800/30 border border-gray-700 p-6 rounded-2xl">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span>🚗</span> ჩემი ავტომობილები
+            </h3>
+            <div id="carsContainer" class="flex flex-wrap gap-3">
+                <!-- Cars inserted dynamically -->
+            </div>
+        </div>
+
+        <!-- FINES LIST -->
+        <div class="bg-gray-800/30 border border-gray-700 p-6 rounded-2xl">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span>📑</span> დაწერილი ჯარიმები & ფოტო/ვიდეო მასალა
+            </h3>
+            <div id="finesContainer" class="space-y-4">
+                <!-- Fines inserted dynamically -->
+            </div>
+        </div>
+
+        <!-- PACKAGES SECTION -->
+        <div id="packagesSection" class="pt-6">
+            <h3 class="text-2xl font-bold text-center mb-2">გამოწერის პაკეტები</h3>
+            <p class="text-gray-400 text-center text-sm mb-8">აირჩიე შენთვის სასურველი პაკეტი და მიიღე ჯარიმების მომენტალური შეტყობინება</p>
             
-            <div id="authFormBox">
-                <div class="modal-header-text" data-key="authModalTitle">პირად კაბინეტში შესვლა</div>
-                <form onsubmit="handleAuthRequest(event)">
-                    <div class="auth-form-group">
-                        <label>სახელი</label>
-                        <input type="text" id="userNameInput" required placeholder="თქვენი სახელი...">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Standard -->
+                <div class="bg-gray-800/50 border border-gray-700 p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xl font-bold">Standard</h4>
+                        <div class="text-3xl font-extrabold text-amber-500 my-4">5 ₾ <span class="text-sm font-normal text-gray-400">/ თვე</span></div>
+                        <ul class="text-sm space-y-2 text-gray-300">
+                            <li>✓ 1 ავტომობილის მონიტორინგი</li>
+                            <li>✓ SMS & Telegram შეტყობინებები</li>
+                            <li>✓ ფოტო/ვიდეო მასალის ნახვა</li>
+                        </ul>
                     </div>
-                    <div class="auth-form-group">
-                        <label data-key="personalIdLabel">პირადი ნომერი (11-ნიშნა)</label>
-                        <input type="text" id="userPersonalIdInput" required maxlength="11" pattern="\d{11}" placeholder="010................">
-                    </div>
-                    <div class="auth-form-group">
-                        <label data-key="phoneLabel">ტელეფონის ნომერი</label>
-                        <input type="tel" id="userPhoneInput" required placeholder="599 00 00 00">
-                    </div>
-                    <div class="auth-form-group">
-                        <label>სახელმწიფო ნომერი</label>
-                        <input type="text" id="userCarInput" required placeholder="AA-100-AA">
-                    </div>
-                    <div class="auth-form-group">
-                        <label>ტექპასპორტი</label>
-                        <input type="text" id="userTechPassportInput" required placeholder="ტექპასპორტის ნომერი">
-                    </div>
-                    <button type="submit" class="auth-submit-btn" data-key="sendRequestBtn">მოთხოვნის გაგზავნა</button>
-                </form>
-            </div>
+                    <button onclick="buyPackage('Standard', 5)" class="mt-6 w-full bg-gray-700 hover:bg-gray-600 py-2.5 rounded-xl text-sm font-bold transition">არჩევა</button>
+                </div>
 
-            <!-- Waiting / Result Screen -->
-            <div id="authWaitingBox" class="waiting-box" style="display: none;">
-                <div id="statusIcon" class="spinner">⏳</div>
-                <h3 id="statusTitle" style="color: #1b382b; margin-bottom: 10px;" data-key="waitingTitle">მოთხოვნა გაგზავნილია</h3>
-                <p id="statusDesc" style="font-size: 13px; color: #666;" data-key="waitingDesc">ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...</p>
+                <!-- Premium -->
+                <div class="bg-gradient-to-b from-amber-500/10 to-gray-800/50 border-2 border-amber-500 p-6 rounded-2xl flex flex-col justify-between relative">
+                    <span class="absolute -top-3 right-4 bg-amber-500 text-gray-950 font-bold text-xs px-3 py-1 rounded-full">პოპულარული</span>
+                    <div>
+                        <h4 class="text-xl font-bold">Premium</h4>
+                        <div class="text-3xl font-extrabold text-amber-500 my-4">12 ₾ <span class="text-sm font-normal text-gray-400">/ თვე</span></div>
+                        <ul class="text-sm space-y-2 text-gray-300">
+                            <li>✓ 3 ავტომობილის მონიტორინგი</li>
+                            <li>✓ მომენტალური შეტყობინებები</li>
+                            <li>✓ ფოტო/ვიდეო მასალის ნახვა</li>
+                            <li>✓ ევაკუატორის 10%-იანი ფასდაკლება</li>
+                        </ul>
+                    </div>
+                    <button onclick="buyPackage('Premium', 12)" class="mt-6 w-full bg-amber-500 hover:bg-amber-600 text-gray-950 py-2.5 rounded-xl text-sm font-bold transition">არჩევა</button>
+                </div>
+
+                <!-- VIP -->
+                <div class="bg-gray-800/50 border border-gray-700 p-6 rounded-2xl flex flex-col justify-between">
+                    <div>
+                        <h4 class="text-xl font-bold">VIP Auto Assitance</h4>
+                        <div class="text-3xl font-extrabold text-amber-500 my-4">25 ₾ <span class="text-sm font-normal text-gray-400">/ თვე</span></div>
+                        <ul class="text-sm space-y-2 text-gray-300">
+                            <li>✓ ულIMITO ავტომობილები</li>
+                            <li>✓ 24/7 პრიორიტეტული მხარდაჭერა</li>
+                            <li>✓ უფასო საწვავის მიწოდება / Jumpstart</li>
+                            <li>✓ ტექინსპექტირების შეხსენება & მართვა</li>
+                        </ul>
+                    </div>
+                    <button onclick="buyPackage('VIP', 25)" class="mt-6 w-full bg-gray-700 hover:bg-gray-600 py-2.5 rounded-xl text-sm font-bold transition">არჩევა</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
-    <script>
-        const BOT_TOKEN = "8935597191:AAF_6E74uYoIIeDX8Hsl0O2407QMHddpNvY"; 
-        const CHAT_ID = "8233255349";     
-        let statusCheckInterval = null;
+    <!-- MODAL: PHOTO / VIDEO MEDIA -->
+    <div id="mediaModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 border border-gray-700 max-w-2xl w-full rounded-2xl overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-gray-700 flex justify-between items-center">
+                <h3 id="modalTitle" class="font-bold text-gray-200">დარღვევის ფოტო/ვიდეო მასალა</h3>
+                <button onclick="closeMediaModal()" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <p class="text-xs text-gray-400 mb-2">დარღვევის ფოტოსურათი (ვიდეოფოტოკონტროლი):</p>
+                    <img id="modalImage" src="" alt="Fine evidence" class="w-full h-64 object-cover rounded-xl border border-gray-700">
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 mb-1">ვიდეო ჩანაწერი:</p>
+                    <div class="bg-gray-900 border border-gray-700 p-4 rounded-xl flex items-center justify-between text-sm">
+                        <span class="text-gray-300">📹 cam_video_recording_hd.mp4</span>
+                        <a href="#" onclick="alert('ვიდეოს ჩამოტვირთვა დაიწყო...')" class="bg-amber-500/20 text-amber-500 px-3 py-1 rounded hover:bg-amber-500/30">ნახვა / Gადმოწერა</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        const translations = {
-            geo: {
-                pageTitle: "მძღოლის ასისტენტი — mashveli.online.ge",
-                loginBtn: "პირადი კაბინეტი",
-                heroBadge: "ავტომობილის მხარდაჭერა ყოველდღე",
-                heroTitle: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქედან",
-                heroDesc: "მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
-                heroBtn: "↗ დაიწყეთ მოთხოვნა",
-                cardHeader: "ერთი სივრცე მძღოლისთვის<br>მარტივი. სწრაფი. უსაფრთხო.",
-                cardDesc: "ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.",
-                pkgSubtitle: "სერვისის პაკეტები",
-                pkgTitle: "აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა",
-                pkg1Badge: "საწყისი",
-                pkg1Dur: "1 თვე",
-                pkg1Desc: "მოქნილი არჩევანი მოკლევადიანი მძღოლის მხარდაჭერისთვის.",
-                pkg2Badge: "პოპულარული",
-                pkg2Dur: "3 თვე",
-                pkg2Desc: "დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.",
-                pkg3Badge: "საუკეთესო ღირებულება",
-                pkg3Dur: "1 წელი",
-                pkg3Desc: "გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.",
-                selectBtn: "არჩევა",
-                footerText: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
-                modalSelectedPkg: "არჩეული პაკეტი",
-                authModalTitle: "პირად კაბინეტში შესვლა",
-                personalIdLabel: "პირადი ნომერი (11-ნიშნა)",
-                phoneLabel: "ტელეფონის ნომერი",
-                sendRequestBtn: "მოთხოვნის გაგზავნა",
-                waitingTitle: "მოთხოვნა გაგზავნილია",
-                waitingDesc: "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში..."
-            },
-            eng: {
-                pageTitle: "Driver Assistant — mashveli.online.ge",
-                loginBtn: "Personal Account",
-                heroBadge: "Car Support Every Day",
-                heroTitle: "Driver Assistant — A Calm Journey Starts Here",
-                heroDesc: "Simple support for drivers: fill out a request, choose your preferred package, and proceed in a secure communication channel.",
-                heroBtn: "↗ Start Request",
-                cardHeader: "One Space for the Driver<br>Simple. Fast. Secure.",
-                cardDesc: "We collect only the essential information needed to connect with your request.",
-                pkgSubtitle: "Service Packages",
-                pkgTitle: "Choose the Right Support for You",
-                pkg1Badge: "Starter",
-                pkg1Dur: "1 Month",
-                pkg1Desc: "Flexible choice for short-term driver support.",
-                pkg2Badge: "Popular",
-                pkg2Dur: "3 Months",
-                pkg2Desc: "Balanced package for continuous assistance.",
-                pkg3Badge: "Best Value",
-                pkg3Dur: "1 Year",
-                pkg3Desc: "Long-term support throughout the whole year.",
-                selectBtn: "Select",
-                footerText: "mashveli.online.ge — Your Daily Road Partner",
-                modalSelectedPkg: "Selected package",
-                authModalTitle: "Login to Personal Cabinet",
-                personalIdLabel: "Personal ID (11 digits)",
-                phoneLabel: "Phone Number",
-                sendRequestBtn: "Send Request",
-                waitingTitle: "Request Sent",
-                waitingDesc: "Administrator is verifying your subscription. You will enter upon approval..."
-            },
-            rus: {
-                pageTitle: "Помощник водителя — mashveli.online.ge",
-                loginBtn: "Личный кабинет",
-                heroBadge: "Поддержка автомобиля каждый день",
-                heroTitle: "Помощник водителя — Спокойный путь начинается здесь",
-                heroDesc: "Простая поддержка для водителей: заполните заявку, выберите подходящий пакет и продолжайте в защищенном канале связи.",
-                heroBtn: "↗ Начать запрос",
-                cardHeader: "Единое пространство для водителя<br>Просто. Быстро. Безопасно.",
-                cardDesc: "Мы собираем только ту основную информацию, которая необходима для связи по вашему запросу.",
-                pkgSubtitle: "Пакеты услуг",
-                pkgTitle: "Выберите подходящую для вас поддержку",
-                pkg1Badge: "Начальный",
-                pkg1Dur: "1 месяц",
-                pkg1Desc: "Гибкий выбор для краткосрочной поддержки водителя.",
-                pkg2Badge: "Популярный",
-                pkg2Dur: "3 месяца",
-                pkg2Desc: "Сбалансированный пакет для постоянной помощи.",
-                pkg3Badge: "Лучшая цена",
-                pkg3Dur: "1 год",
-                pkg3Desc: "Долгосрочная поддержка на весь год.",
-                selectBtn: "Выбрать",
-                footerText: "mashveli.online.ge — Ваш ежедневный партнер в дороге",
-                modalSelectedPkg: "Выбранный пакет",
-                authModalTitle: "Вход в личный кабинет",
-                personalIdLabel: "Личный номер (11 цифр)",
-                phoneLabel: "Номер телефона",
-                sendRequestBtn: "Отправить запрос",
-                waitingTitle: "Запрос отправлен",
-                waitingDesc: "Администратор проверяет вашу подписку. Доступ откроется сразу после подтверждения..."
-            }
+    <script>
+        // --- MOCK DATABASE (LOCALSTORAGE) ---
+        let isRegister = false;
+        let currentUser = null;
+
+        const demoUser = {
+            personalId: "01001011223",
+            password: "password123",
+            package: "Premium",
+            expiry: "2026-12-31",
+            cars: ["AA-100-AA", "GE-888-MS"],
+            fines: [
+                {
+                    id: "F-9021",
+                    car: "AA-100-AA",
+                    date: "2026-10-15 14:32",
+                    location: "თბილისი, ჭავჭავაძის გამზ. N22",
+                    reason: "სიჩქარის გადაჭარბება (15-25 კმ/სთ)",
+                    amount: 50,
+                    status: "გადაუხდელი",
+                    image: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=800&q=80"
+                },
+                {
+                    id: "F-8812",
+                    car: "GE-888-MS",
+                    date: "2026-09-02 09:15",
+                    location: "თბილისი, რუსთაველის გამზირი",
+                    reason: "შუქნიშნის აკრძალულ ნიშანზე გავლით",
+                    amount: 100,
+                    status: "გადახდილი",
+                    image: "https://images.unsplash.com/photo-1508974239320-0a029497e820?auto=format&fit=crop&w=800&q=80"
+                }
+            ]
         };
 
-        function changeLanguage(lang) {
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            document.getElementById('htmlRoot').setAttribute('lang', lang);
-
-            const elements = document.querySelectorAll('[data-key]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[lang] && translations[lang][key]) {
-                    el.innerHTML = translations[lang][key];
-                }
-            });
-            document.title = translations[lang].pageTitle;
+        // --- AUTH LOGIC ---
+        function toggleAuthMode() {
+            isRegister = !isRegister;
+            document.getElementById('authTitle').innerText = isRegister ? "რეგისტრაცია" : "პირად კაბინეტში შესვლა";
+            document.getElementById('authBtn').innerText = isRegister ? "რეგისტრაცია" : "შესვლა";
+            document.getElementById('toggleAuthBtn').innerText = isRegister ? "უკვე გაქვს ანგარიში? შედი" : "არ გაქვს ანგარიში? დარეგისტრირდი";
         }
 
-        // Tally Modal
-        function openTallyModal(pkgName) {
-            document.getElementById('selectedPkgName').innerText = pkgName;
-            document.getElementById('tallyModal').style.display = 'flex';
-        }
-        function closeTallyModal() {
-            document.getElementById('tallyModal').style.display = 'none';
+        function fillDemoData() {
+            document.getElementById('personalId').value = demoUser.personalId;
+            document.getElementById('password').value = demoUser.password;
         }
 
-        // Auth Modal
-        function openAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
-            document.getElementById('authFormBox').style.display = 'block';
-            document.getElementById('authWaitingBox').style.display = 'none';
-        }
-        function closeAuthModal() {
-            document.getElementById('authModal').style.display = 'none';
-            if (statusCheckInterval) clearInterval(statusCheckInterval);
-        }
-
-        // Request handling & Telegram Inline Buttons Integration with full fields
-        async function handleAuthRequest(e) {
+        function handleAuth(e) {
             e.preventDefault();
-            const name = document.getElementById('userNameInput').value;
-            const pid = document.getElementById('userPersonalIdInput').value;
-            const phone = document.getElementById('userPhoneInput').value;
-            const carNumber = document.getElementById('userCarInput').value;
-            const techPassport = document.getElementById('userTechPassportInput').value;
+            const pid = document.getElementById('personalId').value;
+            const pass = document.getElementById('password').value;
 
-            document.getElementById('authFormBox').style.display = 'none';
-            document.getElementById('authWaitingBox').style.display = 'block';
-            
-            document.getElementById('statusIcon').className = "spinner";
-            document.getElementById('statusIcon').innerText = "⏳";
-            document.getElementById('statusTitle').innerText = "მოთხოვნა გაგზავნილია";
-            document.getElementById('statusDesc').innerText = "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...";
-
-            // ზუსტი ფორმატი სქრინშოტის მიხედვით
-            const message = `🚗 *ახალი განაცხადი საიტიდან:*\n\n` +
-                `👤 *სახელი:*\n${name}\n` +
-                `🆔 *პირადი ნომერი:* \`${pid}\`\n` +
-                `📞 *ტელეფონი:* \`${phone}\`\n` +
-                `🚘 *სახელმწიფო ნომერი:* \`${carNumber}\`\n` +
-                `📄 *ტექპასპორტი:* \`${techPassport}\`\n` +
-                `🔗 *გადამოწმების ბმულები:*\n\n` +
-                `• PTI (ინსპექტირება):\nhttps://pti.ge\n\n` +
-                `• Protocols (ისტორია):\nhttps://protocols.ge\n\n` +
-                `• Police Videos (ჯარიმები):\nhttps://videos.police.ge\n\n` +
-                `✅ *თანხმობა:* true`;
-            
-            const keyboard = {
-                inline_keyboard: [
-                    [
-                        { text: "✅ დაშვება", callback_data: `approve_${pid}` },
-                        { text: "❌ უარყოფა", callback_data: `reject_${pid}` }
-                    ]
-                ]
-            };
-
-            try {
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown',
-                        reply_markup: keyboard
-                    })
-                });
-            } catch (err) {
-                console.log("Telegram API Error:", err);
+            if (pid.length !== 11) {
+                alert("პირადი ნომერი უნდა შედგებოდეს 11 ციფრისგან!");
+                return;
             }
 
-            // დემო / ტესტირების სიმულაცია (რომ ნახო უარყოფის ტექსტი როგორ ჩნდება)
-            let secondsElapsed = 0;
-            statusCheckInterval = setInterval(() => {
-                secondsElapsed += 3;
-                
-                // 12 წამის შემდეგ გამოჩნდება ზუსტი მოთხოვნილი უარყოფის ტექსტი
-                if (secondsElapsed > 12) {
-                    showRejectState();
-                    clearInterval(statusCheckInterval);
-                }
-            }, 3000);
+            // Simulate loading demo profile or creating new
+            if (pid === demoUser.personalId) {
+                currentUser = demoUser;
+            } else {
+                currentUser = {
+                    personalId: pid,
+                    password: pass,
+                    package: null,
+                    expiry: null,
+                    cars: [],
+                    fines: []
+                };
+            }
+
+            renderDashboard();
         }
 
-        // უარყოფის ზუსტი ტექსტი
-        function showRejectState() {
-            document.getElementById('statusIcon').className = "";
-            document.getElementById('statusIcon').innerText = "❌";
-            document.getElementById('statusTitle').innerText = "წვდომა შეზღუდულია";
-            document.getElementById('statusDesc').innerHTML = `
-                <span style="color: #d9534f; font-weight: 500; font-size: 14px; line-height: 1.6; display: block; margin-top: 10px;">
-                    თქვენ არ გაქვთ შეძენილი პაკეტი, თუ გსურთ მონაცემების განახლებულად მიღება გთხოვთ შეიძინოთ თქვენთვის სასურველი პაკეტი.
-                </span>
-            `;
+        function logout() {
+            currentUser = null;
+            document.getElementById('authSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+            document.getElementById('userInfo').classList.add('hidden');
         }
 
-        // დაშვების მდგომარეობა
-        function showApproveState() {
-            document.getElementById('statusIcon').className = "";
-            document.getElementById('statusIcon').innerText = "🎉";
-            document.getElementById('statusTitle').innerText = "წარმატებული ავტორიზაცია";
-            document.getElementById('statusDesc').innerHTML = `
-                <span style="color: #5cb85c; font-weight: bold; font-size: 14px;">
-                    პაკეტი აქტიურია! თქვენი ჯარიმები და მონაცემები იტვირთება...
-                </span>
-            `;
+        // --- DASHBOARD RENDER ---
+        function renderDashboard() {
+            document.getElementById('authSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            document.getElementById('userInfo').classList.remove('hidden');
+
+            document.getElementById('userPersonalId').innerText = `🆔 ${currentUser.personalId}`;
+            document.getElementById('currentPackageName').innerText = currentUser.package || "არ არის აქტიური";
+            document.getElementById('packageExpiry').innerText = currentUser.expiry ? `ვადა: ${currentUser.expiry}` : "გთხოვთ აირჩიოთ პაკეტი";
+
+            // Render Cars
+            const carsContainer = document.getElementById('carsContainer');
+            document.getElementById('carCount').innerText = `${currentUser.cars.length} მანქანა`;
+            carsContainer.innerHTML = currentUser.cars.length ? currentUser.cars.map(car => `
+                <div class="bg-gray-900 border border-gray-700 px-4 py-2 rounded-xl flex items-center gap-3 font-mono font-bold text-lg text-amber-400">
+                    🚘 ${car}
+                    <button onclick="removeCar('${car}')" class="text-gray-500 hover:text-red-400 text-xs font-sans">✕</button>
+                </div>
+            `).join('') : '<p class="text-sm text-gray-500">ავტომობილი არ არის დამატებული</p>';
+
+            // Render Fines
+            const finesContainer = document.getElementById('finesContainer');
+            document.getElementById('fineCount').innerText = `${currentUser.fines.length} ჯარიმა`;
+
+            if (currentUser.fines.length === 0) {
+                finesContainer.innerHTML = `<div class="p-6 text-center text-gray-500">ჯარიმები არ ირიცხება 🎉</div>`;
+            } else {
+                finesContainer.innerHTML = currentUser.fines.map(fine => `
+                    <div class="bg-gray-900 border border-gray-700/80 p-4 rounded-xl flex flex-col md:flex-row justify-between md:items-center gap-4">
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="bg-amber-500/10 text-amber-500 font-mono text-xs px-2 py-0.5 rounded font-bold">${fine.car}</span>
+                                <span class="text-xs text-gray-400">${fine.date}</span>
+                                <span class="text-xs px-2 py-0.5 rounded ${fine.status === 'გადაუხდელი' ? 'bg-red-500/20 text-red-400' : 'bg-green-500/20 text-green-400'}">${fine.status}</span>
+                            </div>
+                            <p class="font-semibold text-gray-200">${fine.reason}</p>
+                            <p class="text-xs text-gray-400">📍 ${fine.location}</p>
+                        </div>
+                        <div class="flex items-center justify-between md:justify-end gap-4 border-t md:border-t-0 pt-3 md:pt-0 border-gray-800">
+                            <div class="text-right">
+                                <span class="text-xl font-extrabold text-white">${fine.amount} ₾</span>
+                            </div>
+                            <button onclick="openMediaModal('${fine.reason}', '${fine.image}')" class="bg-gray-800 hover:bg-gray-700 text-amber-400 border border-gray-700 px-3 py-2 rounded-xl text-xs font-medium flex items-center gap-2 transition">
+                                📷 ფოტო/ვიდეო
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // --- CAR ACTIONS ---
+        function toggleCarModal() {
+            const carNum = prompt("შეიყვანეთ ავტომობილის სახელმწიფო ნომერი (მაგ: AA-100-AA):");
+            if (carNum) {
+                currentUser.cars.push(carNum.toUpperCase());
+                renderDashboard();
+            }
+        }
+
+        function removeCar(carNum) {
+            currentUser.cars = currentUser.cars.filter(c => c !== carNum);
+            renderDashboard();
+        }
+
+        // --- PACKAGES ---
+        function buyPackage(pkgName, price) {
+            if (confirm(`გსურთ ${pkgName} პაკეტის აქტივაცია (${price} ₾)?`)) {
+                currentUser.package = pkgName;
+                currentUser.expiry = "2027-10-26";
+                alert(`🎉 ${pkgName} პაკეტი წარმატებით გააქტიურდა!`);
+                renderDashboard();
+            }
+        }
+
+        function scrollToPackages() {
+            document.getElementById('packagesSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // --- MEDIA MODAL ---
+        function openMediaModal(title, imgUrl) {
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalImage').src = imgUrl;
+            document.getElementById('mediaModal').classList.remove('hidden');
+        }
+
+        function closeMediaModal() {
+            document.getElementById('mediaModal').classList.add('hidden');
         }
     </script>
 </body>
