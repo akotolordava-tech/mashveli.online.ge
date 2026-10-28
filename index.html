@@ -872,7 +872,7 @@
                 document.getElementById('successMessage').style.display = 'block';
             }
 
-            // როდესაც ადმინი ტელეგრამში დააჭერს დაშვებას, ბმული გადმოამისამართებს საიტზე და ავტომატურად გაააქტიურებს
+            // როდესაც ადმინი ტელეგრამში დააჭერს დაშვებას, ავტომატურად ვუხსნათ კაბინეტის დაფა (Dashboard)
             const approvePid = urlParams.get('approve');
             if (approvePid) {
                 const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 1 თვე
@@ -881,7 +881,7 @@
                     expireTime: expireTime
                 }));
                 
-                // ავტომატურად გავუხსნათ დაფა (Dashboard) რომ კაბინეტში შევიდეს
+                // ვავსებთ ტექსტს და ვრთავთ Dashboard-ს პირდაპირ ეკრანზე
                 document.getElementById('cabinetStatusText').innerHTML = `✅ პაკეტი წარმატებით გააქტიურდა პირადი ნომრით: <b>${approvePid}</b>!`;
                 document.getElementById('cabinetActiveServices').style.display = 'block';
                 document.getElementById('cabinetDashboard').style.display = 'flex';
@@ -971,7 +971,6 @@
                             `📞 ტელეფონი: <code>${phone}</code>\n\n` +
                             `მომხმარებელი ელოდება პაკეტის აქტივაციას.`;
 
-            // ბმულიანი ღილაკი, რომელიც დაჭერისას ავტომატურად ააქტიურებს საიტზე კაბინეტს
             const inlineKeyboard = {
                 inline_keyboard: [
                     [
