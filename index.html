@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ka" id="htmlRoot">
+<html lang="ka">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="pageTitle">mashveli.online.ge — მძღოლის ასისტენტი</title>
+    <title>mashveli.online.ge</title>
     <style>
         * {
             box-sizing: border-box;
@@ -27,29 +27,6 @@
             font-size: 22px;
             font-weight: bold;
             text-decoration: none;
-        }
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        .login-nav-btn {
-            background-color: #d9f96b;
-            color: #0d231a;
-            font-size: 14px;
-            font-weight: bold;
-            padding: 8px 18px;
-            border-radius: 20px;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .login-nav-btn:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
         }
         .lang-switch {
             background: #17362a;
@@ -81,8 +58,8 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 40px;
-            background-image: linear-gradient(rgba(13, 35, 26, 0.95), rgba(13, 35, 26, 0.95)),
-                               linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px),
+            background-image: linear-gradient(rgba(13, 35, 26, 0.95), rgba(13, 35, 26, 0.95)), 
+                               linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px), 
                                linear-gradient(0deg, rgba(255,255,255,.03) 1px, transparent 1px);
             background-size: 100% 100%, 40px 40px, 40px 40px;
         }
@@ -340,9 +317,9 @@
         }
         .modal-content {
             background: #fff;
-            padding: 35px;
+            padding: 40px;
             border-radius: 20px;
-            max-width: 500px;
+            max-width: 480px;
             width: 100%;
             position: relative;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
@@ -353,7 +330,7 @@
             position: absolute;
             top: 15px; right: 20px;
             background: none; border: none;
-            font-size: 26px; cursor: pointer;
+            font-size: 24px; cursor: pointer;
             color: #0d231a;
         }
         .modal-content h3 {
@@ -378,27 +355,6 @@
             border: 1px solid #ccc;
             border-radius: 10px;
             font-size: 14px;
-            background-color: #fff;
-        }
-        .tech-sample-box {
-            background: #f8faef;
-            border: 1px dashed #0d231a;
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .tech-sample-box p {
-            font-size: 12px;
-            color: #0d231a;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-        .tech-sample-box img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 6px;
-            border: 1px solid #ccc;
         }
         .form-submit-btn {
             background: #d9f96b;
@@ -411,24 +367,6 @@
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
-            transition: background 0.2s;
-        }
-        .form-submit-btn:hover {
-            background: #cbf056;
-        }
-        .waiting-box {
-            text-align: center;
-            padding: 30px 10px;
-        }
-        .spinner {
-            font-size: 36px;
-            margin-bottom: 15px;
-            display: inline-block;
-            animation: spin 2s infinite linear;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         .success-banner {
             display: none;
@@ -448,15 +386,10 @@
 
     <header>
         <a href="#" class="logo">mashveli.online.ge</a>
-        <div class="header-right">
-            <button class="login-nav-btn" onclick="openAuthCabinetModal()">
-                👤 <span data-key="login_nav">პირადი კაბინეტი</span>
-            </button>
-            <div class="lang-switch">
-                <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
-                <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
-                <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">Русский</button>
-            </div>
+        <div class="lang-switch">
+            <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
+            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
+            <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">Русский</button>
         </div>
     </header>
 
@@ -564,88 +497,46 @@
         </div>
     </div>
 
-    <!-- 1. სწრაფი მოთხოვნის ფანჯარა (ორიგინალური პაკეტებიდან) -->
+    <!-- მოთხოვნის შესავსები ფორმის ფანჯარა (Modal) ვიდეოს მიხედვით -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
             <h3 id="modalTitle">მოთხოვნის შევსება</h3>
             <form id="telegramForm" onsubmit="submitToTelegram(event)">
                 <input type="hidden" id="selectedPackage">
+                
                 <div class="form-group">
-                    <label>სახელი და გვარი</label>
-                    <input type="text" id="clientName" required placeholder="მაგ: გიორგი ბერიძე">
+                    <label>სრული სახელი და გვარი</label>
+                    <input type="text" id="clientName" required placeholder="შეიყვანეთ სახელი და გვარი...">
                 </div>
+
+                <div class="form-group">
+                    <label>პირადი ნომერი (11-ნიშნა)</label>
+                    <input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრიანი პირადი ნომერი">
+                </div>
+
                 <div class="form-group">
                     <label>ტელეფონის ნომერი</label>
-                    <input type="tel" id="clientPhone" required placeholder="მაგ: +995 599 ...">
+                    <input type="tel" id="clientPhone" required placeholder="+995 ...">
                 </div>
+
                 <div class="form-group">
-                    <label>ავტომობილის VIN კოდი (ან დეტალები)</label>
-                    <textarea id="clientDetails" rows="3" required placeholder="შეიყვანეთ VIN კოდი..."></textarea>
+                    <label>ავტომობილის სახელმწიფო ნომერი</label>
+                    <input type="text" id="clientCar" required placeholder="მაგ: AA110II">
                 </div>
-                <button type="submit" class="form-submit-btn">გაგზავნა და გადახდაზე გადასვლა</button>
+
+                <div class="form-group">
+                    <label>ტექპასპორტის ნომერი</label>
+                    <input type="text" id="clientTech" required placeholder="მაგ: EV0159681">
+                </div>
+
+                <div class="form-group">
+                    <label>არჩეული პაკეტი (სტატუსი)</label>
+                    <input type="text" id="displayPackage" readonly style="background:#e9ece5; font-weight:bold;">
+                </div>
+
+                <button type="submit" class="form-submit-btn">გაგზავნა და გადახდა</button>
             </form>
-        </div>
-    </div>
-
-    <!-- 2. პირადი კაბინეტის სრული ავტორიზაციის და პაკეტის ფანჯარა -->
-    <div class="modal-overlay" id="cabinetModal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeCabinetModal()">&times;</button>
-            
-            <div id="cabinetFormBox">
-                <h3 data-key="cab_modal_title">პირად კაბინეტში შესვლა</h3>
-                <form onsubmit="handleCabinetRequest(event)">
-                    <div class="form-group">
-                        <label>სახელი და გვარი</label>
-                        <input type="text" id="cabName" required placeholder="თქვენი სახელი...">
-                    </div>
-                    <div class="form-group">
-                        <label>პირადი ნომერი (11-ნიშნა)</label>
-                        <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="010................">
-                    </div>
-                    <div class="form-group">
-                        <label>ტელეფონის ნომერი</label>
-                        <input type="tel" id="cabPhone" required placeholder="599 00 00 00">
-                    </div>
-                    <div class="form-group">
-                        <label>სახელმწიფო ნომერი</label>
-                        <input type="text" id="cabCar" required placeholder="AA-100-AA">
-                    </div>
-
-                    <div class="form-group">
-                        <label>ტექპასპორტის ნომერი</label>
-                        <div class="tech-sample-box">
-                            <p>🔍 მიუთითეთ ტექპასპორტის სერია და ნომერი ნიმუშის მიხედვით</p>
-                            <img src="https://i.ibb.co/6y4G8h6/tech-sample.png" alt="ტექპასპორტის ნიმუში" onerror="this.src='https://via.placeholder.com/450x140?text=Tech+Passport+Sample'">
-                        </div>
-                        <input type="text" id="cabTech" required placeholder="მაგ: AB1234567">
-                    </div>
-
-                    <div class="form-group">
-                        <label>აირჩიეთ პაკეტი და გადახდა</label>
-                        <select id="cabPkg" required>
-                            <option value="7 GEL - საწყისი პაკეტი (1 თვე)">საწყისი - 7 GEL (1 თვე)</option>
-                            <option value="18 GEL - პოპულარული პაკეტი (3 თვე)">პოპულარული - 18 GEL (3 თვე)</option>
-                            <option value="60 GEL - საუკეთესო პაკეტი (1 წელი)">საუკეთესო - 60 GEL (1 წელი)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>დამატებითი სერვისები / შენიშვნა</label>
-                        <input type="text" id="cabExtra" placeholder="სურვილისამებრ (მაგ: ევაკუატორი, ფხიზელი მძღოლი)">
-                    </div>
-
-                    <button type="submit" class="form-submit-btn" data-key="cab_submit_btn">მოთხოვნის გაგზავნა</button>
-                </form>
-            </div>
-
-            <!-- ლოდინის / პასუხის ეკრანი -->
-            <div id="cabinetWaitingBox" class="waiting-box" style="display: none;">
-                <div id="statusIcon" class="spinner">⏳</div>
-                <h3 id="statusTitle" style="color: #0d231a; margin-bottom: 10px;">მოთხოვნა გაგზავნილია</h3>
-                <p id="statusDesc" style="font-size: 14px; color: #555;">ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...</p>
-            </div>
         </div>
     </div>
 
@@ -676,12 +567,8 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzMzCGVILcAds3U0w2qG-pngS2ymCEM7AF7wfmfn3araVIvuJZyWaKZk96x_tAlQxqu/exec";
-        let statusCheckInterval = null;
-
         const translations = {
             ge: {
-                login_nav: "პირადი კაბინეტი",
                 badge_text: "ავტომობილის მხარდაჭერა ყოველდღე",
                 hero_title: "მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან",
                 hero_desc: "მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.",
@@ -721,12 +608,9 @@
                 sec3_desc: "ფორმის მიღების შემდეგ ჩვენ გაგიხსნით გარე დაცულ საკომუნიკაციო და გადახდის არხს. საბანკო ბარათის მონაცემები ამ გვერდზე არ გროვდება.",
                 footer_title: "დაგვიკავშირდით WhatsApp-ზე",
                 footer_copy: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
-                success_msg: "ტექსტური შეტყობინების სახით მოგივათ შეტყობინება, გთხოვთ გაეცანით მიღებულ ინფორმაციას.",
-                cab_modal_title: "პირად კაბინეტში შესვლა",
-                cab_submit_btn: "მოთხოვნის გაგზავნა"
+                success_msg: "ტექსტური შეტყობინების სახით მოგივათ შეტყობინება, გთხოვთ გაეცანით მიღებულ ინფორმაციას."
             },
             en: {
-                login_nav: "Personal Cabinet",
                 badge_text: "Daily Car Support",
                 hero_title: "Driver Assistant — A peaceful journey starts here",
                 hero_desc: "Simple support for drivers: fill out a request, choose your preferred package, and proceed in a secure communication channel.",
@@ -766,12 +650,9 @@
                 sec3_desc: "After receiving the form, we will open an external secure communication and payment channel. Credit card details are not collected on this page.",
                 footer_title: "Contact us on WhatsApp",
                 footer_copy: "mashveli.online.ge — Your daily road partner",
-                success_msg: "You will receive a text message, please review the received information.",
-                cab_modal_title: "Login to Personal Cabinet",
-                cab_submit_btn: "Send Request"
+                success_msg: "You will receive a text message, please review the received information."
             },
             ru: {
-                login_nav: "Личный кабинет",
                 badge_text: "Поддержка автомобилей каждый день",
                 hero_title: "Помощник водителя — спокойный путь начинается здесь",
                 hero_desc: "Простая поддержка для водителей: заполни заявку, выбери удобный пакет и продолжи в защищенном канале связи.",
@@ -811,9 +692,7 @@
                 sec3_desc: "После получения формы мы откроем внешний защищенный канал связи и оплаты. Данные банковских карт на этой странице не собираются.",
                 footer_title: "Свяжитесь с нами в WhatsApp",
                 footer_copy: "mashveli.online.ge — Ваш ежедневный партнер в дороге",
-                success_msg: "Вам придет текстовое сообщение, пожалуйста, ознакомьтесь с полученной информацией.",
-                cab_modal_title: "Вход в личный кабинет",
-                cab_submit_btn: "Отправить запрос"
+                success_msg: "Вам придет текстовое сообщение, пожалуйста, ознакомьтесь с полученной информацией."
             }
         };
 
@@ -836,12 +715,13 @@
             }
         }
 
-        // 1. პაკეტის სწრაფი მოთხოვნის მოდალი
         function openModal(packageName) {
             document.getElementById('selectedPackage').value = packageName;
+            document.getElementById('displayPackage').value = packageName;
             document.getElementById('modalTitle').textContent = packageName + ' - მოთხოვნა';
             document.getElementById('orderModal').style.display = 'flex';
         }
+
         function closeModal() {
             document.getElementById('orderModal').style.display = 'none';
         }
@@ -850,12 +730,21 @@
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
             const name = document.getElementById('clientName').value;
+            const pid = document.getElementById('clientPid').value;
             const phone = document.getElementById('clientPhone').value;
-            const details = document.getElementById('clientDetails').value;
+            const car = document.getElementById('clientCar').value;
+            const tech = document.getElementById('clientTech').value;
 
             const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
             const chatId = "8233255349";
-            const message = `🚨 ახალი მოთხოვნა საიტიდან!\n\n📦 პაკეტი: ${pkg}\n👤 სახელი: ${name}\n📞 ტელეფონი: ${phone}\n🚗 დეტალები/VIN: ${details}`;
+            
+            const message = `🚨 ახალი მოთხოვნა საიტიდან!\n\n` +
+                            `📦 პაკეტი: ${pkg}\n` +
+                            `👤 სახელი: ${name}\n` +
+                            `🆔 პირადი ნომერი: ${pid}\n` +
+                            `📞 ტელეფონი: ${phone}\n` +
+                            `🚗 სახელმწიფო ნომერი: ${car}\n` +
+                            `📄 ტექპასპორტი: ${tech}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -868,99 +757,6 @@
 
             const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
             window.location.href = `https://egreve.bog.ge/Carfax?return_url=${returnUrl}`;
-        }
-
-        // 2. პირადი კაბინეტის მოდალის ლოგიკა (Apps Script-ით და Telegram Inline Buttons-ით)
-        function openAuthCabinetModal() {
-            document.getElementById('cabinetModal').style.display = 'flex';
-            document.getElementById('cabinetFormBox').style.display = 'block';
-            document.getElementById('cabinetWaitingBox').style.display = 'none';
-        }
-
-        function closeCabinetModal() {
-            document.getElementById('cabinetModal').style.display = 'none';
-            if (statusCheckInterval) clearInterval(statusCheckInterval);
-        }
-
-        async function handleCabinetRequest(e) {
-            e.preventDefault();
-            const name = document.getElementById('cabName').value;
-            const pid = document.getElementById('cabPid').value;
-            const phone = document.getElementById('cabPhone').value;
-            const carNumber = document.getElementById('cabCar').value;
-            const techPassport = document.getElementById('cabTech').value;
-            const selectedPackage = document.getElementById('cabPkg').value;
-            const extraService = document.getElementById('cabExtra').value || "არ არის";
-
-            document.getElementById('cabinetFormBox').style.display = 'none';
-            document.getElementById('cabinetWaitingBox').style.display = 'block';
-            
-            document.getElementById('statusIcon').className = "spinner";
-            document.getElementById('statusIcon').innerText = "⏳";
-            document.getElementById('statusTitle').innerText = "მოთხოვნა გაგზავნილია";
-            document.getElementById('statusDesc').innerText = "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში...";
-
-            try {
-                await fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: "auth_request",
-                        name: name,
-                        pid: pid,
-                        phone: phone,
-                        car: carNumber,
-                        tech: techPassport,
-                        package: selectedPackage,
-                        extra: extraService
-                    })
-                });
-            } catch (err) {
-                console.log("Network Error:", err);
-            }
-
-            // სტატუსის პერიოდული შემოწმება (Polling)
-            statusCheckInterval = setInterval(async () => {
-                try {
-                    let res = await fetch(`${APPS_SCRIPT_URL}?action=checkStatus&pid=${pid}`);
-                    let data = await res.json();
-
-                    if (data.status === "approve") {
-                        showApproveCabinetState();
-                        clearInterval(statusCheckInterval);
-                    } else if (data.status === "reject") {
-                        showRejectCabinetState();
-                        clearInterval(statusCheckInterval);
-                    }
-                } catch (err) {
-                    console.log("Check status error:", err);
-                }
-            }, 3000);
-        }
-
-        // უარყოფის ზუსტი ტექსტი
-        function showRejectCabinetState() {
-            document.getElementById('statusIcon').className = "";
-            document.getElementById('statusIcon').innerText = "❌";
-            document.getElementById('statusTitle').innerText = "წვდომა შეზღუდულია";
-            document.getElementById('statusDesc').innerHTML = `
-                <span style="color: #d9534f; font-weight: 500; font-size: 14px; line-height: 1.6; display: block; margin-top: 10px;">
-                    თქვენ არ გაქვთ შეძენილი პაკეტი, თუ გსურთ მონაცემების განახლებულად მიღება გთხოვთ შეიძინოთ თქვენთვის სასურველი პაკეტი.
-                </span>
-            `;
-        }
-
-        // დაშვების მდგომარეობა
-        function showApproveCabinetState() {
-            document.getElementById('statusIcon').className = "";
-            document.getElementById('statusIcon').innerText = "🎉";
-            document.getElementById('statusTitle').innerText = "წარმატებული ავტორიზაცია";
-            document.getElementById('statusDesc').innerHTML = `
-                <span style="color: #5cb85c; font-weight: bold; font-size: 14px;">
-                    პაკეტი აქტიურია! თქვენი მონაცემები იტვირთება...
-                </span>
-            `;
         }
     </script>
 </body>
