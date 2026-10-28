@@ -14,6 +14,7 @@
             font-family: Arial, sans-serif;
             background-color: #f2f4ef;
             color: #0d231a;
+            scroll-behavior: smooth;
         }
         header {
             background-color: #0d231a;
@@ -22,11 +23,33 @@
             justify-content: space-between;
             align-items: center;
         }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
         .logo {
             color: #fff;
             font-size: 22px;
             font-weight: bold;
             text-decoration: none;
+        }
+        .header-nav-btn {
+            background: transparent;
+            border: 1px solid #d9f96b;
+            color: #d9f96b;
+            padding: 6px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+        .header-nav-btn:hover {
+            background: #d9f96b;
+            color: #0d231a;
         }
         .lang-switch {
             background: #17362a;
@@ -381,9 +404,9 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* Welcome Popup Styles */
+        /* Welcome Popup Styles (საიტის გახსნისას რომ ამოვარდეს) */
         #welcomePopup {
-            display: flex; /* საიტის გახსნისას რომ ავტომატურად გამოჩნდეს */
+            display: flex; 
         }
         .welcome-box {
             background: #fff;
@@ -411,7 +434,7 @@
             margin-bottom: 15px;
         }
         .extra-text {
-            display: none; /* თავიდან დამალულია, მეტის წაკითხვისას იხსნება */
+            display: none; 
             margin-top: 10px;
         }
         .read-more-btn {
@@ -442,7 +465,7 @@
 </head>
 <body>
 
-    <!-- საიტის გახსნისას ამომხტარი მისალმების პოპ-აპ ფანჯარა -->
+    <!-- საიტის გახსნისას ამომხტარი გრძელი ტექსტის პოპ-აპ ფანჯარა -->
     <div class="modal-overlay" id="welcomePopup">
         <div class="welcome-box">
             <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
@@ -467,7 +490,11 @@
     </div>
 
     <header>
-        <a href="#" class="logo">mashveli.online.ge</a>
+        <div class="header-left">
+            <a href="#" class="logo">mashveli.online.ge</a>
+            <!-- სერვისები ღილაკი ზედა მენიუში, რომელიც გადაამისამართებს ქვედა სერვისების ბლოკზე -->
+            <a href="#individual-services" class="header-nav-btn">სერვისები</a>
+        </div>
         <div class="lang-switch">
             <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
             <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
@@ -526,7 +553,8 @@
             თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
         </div>
 
-        <div class="section-title" style="margin-top: 40px;">
+        <!-- ინდივიდუალური სერვისების ბლოკი ID-ით, რომ ზედა მენიუს ღილაკმა აქ გადმოიყვანოს -->
+        <div class="section-title" id="individual-services" style="margin-top: 40px;">
             <span data-key="sec2_sub">ინდივიდუალური სერვისები</span>
             <h2 data-key="sec2_title">აირჩიეთ კონკრეტული სერვისი</h2>
         </div>
