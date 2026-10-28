@@ -871,6 +871,23 @@
             if (urlParams.get('paid') === 'true') {
                 document.getElementById('successMessage').style.display = 'block';
             }
+
+            // როდესაც ადმინი ტელეგრამში დააჭერს დაშვებას, ბმული გადმოამისამართებს საიტზე და ავტომატურად გაააქტიურებს
+            const approvePid = urlParams.get('approve');
+            if (approvePid) {
+                const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 1 თვე
+                localStorage.setItem("user_pkg_" + approvePid, JSON.stringify({
+                    name: "აქტიური პაკეტი",
+                    expireTime: expireTime
+                }));
+                
+                // ავტომატურად გავუხსნათ დაფა (Dashboard) რომ კაბინეტში შევიდეს
+                document.getElementById('cabinetStatusText').innerHTML = `✅ პაკეტი წარმატებით გააქტიურდა პირადი ნომრით: <b>${approvePid}</b>!`;
+                document.getElementById('cabinetActiveServices').style.display = 'block';
+                document.getElementById('cabinetDashboard').style.display = 'flex';
+                
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         }
 
         // Welcome Popup მართვა
@@ -946,18 +963,20 @@
                 }
             }
 
+            const siteUrl = window.location.origin + window.location.pathname;
+
             const message = `🔐 <b>მოთხოვნა პირადი კაბინეტის გახსნაზე!</b>\n\n` +
                             `🆔 პირადი: <code>${pid}</code>\n` +
                             `🚗 ნომერი: <code>${car}</code>\n` +
                             `📞 ტელეფონი: <code>${phone}</code>\n\n` +
                             `მომხმარებელი ელოდება პაკეტის აქტივაციას.`;
 
-            // Make.com-ისთვის სწორი callback_data ღილაკები
+            // ბმულიანი ღილაკი, რომელიც დაჭერისას ავტომატურად ააქტიურებს საიტზე კაბინეტს
             const inlineKeyboard = {
                 inline_keyboard: [
                     [
-                        { text: "✅ დაშვება", callback_data: "approve_" + pid },
-                        { text: "❌ უარყოფა", callback_data: "reject_" + pid }
+                        { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
+                        { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
                     ]
                 ]
             };
@@ -1009,11 +1028,12 @@
                             `🚗 სახელმწიფო ნომერი: ${car}\n` +
                             `📄 ტექპასპორტი: ${tech}`;
 
+            const siteUrl = window.location.origin + window.location.pathname;
             const inlineKeyboard = {
                 inline_keyboard: [
                     [
-                        { text: "✅ დაშვება", callback_data: "approve_" + pid },
-                        { text: "❌ უარყოფა", callback_data: "reject_" + pid }
+                        { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
+                        { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
                     ]
                 ]
             };
