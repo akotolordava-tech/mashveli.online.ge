@@ -304,7 +304,7 @@
             font-size: 13px;
         }
         
-        /* Modal Styles */
+        /* Modal & Welcome Popup Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -380,9 +380,55 @@
             font-size: 18px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
+
+        /* Welcome Popup Specific Styles */
+        #welcomePopup {
+            display: flex; /* საიტის გახსნისას რომ ავტომატურად გამოჩნდეს */
+        }
+        .welcome-box {
+            background: #fff;
+            padding: 35px;
+            border-radius: 20px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .welcome-box h3 {
+            color: #0d231a;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+        .welcome-box p {
+            color: #555;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .welcome-btn {
+            background: #d9f96b;
+            color: #0d231a;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
+    <!-- საიტის გახსნისას ამომხტარი მისალმების / ინფო ფანჯარა -->
+    <div class="modal-overlay" id="welcomePopup">
+        <div class="welcome-box">
+            <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
+            <h3>👋 მოგესალმებით!</h3>
+            <p>მოგესალმებით მძღოლის ასისტენტის პლატფორმაზე. გთხოვთ გაეცნოთ ჩვენს სერვისებს და აირჩიოთ თქვენთვის სასურველი პაკეტი.</p>
+            <button class="welcome-btn" onclick="closeWelcomePopup()">გაგება / დახურვა</button>
+        </div>
+    </div>
 
     <header>
         <a href="#" class="logo">mashveli.online.ge</a>
@@ -497,7 +543,7 @@
         </div>
     </div>
 
-    <!-- მოთხოვნის შესავსები ფორმის ფანჯარა (Modal) ვიდეოს მიხედვით -->
+    <!-- მოთხოვნის შესავსები ფორმის ფანჯარა (Modal) -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -713,6 +759,11 @@
             if (urlParams.get('paid') === 'true') {
                 document.getElementById('successMessage').style.display = 'block';
             }
+        }
+
+        // Welcome Popup დახურვის ფუნქცია
+        function closeWelcomePopup() {
+            document.getElementById('welcomePopup').style.display = 'none';
         }
 
         function openModal(packageName) {
