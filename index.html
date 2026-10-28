@@ -26,7 +26,7 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 20px;
         }
         .logo {
             color: #fff;
@@ -50,6 +50,16 @@
         .header-nav-btn:hover {
             background: #d9f96b;
             color: #0d231a;
+        }
+        .cabinet-btn {
+            background: #d9f96b;
+            color: #0d231a;
+            border: none;
+            padding: 6px 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
         }
         .lang-switch {
             background: #17362a;
@@ -327,7 +337,7 @@
             font-size: 13px;
         }
         
-        /* Modal & Pop-up Styles */
+        /* Modal Styles */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -404,7 +414,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        /* Welcome Popup Styles (საიტის გახსნისას რომ ამოვარდეს) */
+        /* Welcome Popup Styles */
         #welcomePopup {
             display: flex; 
         }
@@ -465,7 +475,7 @@
 </head>
 <body>
 
-    <!-- საიტის გახსნისას ამომხტარი გრძელი ტექსტის პოპ-აპ ფანჯარა -->
+    <!-- მისალმების პოპ-აპ ფანჯარა -->
     <div class="modal-overlay" id="welcomePopup">
         <div class="welcome-box">
             <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
@@ -489,16 +499,59 @@
         </div>
     </div>
 
+    <!-- პირადი კაბინეტის შესასვლელი ფანჯარა -->
+    <div class="modal-overlay" id="cabinetLoginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeCabinetLogin()">&times;</button>
+            <h3>👤 მომხმარებლის პირადი კაბინეტი</h3>
+            <form onsubmit="handleCabinetLogin(event)">
+                <div class="form-group">
+                    <label>პირადი ნომერი (11-ნიშნა)</label>
+                    <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრიანი პირადი ნომერი">
+                </div>
+                <div class="form-group">
+                    <label>ავტომობილის სახელმწიფო ნომერი</label>
+                    <input type="text" id="cabCar" required placeholder="მაგ: AA110II">
+                </div>
+                <div class="form-group">
+                    <label>ტელეფონის ნომერი</label>
+                    <input type="tel" id="cabPhone" required placeholder="+995 ...">
+                </div>
+                <button type="submit" class="form-submit-btn">შესვლა კაბინეტში</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- პირადი კაბინეტის შიდა დაფა (Dashboard) -->
+    <div class="modal-overlay" id="cabinetDashboard">
+        <div class="modal-content" style="max-width: 600px; text-align: center;">
+            <button class="modal-close" onclick="closeCabinetDashboard()">&times;</button>
+            <h2 style="color: #0d231a; margin-bottom: 15px;">🚗 თქვენი პერსონალური ასისტენტის კაბინეტი</h2>
+            <p id="cabinetStatusText" style="font-size: 16px; line-height: 1.6; margin-bottom: 25px; color: #333;"></p>
+            <div id="cabinetActiveServices" style="background: #f2f4ef; padding: 20px; border-radius: 12px; text-align: left; margin-bottom: 20px;">
+                <h4 style="margin-bottom: 10px; color: #0d231a;">თქვენი აქტიური სერვისები:</h4>
+                <ul style="padding-left: 20px; color: #555; line-height: 1.5;">
+                    <li>ოპერატიული შეტყობინებები ჯარიმებზე</li>
+                    <li>ტექინსპექტირების ვადების კონტროლი</li>
+                    <li>პრიორიტეტული 24/7 მხარდაჭერა</li>
+                </ul>
+            </div>
+            <button class="form-submit-btn" onclick="closeCabinetDashboard()">დახურვა</button>
+        </div>
+    </div>
+
     <header>
         <div class="header-left">
             <a href="#" class="logo">mashveli.online.ge</a>
-            <!-- სერვისები ღილაკი ზედა მენიუში, რომელიც გადაამისამართებს ქვედა სერვისების ბლოკზე -->
             <a href="#individual-services" class="header-nav-btn">სერვისები</a>
         </div>
-        <div class="lang-switch">
-            <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
-            <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
-            <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">Русский</button>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button class="cabinet-btn" onclick="openCabinetLogin()">პირადი კაბინეტი</button>
+            <div class="lang-switch">
+                <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
+                <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
+                <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">Русский</button>
+            </div>
         </div>
     </header>
 
@@ -553,14 +606,13 @@
             თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი
         </div>
 
-        <!-- ინდივიდუალური სერვისების ბლოკი ID-ით, რომ ზედა მენიუს ღილაკმა აქ გადმოიყვანოს -->
+        <!-- ინდივიდუალური სერვისების ბლოკი -->
         <div class="section-title" id="individual-services" style="margin-top: 40px;">
             <span data-key="sec2_sub">ინდივიდუალური სერვისები</span>
             <h2 data-key="sec2_title">აირჩიეთ კონკრეტული სერვისი</h2>
         </div>
 
         <div class="services-grid">
-            <!-- ევაკუატორი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv1_title">🚚 ევაკუატორი 24/7</h3>
@@ -569,7 +621,6 @@
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
             
-            <!-- ცხოველების ტაქსი -> 568 11 23 50 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv2_title">🐾 ცხოველების ტაქსი</h3>
@@ -578,7 +629,6 @@
                 <a href="https://wa.me/995568112350" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
-            <!-- ფხიზელი მძღოლი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv3_title">🛡️ ფხიზელი მძღოლი</h3>
@@ -587,7 +637,6 @@
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
-            <!-- პირადი მძღოლი -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv4_title">👤 პირადი მძღოლი</h3>
@@ -596,7 +645,6 @@
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
 
-            <!-- ავტომობილის დაქოქვა -> 568 96 56 74 -->
             <div class="service-card">
                 <div class="service-info">
                     <h3 data-key="srv5_title">🔑 ავტომობილის დაქოქვა</h3>
@@ -825,7 +873,7 @@
             }
         }
 
-        // Welcome Popup მართვის ფუნქციები
+        // Welcome Popup მართვა
         function closeWelcomePopup() {
             document.getElementById('welcomePopup').style.display = 'none';
         }
@@ -842,6 +890,7 @@
             }
         }
 
+        // პაკეტის ყიდვის ფორმა
         function openModal(packageName) {
             document.getElementById('selectedPackage').value = packageName;
             document.getElementById('displayPackage').value = packageName;
@@ -853,6 +902,74 @@
             document.getElementById('orderModal').style.display = 'none';
         }
 
+        // პირადი კაბინეტის ფანჯრები
+        function openCabinetLogin() {
+            document.getElementById('cabinetLoginModal').style.display = 'flex';
+        }
+
+        function closeCabinetLogin() {
+            document.getElementById('cabinetLoginModal').style.display = 'none';
+        }
+
+        function closeCabinetDashboard() {
+            document.getElementById('cabinetDashboard').style.display = 'none';
+        }
+
+        // პირადი კაბინეტის ავტორიზაციის და ვადის შემოწმების ლოგიკა
+        function handleCabinetLogin(event) {
+            event.preventDefault();
+            const pid = document.getElementById('cabPid').value;
+            const car = document.getElementById('cabCar').value;
+            const phone = document.getElementById('cabPhone').value;
+
+            const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
+            const chatId = "8233255349";
+
+            // შევამოწმოთ ადგილობრივ მეხსიერებაში არის თუ არა უკვე აქტიური პაკეტი ამ პირად ნომერზე
+            const savedData = localStorage.getItem("user_pkg_" + pid);
+            
+            if (savedData) {
+                const pkgInfo = JSON.parse(savedData);
+                const now = new Date().getTime();
+
+                if (now < pkgInfo.expireTime) {
+                    // ვადა ჯერ არ გასულა -> შევა კაბინეტში უპრობლემოდ
+                    closeCabinetLogin();
+                    document.getElementById('cabinetStatusText').innerHTML = `✅ თქვენი პაკეტი (<b>${pkgInfo.name}</b>) აქტიურია!<br>ვადის ამოწურვამდე: <b>${Math.ceil((pkgInfo.expireTime - now) / (1000 * 60 * 60 * 24))} დღე</b>.`;
+                    document.getElementById('cabinetActiveServices').style.display = 'block';
+                    document.getElementById('cabinetDashboard').style.display = 'flex';
+                    return;
+                } else {
+                    // ვადა გასულია
+                    closeCabinetLogin();
+                    document.getElementById('cabinetStatusText').innerHTML = `⚠️ თქვენ შეგეზღუდათ არსებული სერვისის გამოყენება. თუ გსურთ სერვისის გამოყენება გთხოვთ გააგრძელოთ და გამოიწეროთ თქვენთვის სასურველი პაკეტი.`;
+                    document.getElementById('cabinetActiveServices').style.display = 'none';
+                    document.getElementById('cabinetDashboard').style.display = 'flex';
+                    return;
+                }
+            }
+
+            // თუ ბაზაში/ლექალსთორჯში არ არის, ვუგზავნით ტელეგრამში მოთხოვნას შენს დასადასტურებლად
+            const message = `🔐 მოთხოვნა პირადი კაბინეტის გახსნაზე!\n\n` +
+                            `🆔 პირადი: ${pid}\n` +
+                            `🚗 ნომერი: ${car}\n` +
+                            `📞 ტელეფონი: ${phone}\n\n` +
+                            `მომხმარებელი ელოდება პაკეტის აქტივაციას.`;
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: message
+                })
+            }).catch(err => console.log(err));
+
+            alert("მოთხოვნა გაგზავნილია ადმინისტრატორთან! როგორც კი დაადასტურებთ, შეძლებთ შესვლას.");
+            closeCabinetLogin();
+        }
+
+        // ტელეგრამის ფორმა (პაკეტის გამოწერა)
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -862,10 +979,23 @@
             const car = document.getElementById('clientCar').value;
             const tech = document.getElementById('clientTech').value;
 
+            // განვსაზღვროთ პაკეტის ხანგრძლივობა მილიწამებში
+            let durationDays = 30; // საწყისი 1 თვე
+            if (pkg.includes('3 თვე')) durationDays = 90;
+            if (pkg.includes('1 წელი')) durationDays = 365;
+
+            const expireTime = new Date().getTime() + (durationDays * 24 * 60 * 60 * 1000);
+
+            // შევინახოთ ბრაუზერში ავტომატურად (შენ შეგიძლია შემდეგ ბექენდზე გადაიტანო)
+            localStorage.setItem("user_pkg_" + pid, JSON.stringify({
+                name: pkg,
+                expireTime: expireTime
+            }));
+
             const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
             const chatId = "8233255349";
             
-            const message = `🚨 ახალი მოთხოვნა საიტიდან!\n\n` +
+            const message = `🚨 ახალი პაკეტის გამოწერა!\n\n` +
                             `📦 პაკეტი: ${pkg}\n` +
                             `👤 სახელი: ${name}\n` +
                             `🆔 პირადი ნომერი: ${pid}\n` +
