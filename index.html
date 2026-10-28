@@ -751,7 +751,7 @@
                 sec2_sub: "ინდივიდუალური სერვისები",
                 sec2_title: "აირჩიეთ კონკრეტული სერვისი",
                 srv1_title: "🚚 ევაკუატორი 24/7",
-                srv1_desc: "სწრაფი და სანდო საევაკუაციო მომსახურება.",
+                srv1_desc: "სწრაఫీ და სანდო საევაკუაციო მომსახურება.",
                 srv2_title: "🐾 ცხოველების ტაქსი",
                 srv2_desc: "შინაური ცხოველების უსაფრთხო ტრანსპორტირება.",
                 srv3_title: "🛡️ ფხიზელი მძღოლი",
@@ -872,22 +872,25 @@
                 document.getElementById('successMessage').style.display = 'block';
             }
 
-            // როდესაც ადმინი ტელეგრამში დააჭერს დაშვებას, ავტომატურად ვუხსნათ კაბინეტის დაფა (Dashboard)
+            // თუ URL-ში მოყვა approve პარამეტრი
             const approvePid = urlParams.get('approve');
             if (approvePid) {
-                const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 1 თვე
-                localStorage.setItem("user_pkg_" + approvePid, JSON.stringify({
-                    name: "აქტიური პაკეტი",
-                    expireTime: expireTime
-                }));
-                
-                // ვავსებთ ტექსტს და ვრთავთ Dashboard-ს პირდაპირ ეკრანზე
-                document.getElementById('cabinetStatusText').innerHTML = `✅ პაკეტი წარმატებით გააქტიურდა პირადი ნომრით: <b>${approvePid}</b>!`;
-                document.getElementById('cabinetActiveServices').style.display = 'block';
-                document.getElementById('cabinetDashboard').style.display = 'flex';
-                
+                activateAndOpenDashboard(approvePid);
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
+        }
+
+        function activateAndOpenDashboard(pid) {
+            const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 1 თვე
+            localStorage.setItem("user_pkg_" + pid, JSON.stringify({
+                name: "აქტიური პაკეტი",
+                expireTime: expireTime
+            }));
+            localStorage.setItem("approved_" + pid, "true"); // ვინახავთ რომ დამტკიცდა
+
+            document.getElementById('cabinetStatusText').innerHTML = `✅ პაკეტი წარმატებით გააქტიურდა პირადი ნომრით: <b>${pid}</b>!`;
+            document.getElementById('cabinetActiveServices').style.display = 'block';
+            document.getElementById('cabinetDashboard').style.display = 'flex';
         }
 
         // Welcome Popup მართვა
@@ -932,7 +935,9 @@
             document.getElementById('cabinetDashboard').style.display = 'none';
         }
 
-        // პირადი კაბინეტის ავტორიზაციის და ვადის შემოწმების ლოგიკა
+        // ავტორიზაციის დაფა და ლოდინის (Polling) რეჟიმი
+        let checkInterval = null;
+
         function handleCabinetLogin(event) {
             event.preventDefault();
             const pid = document.getElementById('cabPid').value;
@@ -952,12 +957,6 @@
                     closeCabinetLogin();
                     document.getElementById('cabinetStatusText').innerHTML = `✅ თქვენი პაკეტი (<b>${pkgInfo.name}</b>) აქტიურია!<br>ვადის ამოწურვამდე: <b>${Math.ceil((pkgInfo.expireTime - now) / (1000 * 60 * 60 * 24))} დღე</b>.`;
                     document.getElementById('cabinetActiveServices').style.display = 'block';
-                    document.getElementById('cabinetDashboard').style.display = 'flex';
-                    return;
-                } else {
-                    closeCabinetLogin();
-                    document.getElementById('cabinetStatusText').innerHTML = `⚠️ თქვენ შეგეზღუდათ არსებული სერვისის გამოყენება. თუ გსურთ სერვისის გამოყენება გთხოვთ გააგრძელოთ და გამოიწეროთ თქვენთვის სასურველი პაკეტი.`;
-                    document.getElementById('cabinetActiveServices').style.display = 'none';
                     document.getElementById('cabinetDashboard').style.display = 'flex';
                     return;
                 }
@@ -991,8 +990,23 @@
                 })
             }).catch(err => console.log(err));
 
-            alert("მოთხოვნა გაგზავნილია ადმინისტრატორთან! როგორც კი დაადასტურებთ, შეძლებთ შესვლას.");
             closeCabinetLogin();
+            
+            // ვხსნით ლოდინის ფანჯარს და ვიწყებთ ფონურ შემოწმებას
+            document.getElementById('cabinetStatusText').innerHTML = `⏳ მოთხოვნა გაგზავნილია ადმინისტრატორთან.<br>გთხოვთ დაადასტუროთ ტელეგრამში...<br><b>გვერდი ავტომატურად გაიხსნება დამტკიცებისთანავე!</b>`;
+            document.getElementById('cabinetActiveServices').style.display = 'none';
+            document.getElementById('cabinetDashboard').style.display = 'flex';
+
+            // ვასუფთავებთ ძველ ტაიმერს თუ არსებობდა
+            if (checkInterval) clearInterval(checkInterval);
+
+            // ყოველ 2 წამში ვამოწმებთ, დამტკიცდა თუ არა ეს პირადი ნომერი
+            checkInterval = setInterval(() => {
+                if (localStorage.getItem("approved_" + pid) === "true") {
+                    clearInterval(checkInterval);
+                    activateAndOpenDashboard(pid);
+                }
+            }, 2000);
         }
 
         // ტელეგრამის ფორმა (პაკეტის გამოწერა)
@@ -1015,6 +1029,7 @@
                 name: pkg,
                 expireTime: expireTime
             }));
+            localStorage.setItem("approved_" + pid, "true");
 
             const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
             const chatId = "8233255349";
@@ -1029,7 +1044,7 @@
 
             const siteUrl = window.location.origin + window.location.pathname;
             const inlineKeyboard = {
-                inline_keyboard: [
+                inline_keybord: [
                     [
                         { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
                         { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
