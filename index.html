@@ -386,13 +386,37 @@
             margin-bottom: 5px;
         }
 
-        .auth-form-group input {
+        .auth-form-group input, .auth-form-group select {
             width: 100%;
             padding: 12px 15px;
             border: 1px solid #ccc;
             border-radius: 10px;
             font-size: 14px;
             outline: none;
+            background-color: #fff;
+        }
+
+        /* Tech Passport Sample Box */
+        .tech-sample-box {
+            background: #f5f3ec;
+            border: 1px dashed #4a6b5d;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .tech-sample-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+
+        .tech-sample-box p {
+            font-size: 12px;
+            color: #4a6b5d;
+            font-weight: 600;
         }
 
         .auth-submit-btn {
@@ -484,7 +508,6 @@
             </div>
 
             <div class="packages-grid">
-                <!-- Tally-ს პირდაპირი Popup ღილაკები -->
                 <div class="package-card" data-tally-open="w2X13o" data-tally-layout="modal" data-tally-width="600">
                     <span class="pkg-badge" data-key="pkg1Badge">საწყისი</span>
                     <div class="price">7 GEL</div>
@@ -525,7 +548,7 @@
             <button class="close-modal" onclick="closeAuthModal()">&times;</button>
             
             <div id="authFormBox">
-                <div class="modal-header-text" data-key="authModalTitle">პირად კაბინეტში შესვლა</div>
+                <div class="modal-header-text" data-key="authModalTitle">პირად კაბინეტში შესვლა და პაკეტის არჩევა</div>
                 <form onsubmit="handleAuthRequest(event)">
                     <div class="auth-form-group">
                         <label>სახელი</label>
@@ -543,11 +566,33 @@
                         <label>სახელმწიფო ნომერი</label>
                         <input type="text" id="userCarInput" required placeholder="AA-100-AA">
                     </div>
+
+                    <!-- ტექპასპორტის ნიმუში და შეყვანის ველი -->
                     <div class="auth-form-group">
-                        <label>ტექპასპორტი</label>
-                        <input type="text" id="userTechPassportInput" required placeholder="ტექპასპორტის ნომერი">
+                        <label>ტექპასპორტის ნომერი (იხილეთ ნიმუში ქვემოთ)</label>
+                        <div class="tech-sample-box">
+                            <p>🔍 მიუთითეთ ტექპასპორტის სერია და ნომერი მითითებული ნიმუშის მიხედვით</p>
+                            <img src="https://via.placeholder.com/450x150?text=Tech+Passport+Sample+(ტექპასპორტის+ნიმუში)" alt="ტექპასპორტის ნიმუში">
+                        </div>
+                        <input type="text" id="userTechPassportInput" required placeholder="მაგ: AB1234567">
                     </div>
-                    <button type="submit" class="auth-submit-btn" data-key="sendRequestBtn">მოთხოვნის გაგზავნა</button>
+
+                    <div class="auth-form-group">
+                        <label>აირჩიეთ პაკეტი და გადახდა</label>
+                        <select id="userPackageSelect" required>
+                            <option value="7 GEL - საწყისი პაკეტი (1 თვე)">საწყისი - 7 GEL (1 თვე)</option>
+                            <option value="18 GEL - პოპულარული პაკეტი (3 თვე)">პოპულარული - 18 GEL (3 თვე)</option>
+                            <option value="60 GEL - საუკეთესო პაკეტი (1 წელი)">საუკეთესო - 60 GEL (1 წელი)</option>
+                        </select>
+                    </div>
+
+                    <!-- დამატებითი სერვისების ველი -->
+                    <div class="auth-form-group">
+                        <label>დამატებითი სერვისები / შენიშვნა</label>
+                        <input type="text" id="userExtraServiceInput" placeholder="სურვილისამებრ (მაგ: ევაკუატორი, ფხიზელი მძღოლი)">
+                    </div>
+
+                    <button type="submit" class="auth-submit-btn" data-key="sendRequestBtn">მოთხოვნის და გადახდის გაგზავნა</button>
                 </form>
             </div>
 
@@ -588,10 +633,10 @@
                 pkg3Desc: "გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.",
                 selectBtn: "არჩევა",
                 footerText: "mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი",
-                authModalTitle: "პირად კაბინეტში შესვლა",
+                authModalTitle: "პირად კაბინეტში შესვლა და პაკეტის არჩევა",
                 personalIdLabel: "პირადი ნომერი (11-ნიშნა)",
                 phoneLabel: "ტელეფონის ნომერი",
-                sendRequestBtn: "მოთხოვნის გაგზავნა",
+                sendRequestBtn: "მოთხოვნის და გადახდის გაგზავნა",
                 waitingTitle: "მოთხოვნა გაგზავნილია",
                 waitingDesc: "ადმინისტრატორი ამოწმებს თქვენს პაკეტს. დადასტურებისთანავე შეხვალთ კაბინეტში..."
             },
@@ -617,10 +662,10 @@
                 pkg3Desc: "Long-term support throughout the whole year.",
                 selectBtn: "Select",
                 footerText: "mashveli.online.ge — Your Daily Road Partner",
-                authModalTitle: "Login to Personal Cabinet",
+                authModalTitle: "Login to Personal Cabinet & Select Package",
                 personalIdLabel: "Personal ID (11 digits)",
                 phoneLabel: "Phone Number",
-                sendRequestBtn: "Send Request",
+                sendRequestBtn: "Send Request & Payment",
                 waitingTitle: "Request Sent",
                 waitingDesc: "Administrator is verifying your subscription. You will enter upon approval..."
             },
@@ -646,10 +691,10 @@
                 pkg3Desc: "Долгосрочная поддержка на весь год.",
                 selectBtn: "Выбрать",
                 footerText: "mashveli.online.ge — Ваш ежедневный партнер в дороге",
-                authModalTitle: "Вход в личный кабинет",
+                authModalTitle: "Вход в личный кабинет и выбор пакета",
                 personalIdLabel: "Личный номер (11 цифр)",
                 phoneLabel: "Номер телефона",
-                sendRequestBtn: "Отправить запрос",
+                sendRequestBtn: "Отправить запрос и оплату",
                 waitingTitle: "Запрос отправлен",
                 waitingDesc: "Администратор проверяет вашу подписку. Доступ откроется сразу после подтверждения..."
             }
@@ -681,7 +726,7 @@
             if (statusCheckInterval) clearInterval(statusCheckInterval);
         }
 
-        // Request handling via Apps Script
+        // Request handling via Apps Script with all fields
         async function handleAuthRequest(e) {
             e.preventDefault();
             const name = document.getElementById('userNameInput').value;
@@ -689,6 +734,8 @@
             const phone = document.getElementById('userPhoneInput').value;
             const carNumber = document.getElementById('userCarInput').value;
             const techPassport = document.getElementById('userTechPassportInput').value;
+            const selectedPackage = document.getElementById('userPackageSelect').value;
+            const extraService = document.getElementById('userExtraServiceInput').value || "არ არის";
 
             document.getElementById('authFormBox').style.display = 'none';
             document.getElementById('authWaitingBox').style.display = 'block';
@@ -709,7 +756,9 @@
                         pid: pid,
                         phone: phone,
                         car: carNumber,
-                        tech: techPassport
+                        tech: techPassport,
+                        package: selectedPackage,
+                        extra: extraService
                     })
                 });
             } catch (err) {
