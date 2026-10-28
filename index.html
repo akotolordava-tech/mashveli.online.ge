@@ -868,21 +868,8 @@
 
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            
             if (urlParams.get('paid') === 'true') {
                 document.getElementById('successMessage').style.display = 'block';
-            }
-
-            // როდესაც ადმინი ტელეგრამის ღილაკს დააჭერს და გადმოვა საიტზე
-            const approvePid = urlParams.get('approve');
-            if (approvePid) {
-                const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000); // 1 თვე
-                localStorage.setItem("user_pkg_" + approvePid, JSON.stringify({
-                    name: "აქტიური პაკეტი",
-                    expireTime: expireTime
-                }));
-                alert("✅ მომხმარებლის კაბინეტი წარმატებით გააქტიურდა პირადი ნომრით: " + approvePid);
-                window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
 
@@ -959,19 +946,18 @@
                 }
             }
 
-            const siteUrl = window.location.origin + window.location.pathname;
-
             const message = `🔐 <b>მოთხოვნა პირადი კაბინეტის გახსნაზე!</b>\n\n` +
                             `🆔 პირადი: <code>${pid}</code>\n` +
                             `🚗 ნომერი: <code>${car}</code>\n` +
                             `📞 ტელეფონი: <code>${phone}</code>\n\n` +
                             `მომხმარებელი ელოდება პაკეტის აქტივაციას.`;
 
+            // Make.com-ისთვის სწორი callback_data ღილაკები
             const inlineKeyboard = {
                 inline_keyboard: [
                     [
-                        { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
-                        { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
+                        { text: "✅ დაშვება", callback_data: "approve_" + pid },
+                        { text: "❌ უარყოფა", callback_data: "reject_" + pid }
                     ]
                 ]
             };
@@ -1023,12 +1009,11 @@
                             `🚗 სახელმწიფო ნომერი: ${car}\n` +
                             `📄 ტექპასპორტი: ${tech}`;
 
-            const siteUrl = window.location.origin + window.location.pathname;
             const inlineKeyboard = {
                 inline_keyboard: [
                     [
-                        { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
-                        { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
+                        { text: "✅ დაშვება", callback_data: "approve_" + pid },
+                        { text: "❌ უარყოფა", callback_data: "reject_" + pid }
                     ]
                 ]
             };
