@@ -925,7 +925,6 @@
             const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
             const chatId = "8233255349";
 
-            // შევამოწმოთ ადგილობრივ მეხსიერებაში არის თუ არა უკვე აქტიური პაკეტი ამ პირად ნომერზე
             const savedData = localStorage.getItem("user_pkg_" + pid);
             
             if (savedData) {
@@ -933,14 +932,12 @@
                 const now = new Date().getTime();
 
                 if (now < pkgInfo.expireTime) {
-                    // ვადა ჯერ არ გასულა -> შევა კაბინეტში უპრობლემოდ
                     closeCabinetLogin();
                     document.getElementById('cabinetStatusText').innerHTML = `✅ თქვენი პაკეტი (<b>${pkgInfo.name}</b>) აქტიურია!<br>ვადის ამოწურვამდე: <b>${Math.ceil((pkgInfo.expireTime - now) / (1000 * 60 * 60 * 24))} დღე</b>.`;
                     document.getElementById('cabinetActiveServices').style.display = 'block';
                     document.getElementById('cabinetDashboard').style.display = 'flex';
                     return;
                 } else {
-                    // ვადა გასულია
                     closeCabinetLogin();
                     document.getElementById('cabinetStatusText').innerHTML = `⚠️ თქვენ შეგეზღუდათ არსებული სერვისის გამოყენება. თუ გსურთ სერვისის გამოყენება გთხოვთ გააგრძელოთ და გამოიწეროთ თქვენთვის სასურველი პაკეტი.`;
                     document.getElementById('cabinetActiveServices').style.display = 'none';
@@ -949,19 +946,31 @@
                 }
             }
 
-            // თუ ბაზაში/ლექალსთორჯში არ არის, ვუგზავნით ტელეგრამში მოთხოვნას შენს დასადასტურებლად
-            const message = `🔐 მოთხოვნა პირადი კაბინეტის გახსნაზე!\n\n` +
-                            `🆔 პირადი: ${pid}\n` +
-                            `🚗 ნომერი: ${car}\n` +
-                            `📞 ტელეფონი: ${phone}\n\n` +
+            // ტექსტი ღილაკებით (Inline Keyboard)
+            const message = `🔐 <b>მოთხოვნა პირადი კაბინეტის გახსნაზე!</b>\n\n` +
+                            `🆔 პირადი: <code>${pid}</code>\n` +
+                            `🚗 ნომერი: <code>${car}</code>\n` +
+                            `📞 ტელეფონი: <code>${phone}</code>\n\n` +
                             `მომხმარებელი ელოდება პაკეტის აქტივაციას.`;
+
+            // ინლაინ კლავიატურა დაშვება / უარყოფის ღილაკებით
+            const inlineKeyboard = {
+                inline_keyboard: [
+                    [
+                        { text: "✅ დაშვება", callback_data: "approve_" + pid },
+                        { text: "❌ უარყოფა", callback_data: "reject_" + pid }
+                    ]
+                ]
+            };
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: message
+                    text: message,
+                    parse_mode: "HTML",
+                    reply_markup: inlineKeyboard
                 })
             }).catch(err => console.log(err));
 
@@ -979,14 +988,12 @@
             const car = document.getElementById('clientCar').value;
             const tech = document.getElementById('clientTech').value;
 
-            // განვსაზღვროთ პაკეტის ხანგრძლივობა მილიწამებში
-            let durationDays = 30; // საწყისი 1 თვე
+            let durationDays = 30; 
             if (pkg.includes('3 თვე')) durationDays = 90;
             if (pkg.includes('1 წელი')) durationDays = 365;
 
             const expireTime = new Date().getTime() + (durationDays * 24 * 60 * 60 * 1000);
 
-            // შევინახოთ ბრაუზერში ავტომატურად (შენ შეგიძლია შემდეგ ბექენდზე გადაიტანო)
             localStorage.setItem("user_pkg_" + pid, JSON.stringify({
                 name: pkg,
                 expireTime: expireTime
@@ -995,7 +1002,7 @@
             const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
             const chatId = "8233255349";
             
-            const message = `🚨 ახალი პაკეტის გამოწერა!\n\n` +
+            const message = `🚨 <b>ახალი პაკეტის გამოწერა!</b>\n\n` +
                             `📦 პაკეტი: ${pkg}\n` +
                             `👤 სახელი: ${name}\n` +
                             `🆔 პირადი ნომერი: ${pid}\n` +
@@ -1003,12 +1010,23 @@
                             `🚗 სახელმწიფო ნომერი: ${car}\n` +
                             `📄 ტექპასპორტი: ${tech}`;
 
+            const inlineKeyboard = {
+                inline_keyboard: [
+                    [
+                        { text: "✅ დაშვება", callback_data: "approve_" + pid },
+                        { text: "❌ უარყოფა", callback_data: "reject_" + pid }
+                    ]
+                ]
+            };
+
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chatId,
-                    text: message
+                    text: message,
+                    parse_mode: "HTML",
+                    reply_markup: inlineKeyboard
                 })
             }).catch(err => console.log(err));
 
