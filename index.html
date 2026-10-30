@@ -76,7 +76,7 @@
         .read-more-btn { background: none; border: none; color: #0d231a; font-weight: bold; cursor: pointer; text-decoration: underline; padding: 0; margin-bottom: 20px; display: inline-block; font-size: 14px; }
         .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
 
-        /* ================= 🚗 შიდა კაბინეტი (USER DASHBOARD) - სრულად დამალული საწყისად ================= */
+        /* ================= 🚗 შიდა კაბინეტი (USER DASHBOARD) ================= */
         .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d231a; color: #fff; z-index: 5000; overflow-y: auto; }
         .dash-wrapper { display: flex; min-height: 100vh; }
         
@@ -530,23 +530,21 @@
             if(tabId === 'settingsTab') checkChatHours();
         }
 
-        /* Login Handler (ამოწმებს შენახულ მომხმარებელს და აგზავნის მოთხოვნას ტელეგრამზე) */
+        /* მკაცრი შემოწმება: თუ არ არის რეგისტრირებული/შეძენილი, არ შეუშვებს კაბინეტში */
         function handleCabinetLogin(event) {
             event.preventDefault();
             const pid = document.getElementById('cabPid').value;
             const car = document.getElementById('cabCar').value.toUpperCase();
             const phone = document.getElementById('cabPhone').value;
 
-            const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || {
-                name: "მძღოლი",
-                pid: pid,
-                car: car,
-                tech: "EV0159681",
-                phone: phone,
-                package: "საწყისი პაკეტი (7 GEL)",
-                days: 30,
-                timestamp: Date.now()
-            };
+            const savedData = JSON.parse(localStorage.getItem('mashveli_user'));
+
+            // თუ მონაცემები არ არსებობს ან არ ემთხვევა რეგისტრაციისას შეტანილ მონაცემებს
+            if (!savedData || savedData.pid !== pid || savedData.car !== car) {
+                closeCabinetLogin();
+                showLimitNotice("❌ ასეთი აქტიური პაკეტით რეგისტრაცია ვერ მოიძებნა! გთხოვთ ჯერ შეიძინოთ პაკეტი მთავარი გვერდიდან.");
+                return;
+            }
 
             const authMsg = `🔐 <b>კაბინეტში შესვლის მოთხოვნა!</b>\n\n👤 პირადი: ${pid}\n🚗 მანქანა: ${car}\n📞 ტელეფონი: ${phone}`;
 
