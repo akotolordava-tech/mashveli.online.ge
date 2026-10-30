@@ -6,157 +6,182 @@
     <title>mashveli.online.ge</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background-color: #f2f4ef; color: #0d231a; scroll-behavior: smooth; }
-        header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+        body { font-family: Arial, sans-serif; background-color: #0b0f19; color: #fff; scroll-behavior: smooth; }
+        header { background-color: #0b0f19; border-bottom: 1px solid #1f293d; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; }
-        .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 6px 16px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; }
-        .header-nav-btn:hover { background: #d9f96b; color: #0d231a; }
-        .cabinet-btn { background: #d9f96b; color: #0d231a; border: none; padding: 6px 16px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; }
-        .lang-switch { background: #17362a; border-radius: 20px; padding: 5px; display: flex; gap: 5px; }
-        .lang-btn { background: transparent; border: none; color: #fff; padding: 6px 14px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; }
-        .lang-btn.active { background: #d9f96b; color: #0d231a; }
-        .hero { background-color: #0d231a; color: #fff; padding: 60px 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px; }
+        .header-nav-btn { background: transparent; border: 1px solid #ff9800; color: #ff9800; padding: 6px 16px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; }
+        .header-nav-btn:hover { background: #ff9800; color: #0b0f19; }
+        .cabinet-btn { background: #ff9800; color: #0b0f19; border: none; padding: 8px 18px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
+        .cabinet-btn:hover { background: #e68900; }
+        
+        .hero { background-color: #0b0f19; padding: 60px 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px; }
         .hero-left { max-width: 600px; }
-        .badge { background-color: #d9f96b; color: #0d231a; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        .badge { background-color: #ff9800; color: #0b0f19; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
         .hero h1 { font-size: 42px; line-height: 1.2; margin-bottom: 20px; }
-        .hero p { color: #b0c2bc; font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
-        .btn-primary { background-color: #d9f96b; color: #0d231a; padding: 14px 28px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
-        .hero-right-card { background: #fff; color: #0d231a; padding: 30px; border-radius: 20px; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .hero p { color: #9ca3af; font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
+        .btn-primary { background-color: #ff9800; color: #0b0f19; padding: 14px 28px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+        .hero-right-card { background: #131b2e; border: 1px solid #1f293d; color: #fff; padding: 30px; border-radius: 20px; max-width: 420px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
         .section-title { margin-bottom: 40px; }
-        .section-title span { color: #556660; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
-        .section-title h2 { font-size: 32px; color: #0d231a; margin-top: 5px; }
-        .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 40px; }
-        .package-card { background: #fff; border-radius: 20px; padding: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8e4; cursor: pointer; transition: transform 0.2s; }
-        .package-card:hover { transform: translateY(-5px); }
-        .package-card.popular { background: #0d231a; color: #fff; }
-        .package-badge { background: #e6ebd3; color: #0d231a; padding: 6px 14px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
-        .package-card.popular .package-badge { background: #d9f96b; }
-        .package-card h3 { font-size: 36px; margin-bottom: 5px; color: #0d231a; }
-        .package-card.popular h3 { color: #d9f96b; }
-        .package-card h4 { font-size: 18px; margin-bottom: 15px; }
-        .package-card p { color: #667770; font-size: 14px; line-height: 1.5; }
-        .package-card.popular p { color: #b0c2bc; }
-        .sub-banner { background: #e8ede4; padding: 25px; border-radius: 16px; text-align: center; font-weight: bold; color: #0d231a; border: 1px dashed #b5c4ad; margin-bottom: 60px; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
-        .service-card { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8e4; display: flex; flex-direction: column; justify-content: space-between; }
-        .service-info h3 { font-size: 20px; margin-bottom: 10px; color: #0d231a; display: flex; align-items: center; gap: 10px; }
-        .service-info p { color: #667770; font-size: 14px; margin-bottom: 20px; }
-        .whatsapp-btn { background-color: #0d231a; color: #fff; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
-        .footer-banner { background-color: #d9f96b; padding: 50px 20px; text-align: center; }
-        .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
-        .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
+        .section-title span { color: #9ca3af; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title h2 { font-size: 32px; color: #fff; margin-top: 5px; }
         
-        /* Modal Styles */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; padding: 40px; border-radius: 20px; max-width: 520px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
-        .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #0d231a; }
-        .modal-content h3 { margin-bottom: 20px; color: #0d231a; font-size: 20px; }
-        .form-group { margin-bottom: 15px; text-align: left; }
-        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
-        .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
-        .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-        .success-banner { display: none; background: #d9f96b; color: #0d231a; padding: 30px; border-radius: 16px; text-align: center; font-weight: bold; margin-bottom: 40px; font-size: 18px; }
+        .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 40px; }
+        .package-card { background: #131b2e; border: 1px solid #1f293d; border-radius: 20px; padding: 35px; cursor: pointer; transition: transform 0.2s; }
+        .package-card:hover { transform: translateY(-5px); border-color: #ff9800; }
+        .package-card.popular { background: #1a233a; border: 2px solid #ff9800; }
+        .package-badge { background: #2a3756; color: #ff9800; padding: 6px 14px; border-radius: 15px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        .package-card.popular .package-badge { background: #ff9800; color: #0b0f19; }
+        .package-card h3 { font-size: 36px; margin-bottom: 5px; color: #fff; }
+        .package-card h4 { font-size: 18px; margin-bottom: 15px; color: #ff9800; }
+        .package-card p { color: #9ca3af; font-size: 14px; line-height: 1.5; }
 
-        #welcomePopup { display: flex; }
-        .welcome-box { background: #fff; padding: 35px; border-radius: 20px; max-width: 540px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: left; max-height: 90vh; overflow-y: auto; }
-        .welcome-box h3 { color: #0d231a; margin-bottom: 15px; font-size: 18px; line-height: 1.4; padding-right: 25px; }
-        .welcome-text-container { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 15px; }
-        .extra-text { display: none; margin-top: 10px; }
-        .read-more-btn { background: none; border: none; color: #0d231a; font-weight: bold; cursor: pointer; text-decoration: underline; padding: 0; margin-bottom: 20px; display: inline-block; font-size: 14px; }
-        .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
+        .sub-banner { background: #131b2e; border: 1px dashed #2a3756; padding: 25px; border-radius: 16px; text-align: center; font-weight: bold; color: #fff; margin-bottom: 60px; }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .service-card { background: #131b2e; border: 1px solid #1f293d; border-radius: 20px; padding: 30px; display: flex; flex-direction: column; justify-content: space-between; }
+        .service-info h3 { font-size: 20px; margin-bottom: 10px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .service-info p { color: #9ca3af; font-size: 14px; margin-bottom: 20px; }
+        .whatsapp-btn { background-color: #ff9800; color: #0b0f19; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
 
-        /* Cabinet Cards UI */
-        .user-info-card { background: #f8faf6; border: 1px solid #dcdfd8; border-radius: 12px; padding: 15px; text-align: left; margin-bottom: 20px; font-size: 14px; line-height: 1.8; color: #0d231a; }
-        .active-services-list { background: #fff; border: 1px solid #e2e8e4; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 20px; }
-        .active-services-list h4 { margin-bottom: 12px; color: #0d231a; font-size: 16px; }
-        .active-services-list ul { padding-left: 20px; color: #444; line-height: 1.6; font-size: 14px; }
+        /* Modal Styles (Dark Theme) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: #131b2e; border: 1px solid #1f293d; color: #fff; padding: 40px; border-radius: 20px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto; }
+        .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #9ca3af; }
+        .modal-close:hover { color: #fff; }
+        .modal-content h3 { margin-bottom: 10px; color: #fff; font-size: 22px; }
+        .modal-subtitle { color: #9ca3af; font-size: 13px; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 8px; color: #d1d5db; }
+        .form-group input { width: 100%; padding: 14px; background: #0b0f19; border: 1px solid #2a3756; color: #fff; border-radius: 12px; font-size: 15px; outline: none; }
+        .form-group input:focus { border-color: #ff9800; }
+        
+        .form-submit-btn { background: #ff9800; color: #0b0f19; width: 100%; padding: 15px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .form-submit-btn:hover { background: #e68900; }
+
+        .register-link-text { text-align: center; margin-top: 15px; font-size: 13px; color: #9ca3af; }
+        .register-link-text a { color: #ff9800; text-decoration: none; font-weight: bold; }
+        
+        /* Dashboard Layout Inside */
+        .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0b0f19; z-index: 2000; overflow-y: auto; padding: 40px 20px; }
+        .dashboard-header { max-width: 1100px; margin: 0 auto 30px auto; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1f293d; padding-bottom: 20px; }
+        .dashboard-body { max-width: 1100px; margin: 0 auto; }
+        
+        .fines-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .fine-box { background: #131b2e; border: 1px solid #1f293d; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; }
+        .fine-box-icon { font-size: 28px; background: #1f293d; padding: 12px; border-radius: 12px; }
+        .fine-box h4 { font-size: 13px; color: #9ca3af; margin-bottom: 5px; }
+        .fine-box p { font-size: 20px; font-weight: bold; color: #fff; }
+
+        .fine-item-card { background: #131b2e; border: 1px solid #1f293d; border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .car-plate-badge { background: #ff9800; color: #0b0f19; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 13px; }
+        
+        .success-banner { display: none; background: #ff9800; color: #0b0f19; padding: 20px; border-radius: 12px; text-align: center; font-weight: bold; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
-    <!-- მისალმების პოპ-აპი -->
-    <div class="modal-overlay" id="welcomePopup">
-        <div class="welcome-box">
-            <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
-            <h3>მოგესალმებით ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი! 🚗⚡</h3>
-            <div class="welcome-text-container">
-                <p>გადატვირთული მოძრაობა, მუდმივი საგზაო ნაკადი და ყოველდღიური საზრუნავი... აღარ დაკარგოთ დრო და ენერგია წვრილმანების კონტროლზე. Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს!</p>
-                <div id="moreText" class="extra-text">
-                    <p style="margin-top: 10px; font-weight: bold;">აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:</p>
-                    <ul style="padding-left: 20px; margin-top: 5px;">
-                        <li><strong>🚨 ოპერატიული შეტყობინებები ჯარიმებზე</strong></li>
-                        <li><strong>🔍 ტექინსპექტირების ვადების კონტროლი</strong></li>
-                        <li><strong>🛠️ სხვა დამატებითი საჭირო სერვისები ერთ სივრცეში</strong></li>
-                    </ul>
-                </div>
-            </div>
-            <button class="read-more-btn" id="readMoreBtn" onclick="toggleReadMore()">მეტის წაკითხვა...</button>
-            <button class="welcome-btn" onclick="closeWelcomePopup()">გავეცანი</button>
-        </div>
-    </div>
-
-    <!-- პირადი კაბინეტის შესასვლელი ფორმა -->
+    <!-- პირადი კაბინეტის შესასვლელი ფანჯარა (ვიდეოს მსგავსი დიზაინით) -->
     <div class="modal-overlay" id="cabinetLoginModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCabinetLogin()">&times;</button>
-            <h3>👤 შესვლა პირად კაბინეტში</h3>
+            <h3>პირად კაბინეტში შესვლა</h3>
+            <p class="modal-subtitle">შეიყვანეთ 11-ნიშნა პირადი ნომერი, ავტომობილის ნომერი და ტელეფონი</p>
+            
             <form onsubmit="handleCabinetLogin(event)">
                 <div class="form-group">
-                    <label>პირადი ნომერი (11-ნიშნა)</label>
-                    <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="11-ციფრიანი პირადი ნომერი">
+                    <label>პირადი ნომერი (11 ციფრი)</label>
+                    <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="მაგ: 62004028505">
                 </div>
                 <div class="form-group">
                     <label>ავტომობილის სახელმწიფო ნომერი</label>
-                    <input type="text" id="cabCar" required placeholder="მაგ: AA110II">
+                    <input type="text" id="cabCar" required placeholder="მაგ: AA110AA">
                 </div>
                 <div class="form-group">
                     <label>ტელეფონის ნომერი</label>
-                    <input type="tel" id="cabPhone" required placeholder="+995 ...">
+                    <input type="tel" id="cabPhone" required placeholder="მაგ: +995 599 11 22 33">
                 </div>
-                <button type="submit" class="form-submit-btn">კაბინეტში შესვლა ➔</button>
+                <button type="submit" class="form-submit-btn">კაბინეტში შესვლა</button>
             </form>
+            
+            <div class="register-link-text">
+                არ გაქვთ პაკეტი? <a href="#services" onclick="closeCabinetLogin()">შეიძინეთ აქ</a>
+            </div>
         </div>
     </div>
 
-    <!-- პირადი კაბინეტის შიდა დაფა (Dashboard) -->
-    <div class="modal-overlay" id="cabinetDashboard">
-        <div class="modal-content" style="max-width: 580px; text-align: center;">
-            <button class="modal-close" onclick="closeCabinetDashboard()">&times;</button>
-            <h2 style="color: #0d231a; margin-bottom: 15px;">🚗 პირადი კაბინეტი</h2>
-            
-            <div class="user-info-card" id="userInfoCard"></div>
-
-            <p id="cabinetStatusText" style="font-size: 15px; line-height: 1.6; margin-bottom: 20px; color: #333;"></p>
-
-            <div class="active-services-list">
-                <h4>🛡️ თქვენი ასისტენტის სერვისები:</h4>
-                <ul>
-                    <li>🚨 ოპერატიული შეტყობინებები ახალ ჯარიმებზე</li>
-                    <li>🔍 ტექინსპექტირების გავლის ვადების კონტროლი</li>
-                    <li>📞 24/7 პრიორიტეტული მხარდაჭერა და ასისტენსი</li>
-                </ul>
+    <!-- მთავარი შიდა კაბინეტი (Dashboard - ვიდეოდან აღებული სტილით) -->
+    <div class="dashboard-container" id="cabinetDashboard">
+        <div class="dashboard-header">
+            <div style="font-size: 20px; font-weight: bold;">User Dashboard</div>
+            <button class="cabinet-btn" style="background: transparent; border: 1px solid #ef4444; color: #ef4444;" onclick="closeCabinetDashboard()">გასვლა ✕</button>
+        </div>
+        
+        <div class="dashboard-body">
+            <div style="margin-bottom: 30px;">
+                <h2 id="welcomeUserTitle" style="margin-bottom: 5px;">მოგესალმებით, კაბინეტში!</h2>
+                <p style="color: #9ca3af; font-size: 14px;">ავტომატურად გაძლეული ინფორმაცია საგზაო მოძრაობის ბაზიდან</p>
             </div>
 
-            <div id="cabinetActionArea"></div>
-            
-            <button class="form-submit-btn" style="background:#0d231a; color:#fff;" onclick="closeCabinetDashboard()">დახურვა</button>
+            <div class="fines-summary">
+                <div class="fine-box">
+                    <div class="fine-box-icon">⚠️</div>
+                    <div>
+                        <h4>გადაუხდელი ჯარიმები</h4>
+                        <p style="color: #f87171;">50 GEL</p>
+                    </div>
+                </div>
+                <div class="fine-box">
+                    <div class="fine-box-icon">✅</div>
+                    <div>
+                        <h4>გადახდილი (სულ)</h4>
+                        <p style="color: #4ade80;">110 GEL</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 20px; font-size: 20px;">დარიცხული ჯარიმები</h3>
+
+            <div class="fine-item-card">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span class="car-plate-badge" id="dashCarBadge">AA-100-AA</span>
+                    <div>
+                        <div style="font-weight: bold; margin-bottom: 4px;">სიჩქარის გადამეტება (15-20 კმ/სთ)</div>
+                        <div style="font-size: 12px; color: #9ca3af;">📅 2026-10-14 14:22 &nbsp;|&nbsp; 📍 თბილისი, ილია ჭავჭავაძის გამზირი #37</div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">50 GEL</div>
+                    <span style="background: rgba(248, 113, 113, 0.15); color: #f87171; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">გადასახდელი</span>
+                </div>
+            </div>
+
+            <div class="fine-item-card">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span class="car-plate-badge">AA-100-AA</span>
+                    <div>
+                        <div style="font-weight: bold; margin-bottom: 4px;">მყარი ზოლის გადაკვეთის წესის დარღვევა</div>
+                        <div style="font-size: 12px; color: #9ca3af;">📅 2026-09-02 11:05 &nbsp;|&nbsp; 📍 თბილისი, რუსთაველის გამზირი</div>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 18px; font-weight: bold; color: #4ade80; margin-bottom: 5px;">100 GEL</div>
+                    <span style="background: rgba(74, 222, 128, 0.15); color: #4ade80; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">გადახდილია</span>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- ჰედერი -->
     <header>
         <div class="header-left">
             <a href="#" class="logo">mashveli.online.ge</a>
-            <a href="#individual-services" class="header-nav-btn">სერვისები</a>
+            <a href="#services" class="header-nav-btn">სერვისები</a>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
+        <div>
             <button class="cabinet-btn" onclick="openCabinetLogin()">პირადი კაბინეტი</button>
-            <div class="lang-switch">
-                <button class="lang-btn active" id="btn-ge" onclick="setLanguage('ge')">GEO</button>
-                <button class="lang-btn" id="btn-en" onclick="setLanguage('en')">ENG</button>
-                <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">Русский</button>
-            </div>
         </div>
     </header>
 
@@ -166,19 +191,21 @@
         </div>
     </div>
 
+    <!-- მთავარი სექცია -->
     <section class="hero">
         <div class="hero-left">
             <div class="badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
             <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან</h1>
-            <p>მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+            <p>მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული ინფორმაცია ჯარიმებსა და ვადებზე.</p>
             <a href="#services" class="btn-primary">↓ დაიწყეთ მოთხოვნა</a>
         </div>
         <div class="hero-right-card">
             <h3>🛡️ ერთი სივრცე მძღოლისთვის — მარტივი. სწრაფი. უსაფრთხო.</h3>
-            <p>ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.</p>
+            <p style="color: #9ca3af; font-size: 14px; margin-top: 10px;">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.</p>
         </div>
     </section>
 
+    <!-- პაკეტების სექცია -->
     <div class="container" id="services">
         <div class="section-title">
             <span>სერვისის პაკეტები</span>
@@ -208,6 +235,7 @@
 
         <div class="sub-banner">თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი</div>
 
+        <!-- ინდივიდუალური სერვისები -->
         <div class="section-title" id="individual-services" style="margin-top: 40px;">
             <span>ინდივიდუალური სერვისები</span>
             <h2>აირჩიეთ კონკრეტული სერვისი</h2>
@@ -238,7 +266,7 @@
         </div>
     </div>
 
-    <!-- შეკვეთის ფორმა -->
+    <!-- შეკვეთის ფორმა (Modal) -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -248,19 +276,21 @@
                 <div class="form-group"><label>სრული სახელი და გვარი</label><input type="text" id="clientName" required placeholder="სახელი და გვარი..."></div>
                 <div class="form-group"><label>პირადი ნომერი (11-ნიშნა)</label><input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრი"></div>
                 <div class="form-group"><label>ტელეფონის ნომერი</label><input type="tel" id="clientPhone" required placeholder="+995 ..."></div>
-                <div class="form-group"><label>ავტომობილის ნომერი</label><input type="text" id="clientCar" required placeholder="მაგ: AA110II"></div>
+                <div class="form-group"><label>ავტომობილის ნომერი</label><input type="text" id="clientCar" required placeholder="მაგ: AA110AA"></div>
                 <div class="form-group"><label>ტექპასპორტის ნომერი</label><input type="text" id="clientTech" required placeholder="მაგ: EV0159681"></div>
-                <div class="form-group"><label>არჩეული პაკეტი</label><input type="text" id="displayPackage" readonly style="background:#e9ece5; font-weight:bold;"></div>
+                <div class="form-group"><label>არჩეული პაკეტი</label><input type="text" id="displayPackage" readonly style="background:#1f293d; font-weight:bold;"></div>
                 <button type="submit" class="form-submit-btn">გაგზავნა და გადახდა</button>
             </form>
         </div>
     </div>
 
-    <div class="footer-banner">
-        <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
-        <a href="https://wa.me/995568965674" target="_blank" class="footer-phone">+995 568 96 56 74</a>
+    <div class="footer-banner" style="background-color: #131b2e; border-top: 1px solid #1f293d; padding: 40px 20px; text-align: center; margin-top: 60px;">
+        <h3 style="color: #fff; margin-bottom: 15px;">დაგვიკავშირდით WhatsApp-ზე</h3>
+        <a href="https://wa.me/995568965674" target="_blank" style="background-color: #ff9800; color: #0b0f19; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block;">+995 568 96 56 74</a>
     </div>
-    <div class="footer-bottom">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</div>
+    <div class="footer-bottom" style="background-color: #0b0f19; color: #9ca3af; text-align: center; padding: 20px; font-size: 13px;">
+        mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი
+    </div>
 
     <script>
         const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
@@ -271,27 +301,31 @@
             if (urlParams.get('paid') === 'true') {
                 document.getElementById('successMessage').style.display = 'block';
             }
-
-            // ტელეგრამის ბმულიდან შემოსვლისას
-            const approvePid = urlParams.get('approve');
-            if (approvePid) {
-                const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
-                localStorage.setItem("user_pkg_" + approvePid, JSON.stringify({
-                    name: "აქტიური პაკეტი (1 თვე)",
-                    expireTime: expireTime
-                }));
-                
-                openCabinetView(approvePid, "მომხმარებელი", "მითითებული ავტომობილი");
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
         }
 
-        function closeWelcomePopup() { document.getElementById('welcomePopup').style.display = 'none'; }
-        function toggleReadMore() {
-            const moreText = document.getElementById('moreText');
-            const btn = document.getElementById('readMoreBtn');
-            if (moreText.style.display === 'block') { moreText.style.display = 'none'; btn.textContent = "მეტის წაკითხვა..."; }
-            else { moreText.style.display = 'block'; btn.textContent = "ნაკლების ჩვენება"; }
+        function openCabinetLogin() {
+            document.getElementById('cabinetLoginModal').style.display = 'flex';
+        }
+        function closeCabinetLogin() {
+            document.getElementById('cabinetLoginModal').style.display = 'none';
+        }
+        function closeCabinetDashboard() {
+            document.getElementById('cabinetDashboard').style.display = 'none';
+        }
+
+        // კაბინეტში შესვლის ლოგიკა (მონაცემების მიხედვით ხსნის დაფას)
+        function handleCabinetLogin(event) {
+            event.preventDefault();
+            const pid = document.getElementById('cabPid').value;
+            const car = document.getElementById('cabCar').value.toUpperCase();
+            const phone = document.getElementById('cabPhone').value;
+
+            // ვცვლით ინფორმაციას დაფაზე შესული მომხმარებლის მიხედვით
+            document.getElementById('welcomeUserTitle').textContent = `მოგესალმებით, პირადი ნომერი: ${pid}`;
+            document.getElementById('dashCarBadge').textContent = car;
+
+            closeCabinetLogin();
+            document.getElementById('cabinetDashboard').style.display = 'block';
         }
 
         function openModal(packageName) {
@@ -300,64 +334,10 @@
             document.getElementById('modalTitle').textContent = packageName + ' - მოთხოვნა';
             document.getElementById('orderModal').style.display = 'flex';
         }
-        function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
-        function openCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'flex'; }
-        function closeCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'none'; }
-        function closeCabinetDashboard() { document.getElementById('cabinetDashboard').style.display = 'none'; }
-
-        // მომხმარებლის კაბინეტში შესვლის დამუშავება
-        function handleCabinetLogin(event) {
-            event.preventDefault();
-            const pid = document.getElementById('cabPid').value;
-            const car = document.getElementById('cabCar').value.toUpperCase();
-            const phone = document.getElementById('cabPhone').value;
-
-            // შეტყობინების გაგზავნა ტელეგრამში (ადმინისთვის ინფორმაციის მიწოდება)
-            const message = `🔑 <b>მომხმარებელი შევიდა კაბინეტში!</b>\n\n🆔 პირადი ნომერი: <code>${pid}</code>\n🚗 ავტომობილი: <code>${car}</code>\n📞 ტელეფონი: <code>${phone}</code>`;
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
-            }).catch(err => console.log(err));
-
-            closeCabinetLogin();
-            openCabinetView(pid, phone, car);
+        function closeModal() {
+            document.getElementById('orderModal').style.display = 'none';
         }
 
-        // კაბინეტის ჩვენების ფუნქცია
-        function openCabinetView(pid, phone, car) {
-            const savedData = localStorage.getItem("user_pkg_" + pid);
-            const userInfoCard = document.getElementById('userInfoCard');
-            const cabinetStatusText = document.getElementById('cabinetStatusText');
-            const actionArea = document.getElementById('cabinetActionArea');
-
-            userInfoCard.innerHTML = `
-                👤 <b>პირადი ნომერი:</b> ${pid}<br>
-                🚗 <b>ავტომობილი:</b> ${car}<br>
-                📞 <b>ტელეფონი:</b> ${phone}
-            `;
-
-            if (savedData) {
-                const pkgInfo = JSON.parse(savedData);
-                const now = new Date().getTime();
-
-                if (now < pkgInfo.expireTime) {
-                    const daysLeft = Math.ceil((pkgInfo.expireTime - now) / (1000 * 60 * 60 * 24));
-                    cabinetStatusText.innerHTML = `✅ თქვენი პაკეტი (<b>${pkgInfo.name}</b>) აქტიურია!<br>ვადის ამოწურვამდე დარჩენილია: <b>${daysLeft} დღე</b>.`;
-                    actionArea.innerHTML = ``;
-                } else {
-                    cabinetStatusText.innerHTML = `⚠️ თქვენი პაკეტის ვადა ამოწურულია. მომსახურების გასაგრძელებლად გთხოვთ აირჩიოთ სასურველი პაკეტი:`;
-                    actionArea.innerHTML = `<button class="form-submit-btn" style="margin-bottom:15px;" onclick="closeCabinetDashboard(); window.location.href='#services';">პაკეტის შეძენა ➔</button>`;
-                }
-            } else {
-                cabinetStatusText.innerHTML = `ℹ️ ამ პირად ნომერზე აქტიური პაკეტი ჯერ არ არის რეგისტრირებული.<br>სერვისის გასააქტიურებლად აირჩიეთ თქვენთვის სასურველი პაკეტი:`;
-                actionArea.innerHTML = `<button class="form-submit-btn" style="margin-bottom:15px;" onclick="closeCabinetDashboard(); window.location.href='#services';">პაკეტის არჩევა ➔</button>`;
-            }
-
-            document.getElementById('cabinetDashboard').style.display = 'flex';
-        }
-
-        // ტელეგრამის ფორმა (პაკეტის გამოწერა)
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -366,13 +346,6 @@
             const phone = document.getElementById('clientPhone').value;
             const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
-
-            let durationDays = 30; 
-            if (pkg.includes('3 თვე')) durationDays = 90;
-            if (pkg.includes('1 წელი')) durationDays = 365;
-
-            const expireTime = new Date().getTime() + (durationDays * 24 * 60 * 60 * 1000);
-            localStorage.setItem("user_pkg_" + pid, JSON.stringify({ name: pkg, expireTime: expireTime }));
 
             const message = `🚨 <b>ახალი პაკეტის გამოწერა!</b>\n\n📦 პაკეტი: ${pkg}\n👤 სახელი: ${name}\n🆔 პირადი: ${pid}\n📞 ტელეფონი: ${phone}\n🚗 ნომერი: ${car}\n📄 ტექპასპორტი: ${tech}`;
 
