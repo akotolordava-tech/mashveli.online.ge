@@ -9,7 +9,7 @@
         body { font-family: Arial, sans-serif; background-color: #f2f4ef; color: #0d231a; scroll-behavior: smooth; }
         
         /* Header */
-        header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; }
+        header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; }
         .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 6px 16px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; }
@@ -76,8 +76,8 @@
         .read-more-btn { background: none; border: none; color: #0d231a; font-weight: bold; cursor: pointer; text-decoration: underline; padding: 0; margin-bottom: 20px; display: inline-block; font-size: 14px; }
         .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
 
-        /* ================= 🚗 შიდა კაბინეტი (USER DASHBOARD) ================= -->
-        .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d231a; color: #fff; z-index: 2000; overflow-y: auto; }
+        /* ================= 🚗 შიდა კაბინეტი (USER DASHBOARD) - სრულად დამალული საწყისად ================= */
+        .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d231a; color: #fff; z-index: 5000; overflow-y: auto; }
         .dash-wrapper { display: flex; min-height: 100vh; }
         
         /* Sidebar */
@@ -114,7 +114,6 @@
         .car-manage-card h4 { font-size: 18px; color: #d9f96b; margin-bottom: 6px; }
         .car-status-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; margin-bottom: 12px; }
         .status-active { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
-        .status-pending { background: rgba(251, 146, 60, 0.2); color: #fb923c; }
         .delete-car-btn { background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .delete-car-btn:hover { background: #ef4444; color: #fff; }
 
@@ -134,6 +133,94 @@
     </style>
 </head>
 <body>
+
+    <!-- MAIN WEBSITE HEADER -->
+    <header>
+        <div class="header-left">
+            <a href="#" class="logo">mashveli.online.ge</a>
+            <a href="#individual-services" class="header-nav-btn">სერვისები</a>
+        </div>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <button class="cabinet-btn" onclick="openCabinetLogin()">პირადი კაბინეტი</button>
+            <div class="lang-switch">
+                <button class="lang-btn active">GEO</button>
+                <button class="lang-btn">ENG</button>
+                <button class="lang-btn">Русский</button>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-left">
+            <div class="badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
+            <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან</h1>
+            <p>მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
+            <a href="#services" class="btn-primary">↓ დაიწყეთ მოთხოვნა</a>
+        </div>
+        <div class="hero-right-card">
+            <h3>🛡️ ერთი სივრცე მძღოლისთვის — მარტივი. სწრაფი. უსაფრთხო.</h3>
+            <p style="color: #555; font-size: 14px; margin-top: 10px;">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.</p>
+        </div>
+    </section>
+
+    <div class="container" id="services">
+        <div class="section-title">
+            <span>სერვისის პაკეტები</span>
+            <h2>აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
+        </div>
+        
+        <div class="packages-grid">
+            <div class="package-card" onclick="openModal('საწყისი პაკეტი (7 GEL)')">
+                <span class="package-badge">საწყისი</span>
+                <h3>7 GEL</h3>
+                <h4>30 დღე</h4>
+                <p>მოქნილი არჩევანი მოკლევადიანი მხარდაჭერისთვის.</p>
+            </div>
+            <div class="package-card popular" onclick="openModal('პოპულარული პაკეტი (18 GEL)')">
+                <span class="package-badge">პოპულარული</span>
+                <h3>18 GEL</h3>
+                <h4>90 დღე</h4>
+                <p>დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
+            </div>
+            <div class="package-card" onclick="openModal('საუკეთესო ღირებულება (60 GEL)')">
+                <span class="package-badge">საუკეთესო ღირებულება</span>
+                <h3>60 GEL</h3>
+                <h4>365 დღე</h4>
+                <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
+            </div>
+        </div>
+
+        <div class="sub-banner">თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი</div>
+
+        <div class="section-title" id="individual-services" style="margin-top: 40px;">
+            <span>ინდივიდუალური სერვისები</span>
+            <h2>აირჩიეთ კონკრეტული სერვისი</h2>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-info">
+                    <h3>🚚 ევაკუატორი 24/7</h3>
+                    <p>სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
+                </div>
+                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+            <div class="service-card">
+                <div class="service-info">
+                    <h3>🐾 ცხოველების ტაქსი</h3>
+                    <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
+                </div>
+                <a href="https://wa.me/995568112350" target="_blank" class="whatsapp-btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+            <div class="service-card">
+                <div class="service-info">
+                    <h3>🛡️ ფხიზელი მძღოლი</h3>
+                    <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.</p>
+                </div>
+                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn">💬 WhatsApp-ზე მოგვწერეთ</a>
+            </div>
+        </div>
+    </div>
 
     <!-- მისალმების პოპ-აპი -->
     <div class="modal-overlay" id="welcomePopup">
@@ -157,7 +244,7 @@
     </div>
 
     <!-- შეტყობინების მოდალური ფანჯარა X ღილაკით -->
-    <div class="modal-overlay" id="limitNoticeModal" style="z-index: 4000;">
+    <div class="modal-overlay" id="limitNoticeModal" style="z-index: 6000;">
         <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30; text-align: center; padding: 30px;">
             <button class="modal-close" style="color: #fff;" onclick="closeLimitNoticeModal()">&times;</button>
             <div style="font-size: 36px; margin-bottom: 10px;">⚠️</div>
@@ -167,7 +254,7 @@
         </div>
     </div>
 
-    <!-- პირადი კაბინეტის შესასვლელი (ავტორიზაციის მოთხოვნა ადმინთან) -->
+    <!-- პირადი კაბინეტის შესასვლელი -->
     <div class="modal-overlay" id="cabinetLoginModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCabinetLogin()">&times;</button>
@@ -191,7 +278,7 @@
     </div>
 
     <!-- ავტომობილის დამატების მოდალური ფანჯარა -->
-    <div class="modal-overlay" id="addCarModal">
+    <div class="modal-overlay" id="addCarModal" style="z-index: 6000;">
         <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30;">
             <button class="modal-close" style="color: #fff;" onclick="closeAddCarModal()">&times;</button>
             <h3 style="color: #d9f96b;">🚗 ავტომობილის დამატება</h3>
@@ -381,94 +468,6 @@
         </div>
     </div>
 
-    <!-- MAIN WEBSITE HEADER -->
-    <header>
-        <div class="header-left">
-            <a href="#" class="logo">mashveli.online.ge</a>
-            <a href="#individual-services" class="header-nav-btn">სერვისები</a>
-        </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <button class="cabinet-btn" onclick="openCabinetLogin()">პირადი კაბინეტი</button>
-            <div class="lang-switch">
-                <button class="lang-btn active">GEO</button>
-                <button class="lang-btn">ENG</button>
-                <button class="lang-btn">Русский</button>
-            </div>
-        </div>
-    </header>
-
-    <section class="hero">
-        <div class="hero-left">
-            <div class="badge">ავტომობილის მხარდაჭერა ყოველდღე</div>
-            <h1>მძღოლის ასისტენტი — მშვიდი გზა იწყება აქდან</h1>
-            <p>მარტივი მხარდაჭერა მძღოლებისათვის: შეავსეთ მოთხოვნა, აირჩიეთ თქვენთვის სასურველი პაკეტი და გააგრძელეთ დაცულ საკომუნიკაციო არხში.</p>
-            <a href="#services" class="btn-primary">↓ დაიწყეთ მოთხოვნა</a>
-        </div>
-        <div class="hero-right-card">
-            <h3>🛡️ ერთი სივრცე მძღოლისთვის — მარტივი. სწრაფი. უსაფრთხო.</h3>
-            <p style="color: #555; font-size: 14px; margin-top: 10px;">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც საჭიროა თქვენს მოთხოვნაზე დასაკავშირებლად.</p>
-        </div>
-    </section>
-
-    <div class="container" id="services">
-        <div class="section-title">
-            <span>სერვისის პაკეტები</span>
-            <h2>აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
-        </div>
-        
-        <div class="packages-grid">
-            <div class="package-card" onclick="openModal('საწყისი პაკეტი (7 GEL)')">
-                <span class="package-badge">საწყისი</span>
-                <h3>7 GEL</h3>
-                <h4>30 დღე</h4>
-                <p>მოქნილი არჩევანი მოკლევადიანი მხარდაჭერისთვის.</p>
-            </div>
-            <div class="package-card popular" onclick="openModal('პოპულარული პაკეტი (18 GEL)')">
-                <span class="package-badge">პოპულარული</span>
-                <h3>18 GEL</h3>
-                <h4>90 დღე</h4>
-                <p>დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
-            </div>
-            <div class="package-card" onclick="openModal('საუკეთესო ღირებულება (60 GEL)')">
-                <span class="package-badge">საუკეთესო ღირებულება</span>
-                <h3>60 GEL</h3>
-                <h4>365 დღე</h4>
-                <p>გრძელვადიანი მხარდაჭერა მთელი წლის განმავლობაში.</p>
-            </div>
-        </div>
-
-        <div class="sub-banner">თქვენ დამატებით შეგიძლიათ აირჩიოთ თქვენთვის სასურველი მომსახურების სერვისი</div>
-
-        <div class="section-title" id="individual-services" style="margin-top: 40px;">
-            <span>ინდივიდუალური სერვისები</span>
-            <h2>აირჩიეთ კონკრეტული სერვისი</h2>
-        </div>
-
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-info">
-                    <h3>🚚 ევაკუატორი 24/7</h3>
-                    <p>სწრაფი და სანდო საევაკუაციო მომსახურება.</p>
-                </div>
-                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn">💬 WhatsApp-ზე მოგვწერეთ</a>
-            </div>
-            <div class="service-card">
-                <div class="service-info">
-                    <h3>🐾 ცხოველების ტაქსი</h3>
-                    <p>შინაური ცხოველების უსაფრთხო ტრანსპორტირება.</p>
-                </div>
-                <a href="https://wa.me/995568112350" target="_blank" class="whatsapp-btn">💬 WhatsApp-ზე მოგვწერეთ</a>
-            </div>
-            <div class="service-card">
-                <div class="service-info">
-                    <h3>🛡️ ფხიზელი მძღოლი</h3>
-                    <p>თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.</p>
-                </div>
-                <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn">💬 WhatsApp-ზე მოგვწერეთ</a>
-            </div>
-        </div>
-    </div>
-
     <!-- მოთხოვნის ფანჯარა -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
@@ -538,7 +537,6 @@
             const car = document.getElementById('cabCar').value.toUpperCase();
             const phone = document.getElementById('cabPhone').value;
 
-            // ვამოწმებთ თუ არსებობს შენახული მონაცემები ამ ბრაუზერში
             const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || {
                 name: "მძღოლი",
                 pid: pid,
@@ -550,8 +548,7 @@
                 timestamp: Date.now()
             };
 
-            // ტელეგრამზე გაგზავნა ადმინისტრატორთან დასადასტურებლად
-            const authMsg = `🔐 <b>კაბინეტში შესვლის მოთხოვნა!</b>\n\n👤 პირადი: ${pid}\n🚗 მანქანა: ${car}\n📞 ტელეფონი: ${phone}\n\n<i>გსურთ დაშვება? (მონაცემები ემთხვევა რეგისტრაციას)</i>`;
+            const authMsg = `🔐 <b>კაბინეტში შესვლის მოთხოვნა!</b>\n\n👤 პირადი: ${pid}\n🚗 მანქანა: ${car}\n📞 ტელეფონი: ${phone}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -559,7 +556,6 @@
                 body: JSON.stringify({ chat_id: chatId, text: authMsg, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
-            // სიმულაციისთვის ანუ დაუყონებლივ შესასვლელად ვატვირთავთ მონაცემებს
             loadUserData(savedData);
             closeCabinetLogin();
             document.getElementById('cabinetDashboard').style.display = 'block';
@@ -598,11 +594,10 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById('liveCountdown').textContent = `${days} დღე ${hours}სთ ${minutes}წთ ${seconds}წმ`;
+                document.getElementById('liveCountdown').textContent = `${days}დღე ${hours}სთ ${minutes}წთ ${seconds}წმ`;
             }, 1000);
         }
 
-        /* შეტყობინების ფანჯარა */
         function showLimitNotice(msg) {
             document.getElementById('limitNoticeText').textContent = msg;
             document.getElementById('limitNoticeModal').style.display = 'flex';
@@ -669,7 +664,6 @@
             }
         }
 
-        /* Online Chat Working Hours Check (10:00 - 19:00) */
         function checkChatHours() {
             const now = new Date();
             const hours = now.getHours();
@@ -705,7 +699,6 @@
             }
         }
 
-        /* პაკეტის შეძენა და ტელეგრამზე რეგისტრაციის გაგზავნა */
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -715,12 +708,10 @@
             const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
 
-            // ვადგენთ დღეების რაოდენობას არჩეული პაკეტის მიხედვით
             let daysCount = 30;
             if(pkg.includes("18 GEL")) daysCount = 90;
             if(pkg.includes("60 GEL")) daysCount = 365;
 
-            // ვინახავთ მომხმარებლის მონაცემებს ბრაუზერში
             const userData = { name, pid, phone, car, tech, package: pkg, days: daysCount, timestamp: Date.now() };
             localStorage.setItem('mashveli_user', JSON.stringify(userData));
 
