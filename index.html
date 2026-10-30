@@ -44,21 +44,18 @@
         .service-info h3 { font-size: 20px; margin-bottom: 10px; color: #0d231a; display: flex; align-items: center; gap: 10px; }
         .service-info p { color: #667770; font-size: 14px; margin-bottom: 20px; }
         .whatsapp-btn { background-color: #0d231a; color: #fff; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
-        .security-box-section { background: #e8ede4; padding: 60px 20px; }
-        .security-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px; }
-        .security-card { background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 550px; display: flex; align-items: flex-start; gap: 20px; }
         .footer-banner { background-color: #d9f96b; padding: 50px 20px; text-align: center; }
         .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
         .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
         
         /* Modal Styles */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; padding: 40px; border-radius: 20px; max-width: 480px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal-content { background: #fff; padding: 40px; border-radius: 20px; max-width: 520px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #0d231a; }
         .modal-content h3 { margin-bottom: 20px; color: #0d231a; font-size: 20px; }
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
         .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .success-banner { display: none; background: #d9f96b; color: #0d231a; padding: 30px; border-radius: 16px; text-align: center; font-weight: bold; margin-bottom: 40px; font-size: 18px; }
 
@@ -69,10 +66,17 @@
         .extra-text { display: none; margin-top: 10px; }
         .read-more-btn { background: none; border: none; color: #0d231a; font-weight: bold; cursor: pointer; text-decoration: underline; padding: 0; margin-bottom: 20px; display: inline-block; font-size: 14px; }
         .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
+
+        /* Cabinet Cards UI */
+        .user-info-card { background: #f8faf6; border: 1px solid #dcdfd8; border-radius: 12px; padding: 15px; text-align: left; margin-bottom: 20px; font-size: 14px; line-height: 1.8; color: #0d231a; }
+        .active-services-list { background: #fff; border: 1px solid #e2e8e4; border-radius: 12px; padding: 20px; text-align: left; margin-bottom: 20px; }
+        .active-services-list h4 { margin-bottom: 12px; color: #0d231a; font-size: 16px; }
+        .active-services-list ul { padding-left: 20px; color: #444; line-height: 1.6; font-size: 14px; }
     </style>
 </head>
 <body>
 
+    <!-- მისალმების პოპ-აპი -->
     <div class="modal-overlay" id="welcomePopup">
         <div class="welcome-box">
             <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
@@ -93,14 +97,15 @@
         </div>
     </div>
 
+    <!-- პირადი კაბინეტის შესასვლელი ფორმა -->
     <div class="modal-overlay" id="cabinetLoginModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeCabinetLogin()">&times;</button>
-            <h3>👤 მომხმარებლის პირადი კაბინეტი</h3>
+            <h3>👤 შესვლა პირად კაბინეტში</h3>
             <form onsubmit="handleCabinetLogin(event)">
                 <div class="form-group">
                     <label>პირადი ნომერი (11-ნიშნა)</label>
-                    <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრიანი პირადი ნომერი">
+                    <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="11-ციფრიანი პირადი ნომერი">
                 </div>
                 <div class="form-group">
                     <label>ავტომობილის სახელმწიფო ნომერი</label>
@@ -110,25 +115,33 @@
                     <label>ტელეფონის ნომერი</label>
                     <input type="tel" id="cabPhone" required placeholder="+995 ...">
                 </div>
-                <button type="submit" class="form-submit-btn">შესვლა კაბინეტში</button>
+                <button type="submit" class="form-submit-btn">კაბინეტში შესვლა ➔</button>
             </form>
         </div>
     </div>
 
+    <!-- პირადი კაბინეტის შიდა დაფა (Dashboard) -->
     <div class="modal-overlay" id="cabinetDashboard">
-        <div class="modal-content" style="max-width: 600px; text-align: center;">
+        <div class="modal-content" style="max-width: 580px; text-align: center;">
             <button class="modal-close" onclick="closeCabinetDashboard()">&times;</button>
-            <h2 style="color: #0d231a; margin-bottom: 15px;">🚗 თქვენი პერსონალური ასისტენტის კაბინეტი</h2>
-            <p id="cabinetStatusText" style="font-size: 16px; line-height: 1.6; margin-bottom: 25px; color: #333;"></p>
-            <div id="cabinetActiveServices" style="background: #f2f4ef; padding: 20px; border-radius: 12px; text-align: left; margin-bottom: 20px;">
-                <h4 style="margin-bottom: 10px; color: #0d231a;">თქვენი აქტიური სერვისები:</h4>
-                <ul style="padding-left: 20px; color: #555; line-height: 1.5;">
-                    <li>ოპერატიული შეტყობინებები ჯარიმებზე</li>
-                    <li>ტექინსპექტირების ვადების კონტროლი</li>
-                    <li>პრიორიტეტული 24/7 მხარდაჭერა</li>
+            <h2 style="color: #0d231a; margin-bottom: 15px;">🚗 პირადი კაბინეტი</h2>
+            
+            <div class="user-info-card" id="userInfoCard"></div>
+
+            <p id="cabinetStatusText" style="font-size: 15px; line-height: 1.6; margin-bottom: 20px; color: #333;"></p>
+
+            <div class="active-services-list">
+                <h4>🛡️ თქვენი ასისტენტის სერვისები:</h4>
+                <ul>
+                    <li>🚨 ოპერატიული შეტყობინებები ახალ ჯარიმებზე</li>
+                    <li>🔍 ტექინსპექტირების გავლის ვადების კონტროლი</li>
+                    <li>📞 24/7 პრიორიტეტული მხარდაჭერა და ასისტენსი</li>
                 </ul>
             </div>
-            <button class="form-submit-btn" onclick="closeCabinetDashboard()">დახურვა</button>
+
+            <div id="cabinetActionArea"></div>
+            
+            <button class="form-submit-btn" style="background:#0d231a; color:#fff;" onclick="closeCabinetDashboard()">დახურვა</button>
         </div>
     </div>
 
@@ -225,6 +238,7 @@
         </div>
     </div>
 
+    <!-- შეკვეთის ფორმა -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -258,19 +272,16 @@
                 document.getElementById('successMessage').style.display = 'block';
             }
 
+            // ტელეგრამის ბმულიდან შემოსვლისას
             const approvePid = urlParams.get('approve');
             if (approvePid) {
-                // ვქმნით აქტიურ პაკეტს და პირდაპირ ვრთავთ კაბინეტს
                 const expireTime = new Date().getTime() + (30 * 24 * 60 * 60 * 1000);
                 localStorage.setItem("user_pkg_" + approvePid, JSON.stringify({
-                    name: "აქტიური პაკეტი",
+                    name: "აქტიური პაკეტი (1 თვე)",
                     expireTime: expireTime
                 }));
                 
-                document.getElementById('cabinetStatusText').innerHTML = `✅ პაკეტი წარმატებით გააქტიურდა პირადი ნომრით: <b>${approvePid}</b>!`;
-                document.getElementById('cabinetActiveServices').style.display = 'block';
-                document.getElementById('cabinetDashboard').style.display = 'flex';
-                
+                openCabinetView(approvePid, "მომხმარებელი", "მითითებული ავტომობილი");
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
@@ -294,60 +305,66 @@
         function closeCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'none'; }
         function closeCabinetDashboard() { document.getElementById('cabinetDashboard').style.display = 'none'; }
 
+        // მომხმარებლის კაბინეტში შესვლის დამუშავება
         function handleCabinetLogin(event) {
             event.preventDefault();
             const pid = document.getElementById('cabPid').value;
-            const car = document.getElementById('cabCar').value;
+            const car = document.getElementById('cabCar').value.toUpperCase();
             const phone = document.getElementById('cabPhone').value;
 
-            const savedData = localStorage.getItem("user_pkg_" + pid);
-            if (savedData) {
-                const pkgInfo = JSON.parse(savedData);
-                const now = new Date().getTime();
-                if (now < pkgInfo.expireTime) {
-                    closeCabinetLogin();
-                    document.getElementById('cabinetStatusText').innerHTML = `✅ თქვენი პაკეტი (<b>${pkgInfo.name}</b>) აქტიურია!<br>ვადის ამოწურვამდე: <b>${Math.ceil((pkgInfo.expireTime - now) / (1000 * 60 * 60 * 24))} დღე</b>.`;
-                    document.getElementById('cabinetActiveServices').style.display = 'block';
-                    document.getElementById('cabinetDashboard').style.display = 'flex';
-                    return;
-                } else {
-                    closeCabinetLogin();
-                    document.getElementById('cabinetStatusText').innerHTML = `⚠️ თქვენი პაკეტის ვადა ამოწურულია. გთხოვთ განაახლოთ სერვისი.`;
-                    document.getElementById('cabinetActiveServices').style.display = 'none';
-                    document.getElementById('cabinetDashboard').style.display = 'flex';
-                    return;
-                }
-            }
-
-            const siteUrl = window.location.origin + window.location.pathname;
-            const message = `🔐 <b>მოთხოვნა პირადი კაბინეტის გახსნაზე!</b>\n\n🆔 პირადი: <code>${pid}</code>\n🚗 ნომერი: <code>${car}</code>\n📞 ტელეფონი: <code>${phone}</code>`;
-
-            const inlineKeyboard = {
-                inline_keyboard: [
-                    [
-                        { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
-                        { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
-                    ]
-                ]
-            };
-
+            // შეტყობინების გაგზავნა ტელეგრამში (ადმინისთვის ინფორმაციის მიწოდება)
+            const message = `🔑 <b>მომხმარებელი შევიდა კაბინეტში!</b>\n\n🆔 პირადი ნომერი: <code>${pid}</code>\n🚗 ავტომობილი: <code>${car}</code>\n📞 ტელეფონი: <code>${phone}</code>`;
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML", reply_markup: inlineKeyboard })
+                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
             closeCabinetLogin();
-            alert("მოთხოვნა გაგზავნილია ადმინისტრატორთან! როგორც კი დაადასტურებთ, შეძლებთ შესვლას.");
+            openCabinetView(pid, phone, car);
         }
 
+        // კაბინეტის ჩვენების ფუნქცია
+        function openCabinetView(pid, phone, car) {
+            const savedData = localStorage.getItem("user_pkg_" + pid);
+            const userInfoCard = document.getElementById('userInfoCard');
+            const cabinetStatusText = document.getElementById('cabinetStatusText');
+            const actionArea = document.getElementById('cabinetActionArea');
+
+            userInfoCard.innerHTML = `
+                👤 <b>პირადი ნომერი:</b> ${pid}<br>
+                🚗 <b>ავტომობილი:</b> ${car}<br>
+                📞 <b>ტელეფონი:</b> ${phone}
+            `;
+
+            if (savedData) {
+                const pkgInfo = JSON.parse(savedData);
+                const now = new Date().getTime();
+
+                if (now < pkgInfo.expireTime) {
+                    const daysLeft = Math.ceil((pkgInfo.expireTime - now) / (1000 * 60 * 60 * 24));
+                    cabinetStatusText.innerHTML = `✅ თქვენი პაკეტი (<b>${pkgInfo.name}</b>) აქტიურია!<br>ვადის ამოწურვამდე დარჩენილია: <b>${daysLeft} დღე</b>.`;
+                    actionArea.innerHTML = ``;
+                } else {
+                    cabinetStatusText.innerHTML = `⚠️ თქვენი პაკეტის ვადა ამოწურულია. მომსახურების გასაგრძელებლად გთხოვთ აირჩიოთ სასურველი პაკეტი:`;
+                    actionArea.innerHTML = `<button class="form-submit-btn" style="margin-bottom:15px;" onclick="closeCabinetDashboard(); window.location.href='#services';">პაკეტის შეძენა ➔</button>`;
+                }
+            } else {
+                cabinetStatusText.innerHTML = `ℹ️ ამ პირად ნომერზე აქტიური პაკეტი ჯერ არ არის რეგისტრირებული.<br>სერვისის გასააქტიურებლად აირჩიეთ თქვენთვის სასურველი პაკეტი:`;
+                actionArea.innerHTML = `<button class="form-submit-btn" style="margin-bottom:15px;" onclick="closeCabinetDashboard(); window.location.href='#services';">პაკეტის არჩევა ➔</button>`;
+            }
+
+            document.getElementById('cabinetDashboard').style.display = 'flex';
+        }
+
+        // ტელეგრამის ფორმა (პაკეტის გამოწერა)
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
             const name = document.getElementById('clientName').value;
             const pid = document.getElementById('clientPid').value;
             const phone = document.getElementById('clientPhone').value;
-            const car = document.getElementById('clientCar').value;
+            const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
 
             let durationDays = 30; 
@@ -359,20 +376,10 @@
 
             const message = `🚨 <b>ახალი პაკეტის გამოწერა!</b>\n\n📦 პაკეტი: ${pkg}\n👤 სახელი: ${name}\n🆔 პირადი: ${pid}\n📞 ტელეფონი: ${phone}\n🚗 ნომერი: ${car}\n📄 ტექპასპორტი: ${tech}`;
 
-            const siteUrl = window.location.origin + window.location.pathname;
-            const inlineKeyboard = {
-                inline_keyboard: [
-                    [
-                        { text: "✅ დაშვება", url: `${siteUrl}?approve=${pid}` },
-                        { text: "❌ უარყოფა", url: `${siteUrl}?reject=${pid}` }
-                    ]
-                ]
-            };
-
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML", reply_markup: inlineKeyboard })
+                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
             const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
