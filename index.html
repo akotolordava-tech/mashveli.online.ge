@@ -156,6 +156,17 @@
         </div>
     </div>
 
+    <!-- შეტყობინების მოდალური ფანჯარა X ღილაკით -->
+    <div class="modal-overlay" id="limitNoticeModal" style="z-index: 4000;">
+        <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30; text-align: center; padding: 30px;">
+            <button class="modal-close" style="color: #fff;" onclick="closeLimitNoticeModal()">&times;</button>
+            <div style="font-size: 36px; margin-bottom: 10px;">⚠️</div>
+            <h3 style="color: #d9f96b; margin-bottom: 15px;">შეტყობინება</h3>
+            <p id="limitNoticeText" style="font-size: 15px; color: #b0c2bc; line-height: 1.6; margin-bottom: 25px;"></p>
+            <button class="form-submit-btn" style="background: #d9f96b; color: #0d231a;" onclick="closeLimitNoticeModal()">გასაგებია</button>
+        </div>
+    </div>
+
     <!-- პირადი კაბინეტის შესასვლელი -->
     <div class="modal-overlay" id="cabinetLoginModal">
         <div class="modal-content">
@@ -179,12 +190,12 @@
         </div>
     </div>
 
-    <!-- ავტომობილის დამატების მოდალური ფანჯარა (ნომერი + ტექპასპორტი) -->
+    <!-- ავტომობილის დამატების მოდალური ფანჯარა -->
     <div class="modal-overlay" id="addCarModal">
         <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30;">
             <button class="modal-close" style="color: #fff;" onclick="closeAddCarModal()">&times;</button>
             <h3 style="color: #d9f96b;">🚗 ავტომობილის დამატება</h3>
-            <p style="font-size: 13px; color: #b0c2bc; margin-bottom: 20px;">თითოეული ავტომობილი მოითხოვს ცალკე აქტიურ პაკეტს.</p>
+            <p style="font-size: 13px; color: #b0c2bc; margin-bottom: 20px;">შეიყვანეთ ახალი ავტომობილისა და ტექპასპორტის მონაცემები</p>
             <form onsubmit="submitNewCar(event)">
                 <div class="form-group">
                     <label style="color: #d9f96b;">ავტომობილის სახელმწიფო ნომერი</label>
@@ -286,12 +297,12 @@
                     </div>
                 </div>
 
-                <!-- TAB 2: ჩემი ავტომობილები (დამატება და წაშლა) -->
+                <!-- TAB 2: ჩემი ავტომობილები -->
                 <div class="dash-section" id="carsTab">
                     <div class="dash-header">
                         <div class="dash-title">
                             <h2>ჩემი ავტომობილები</h2>
-                            <p>თითოეულ დამატებულ ავტომობილს სჭირდება ინდივიდუალური აქტიური პაკეტი</p>
+                            <p id="userPackageSubtitle">თქვენი აქტიური პაკეტი: <b>საწყისი პაკეტი (7 GEL)</b></p>
                         </div>
                         <button class="cabinet-btn" onclick="openAddCarModal()">+ ავტომობილის დამატება</button>
                     </div>
@@ -300,7 +311,7 @@
                         <div class="car-manage-card" id="car-card-default">
                             <h4 id="carCard1Title">AA-100-AA</h4>
                             <span class="car-status-badge status-active">✅ აქტიური მონიტორინგი</span>
-                            <p style="font-size: 13px; color: #b0c2bc; line-height: 1.5; margin-bottom: 10px;">პაკეტი: <b>3 თვიანი (18 GEL)</b></p>
+                            <p style="font-size: 13px; color: #b0c2bc; line-height: 1.5; margin-bottom: 10px;">პაკეტი: <b id="activePackageNameDisp">საწყისი პაკეტი (7 GEL)</b></p>
                         </div>
                     </div>
                 </div>
@@ -315,23 +326,23 @@
                     </div>
 
                     <div class="packages-grid">
-                        <div class="package-card" onclick="alert('პაკეტის შესაძენად გაიარეთ გადახდა')">
+                        <div class="package-card" onclick="selectUserPackage('საწყისი პაკეტი (7 GEL)', 7)">
                             <span class="package-badge">საწყისი</span>
                             <h3>7 GEL</h3>
                             <h4>1 თვე</h4>
                             <p>1 ავტომობილის მონიტორინგი და შეტყობინებები.</p>
                         </div>
-                        <div class="package-card popular" onclick="alert('პაკეტის შესაძენად გაიარეთ გადახდა')">
+                        <div class="package-card popular" onclick="selectUserPackage('პოპულარული პაკეტი (18 GEL)', 18)">
                             <span class="package-badge">პოპულარული</span>
                             <h3>18 GEL</h3>
                             <h4>3 თვე</h4>
-                            <p>სრული მხარდაჭერა და პრიორიტეტული შეტყობინებები.</p>
+                            <p>შესაძლებელია 1 ახალი ავტომობილის დამატება.</p>
                         </div>
-                        <div class="package-card" onclick="alert('პაკეტის შესაძენად გაიარეთ გადახდა')">
+                        <div class="package-card" onclick="selectUserPackage('საუკეთესო ღირებულება (60 GEL)', 60)">
                             <span class="package-badge">საუკეთესო</span>
                             <h3>60 GEL</h3>
                             <h4>1 წელი</h4>
-                            <p>გრძელვადიანი უზრუნველყოფა მთელი წლის განმავლობაში.</p>
+                            <p>შესაძლებელია 2 ახალი ავტომობილის დამატება.</p>
                         </div>
                     </div>
                 </div>
@@ -486,6 +497,9 @@
         const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
         const chatId = "8233255349";
 
+        let currentUserPackage = "საწყისი პაკეტი (7 GEL)";
+        let packagePrice = 7; 
+
         function closeWelcomePopup() { document.getElementById('welcomePopup').style.display = 'none'; }
         function toggleReadMore() {
             const moreText = document.getElementById('moreText');
@@ -527,12 +541,58 @@
             document.getElementById('profPid').textContent = pid;
             document.getElementById('profPhone').textContent = phone;
 
+            updatePackageDisplay();
             closeCabinetLogin();
             document.getElementById('cabinetDashboard').style.display = 'block';
         }
 
-        /* Add Car Modal Functions */
+        /* პაკეტის შეცვლა კაბინეტიდან */
+        function selectUserPackage(pkgName, price) {
+            currentUserPackage = pkgName;
+            packagePrice = price;
+            updatePackageDisplay();
+            showLimitNotice(`თქვენ წარმატებით აირჩიეთ: ${pkgName}`);
+            switchTab('carsTab', document.querySelectorAll('.dash-menu-item')[1]);
+        }
+
+        function updatePackageDisplay() {
+            document.getElementById('userPackageSubtitle').innerHTML = `თქვენი აქტიური პაკეტი: <b>${currentUserPackage}</b>`;
+            document.getElementById('activePackageNameDisp').textContent = currentUserPackage;
+        }
+
+        /* შეტყობინების ფანჯრის გახსნა/დახურვა X ღილაკით */
+        function showLimitNotice(msg) {
+            document.getElementById('limitNoticeText').textContent = msg;
+            document.getElementById('limitNoticeModal').style.display = 'flex';
+        }
+
+        function closeLimitNoticeModal() {
+            document.getElementById('limitNoticeModal').style.display = 'none';
+        }
+
+        /* Add Car Modal Control with Exact User Limits */
         function openAddCarModal() {
+            const carsContainer = document.getElementById('userCarsContainer');
+            const currentCarsCount = carsContainer.children.length; // არსებული მანქანების რაოდენობა
+
+            // 7 ლარიანი: 0 ახალი დამატება (მხოლოდ 1 ძირითადი მანქანა)
+            if (packagePrice === 7 && currentCarsCount >= 1) {
+                showLimitNotice("არსებულ პაკეტში არარის შესაძლებელი დამატებით მეორე ავტომობილის დამატება");
+                return;
+            }
+            
+            // 18 ლარიანი: 1 ახალი დამატება (სულ 2)
+            if (packagePrice === 18 && currentCarsCount >= 2) {
+                showLimitNotice("არსებულ პაკეტში შესაძლებელია მხოლოდ 1 ახალი ავტომობილის დამატება");
+                return;
+            }
+
+            // 60 ლარიანი: 2 ახალი დამატება (სულ 3)
+            if (packagePrice === 60 && currentCarsCount >= 3) {
+                showLimitNotice("არსებულ პაკეტში შესაძლებელია მხოლოდ 2 ახალი ავტომობილის დამატება");
+                return;
+            }
+
             document.getElementById('addCarModal').style.display = 'flex';
         }
 
@@ -556,9 +616,8 @@
                 carCard.innerHTML = `
                     <h4>${plate}</h4>
                     <p style="font-size: 13px; color: #b0c2bc; margin-bottom: 6px;">ტექპასპორტი: <b>${tech}</b></p>
-                    <span class="car-status-badge status-pending">⚠️ საჭიროებს პაკეტის გააქტიურებას</span><br>
-                    <button class="cabinet-btn" style="padding: 6px 12px; font-size: 12px; margin-right: 5px;" onclick="switchTab('packagesTab', document.querySelectorAll('.dash-menu-item')[2]); closeAddCarModal();">პაკეტის გამოწერა ➔</button>
-                    <button class="delete-car-btn" onclick="deleteCarCard('${cardId}')">წაშლა 🗑️</button>
+                    <span class="car-status-badge status-active">✅ აქტიური მონიტორინგი</span><br>
+                    <button class="delete-car-btn" onclick="deleteCarCard('${cardId}')">წაშლა ✕</button>
                 `;
                 container.appendChild(carCard);
                 
@@ -627,7 +686,7 @@
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
+                body: JSON.stringify({ chat_id: chatId, text: `chat_id=${chatId}&text=${encodeURIComponent(message)}`, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
             const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
