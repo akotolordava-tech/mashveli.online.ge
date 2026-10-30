@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ka">
 <head>
@@ -57,7 +58,7 @@
         .whatsapp-btn { background-color: #0d231a; color: #fff; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
 
         /* Modals */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; max-width: 480px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #0d231a; }
         .modal-content h3 { margin-bottom: 20px; color: #0d231a; font-size: 20px; }
@@ -347,7 +348,7 @@
 
                     <div style="margin-bottom: 30px; background: #132e23; padding: 20px; border-radius: 16px; max-width: 600px; border: 1px solid #1a3e30;">
                         <p style="margin-bottom: 8px;">🆔 <b>პირადი ნომერი:</b> <span id="profPid">62004028505</span></p>
-                        <p>📞 <b>ტელეფონი:</b> <span id="profPhone">+995 599 00 00 00</span></p>
+                        <p>📞 <b>ტელეფონის ნომერი:</b> <span id="profPhone">+995 599 00 00 00</span></p>
                     </div>
 
                     <h3 style="margin-bottom: 15px; color: #d9f96b;">💬 ონლაინ მხარდაჭერის ჩათი</h3>
@@ -531,15 +532,16 @@
             document.getElementById('cabinetDashboard').style.display = 'block';
         }
 
-        /* Add Car Modal Control */
+        /* Add Car Modal Functions */
         function openAddCarModal() {
             document.getElementById('addCarModal').style.display = 'flex';
         }
+
         function closeAddCarModal() {
             document.getElementById('addCarModal').style.display = 'none';
         }
 
-        /* Submit New Car with Tech Passport & Delete Function */
+        /* Submit New Car with Tech Passport & Delete Functionality */
         function submitNewCar(event) {
             event.preventDefault();
             const plate = document.getElementById('newCarPlate').value.toUpperCase();
@@ -570,7 +572,7 @@
         function deleteCarCard(cardId) {
             const card = document.getElementById(cardId);
             if(card) {
-                if(confirm("ნამდვილად გწადდათ ამ ავტომობილის წაშლა?")) {
+                if(confirm("ნამდვილად გსურთ ამ ავტომობილის წაშლა?")) {
                     card.remove();
                 }
             }
