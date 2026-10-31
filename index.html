@@ -294,18 +294,28 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ განახლებული ადმინ პანელი (ჯარიმის არარსებობის ჩამრთველით) ================= -->
+    <!-- ================= 🛠️ განახლებული ადმინ პანელი (ძებნის ფუნქციით) ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
         <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 580px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
             <h3 style="color: #d9f96b; text-align: center; margin-bottom: 15px;">🛠️ ადმინისტრატორის პანელი</h3>
-            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">ავტორიზაცია წარმატებულია! შეავსეთ მომხმარებლის მონაცემები.</p>
+            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">ავტორიზაცია წარმატებულია! მოძებნეთ და მართეთ მომხმარებელი.</p>
             
             <form onsubmit="saveAdminData(event)">
                 <div class="form-group">
                     <label style="color: #d9f96b;">მომხმარებლის პირადი ნომერი (11-ნიშნა)</label>
-                    <input type="text" id="adminTargetPid" required maxlength="11" pattern="\d{11}" placeholder="62004028505" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="adminTargetPid" required maxlength="11" pattern="\d{11}" placeholder="62004028505" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
+                        <button type="button" onclick="searchUserByPid()" style="background: #d9f96b; color: #0d231a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">ძებნა 🔍</button>
+                    </div>
                 </div>
+
+                <!-- მრავალი ავტომობილის არჩევის ველი (დინამიურად გამოჩნდება) -->
+                <div class="form-group" id="carSelectWrapper" style="display: none; background: #17362a; padding: 15px; border-radius: 12px; border: 1px solid #1a3e30;">
+                    <label style="color: #d9f96b; margin-bottom: 8px;">აირჩიეთ ამ პირად ნომერზე რეგისტრირებული ავტომობილი:</label>
+                    <select id="adminCarSelector" onchange="onCarSelected(this.value)" style="width: 100%; padding: 12px; background: #0d231a; color: #fff; border: 1px solid #1a3e30; border-radius: 8px; font-weight: bold; cursor: pointer;"></select>
+                </div>
+
                 <div class="form-group">
                     <label style="color: #d9f96b;">მომხმარებლის სახელი და გვარი</label>
                     <input type="text" id="adminTargetName" required placeholder="მაგ: აკაკი თოლორდავა" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
@@ -317,14 +327,13 @@
 
                 <hr style="border: 0; border-top: 1px solid #17362a; margin: 20px 0;">
                 
-                <!-- 🔘 ჯარიმა არ ფიქსირდება ჩამრთველი -->
                 <div class="form-group" style="background: #17362a; padding: 15px; border-radius: 12px; border: 1px solid #1a3e30; display: flex; align-items: center; gap: 12px;">
                     <input type="checkbox" id="adminNoFineCheck" style="width: 20px; height: 20px; accent-color: #d9f96b; cursor: pointer;" onchange="toggleFineInputsState(this.checked)">
-                    <label for="adminNoFineCheck" style="color: #d9f96b; font-size: 15px; font-weight: bold; margin-bottom: 0; cursor: pointer;">ავტომობილზე ჯარიმა არ ფიქსირდება (მოინიშნოს ჯარიმების არარსებობისას)</label>
+                    <label for="adminNoFineCheck" style="color: #d9f96b; font-size: 15px; font-weight: bold; margin-bottom: 0; cursor: pointer;">ავტომობილზე ჯარიმა არ ფიქსირდება</label>
                 </div>
 
                 <div id="finesSectionWrapper">
-                    <h4 style="color: #d9f96b; font-size: 16px; margin-bottom: 15px;">🚨 ჯარიმების სია (შეგიძლიათ დაამატოთ რამდენიმე)</h4>
+                    <h4 style="color: #d9f96b; font-size: 16px; margin-bottom: 15px;">🚨 ჯარიმების სია</h4>
                     <div id="finesListContainer"></div>
                     <button type="button" id="addFineBtn" onclick="addNewFineFields()" style="background: #17362a; color: #d9f96b; border: 1px dashed #d9f96b; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;">+ ჯარიმის დამატება</button>
                 </div>
@@ -610,10 +619,10 @@
             const car = document.getElementById('cabCar').value.trim().toUpperCase();
             const phone = document.getElementById('cabPhone').value.trim();
 
-            const storageKey = 'user_' + pid;
+            const storageKey = 'user_' + pid + '_' + car;
             const savedData = JSON.parse(localStorage.getItem(storageKey));
 
-            if (!savedData || savedData.car !== car) {
+            if (!savedData) {
                 closeCabinetLogin();
                 showLimitNotice("❌ ასეთი პირადი ნომრით და ავტომობილით რეგისტრაცია ვერ მოიძებნა! გთხოვთ შეამოწმოთ მონაცემები.");
                 return;
@@ -645,7 +654,6 @@
                 let totalSum = 0;
                 let finesHTML = "";
 
-                // თუ ადმინმა მონიშნა რომ ჯარიმა არ ფიქსირდება ან სია ცარიელია
                 if (data.noFine === true || finesArr.length === 0) {
                     finesHTML = `
                     <div class="dash-card" style="justify-content: center; text-align: center; padding: 30px;">
@@ -765,13 +773,83 @@
                 document.getElementById('adminNoFineCheck').checked = false;
                 toggleFineInputsState(false);
                 document.getElementById('finesListContainer').innerHTML = '';
+                document.getElementById('carSelectWrapper').style.display = 'none';
                 addNewFineFields();
             } else {
                 alert("❌ არასწორი Telegram კოდია!");
             }
         }
 
-        // როდესაც ადმინი მონიშნავს "ჯარიმა არ ფიქსირდება" ჩამრთველს, ჯარიმების დამატების ღილაკი და სია იფარება
+        // 🔍 ძებნის ფუნქცია ადმინ პანელში პირადი ნომრით
+        let foundUsersCache = [];
+        function searchUserByPid() {
+            const pid = document.getElementById('adminTargetPid').value.trim();
+            if(!pid || pid.length !== 11) {
+                alert("გთხოვთ შეიყვანოთ 11-ნიშნა პირადი ნომერი!");
+                return;
+            }
+
+            foundUsersCache = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('user_')) {
+                    const val = JSON.parse(localStorage.getItem(key));
+                    if (val && val.pid === pid) {
+                        foundUsersCache.push(val);
+                    }
+                }
+            }
+
+            const selectWrapper = document.getElementById('carSelectWrapper');
+            const carSelector = document.getElementById('adminCarSelector');
+            carSelector.innerHTML = '';
+
+            if (foundUsersCache.length === 0) {
+                alert("❌ ამ პირადი ნომრით მომხმარებელი ვერ მოიძებნა!");
+                selectWrapper.style.display = 'none';
+                return;
+            }
+
+            if (foundUsersCache.length === 1) {
+                selectWrapper.style.display = 'none';
+                fillAdminFormWithUser(foundUsersCache[0]);
+            } else {
+                selectWrapper.style.display = 'block';
+                foundUsersCache.forEach((u, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.textContent = `🚗 მანქანა: ${u.car} (პაკეტი: ${u.package})`;
+                    carSelector.appendChild(opt);
+                });
+                fillAdminFormWithUser(foundUsersCache[0]);
+            }
+            alert(`✅ მოიძებნა ${foundUsersCache.length} ჩანაწერი ამ პირად ნომერზე!`);
+        }
+
+        function onCarSelected(index) {
+            if (foundUsersCache[index]) {
+                fillAdminFormWithUser(foundUsersCache[index]);
+            }
+        }
+
+        function fillAdminFormWithUser(userData) {
+            document.getElementById('adminTargetName').value = userData.name || '';
+            document.getElementById('adminTargetPhone').value = userData.phone || '+995 ';
+            document.getElementById('adminInputTechStatus').value = userData.techStatus || '';
+            document.getElementById('adminNoFineCheck').checked = userData.noFine || false;
+            toggleFineInputsState(userData.noFine || false);
+
+            const finesContainer = document.getElementById('finesListContainer');
+            finesContainer.innerHTML = '';
+            if (userData.fines && userData.fines.length > 0) {
+                userData.fines.forEach(f => {
+                    addNewFineFields(f.sum, f.desc, f.date, f.link);
+                });
+            } else if (!userData.noFine) {
+                addNewFineFields();
+            }
+        }
+
         function toggleFineInputsState(isChecked) {
             const wrapper = document.getElementById('finesSectionWrapper');
             if (isChecked) {
@@ -839,11 +917,30 @@
                 });
             }
 
-            const storageKey = 'user_' + targetPid;
+            // ვპოულობთ რომელ მანქანას ვასწორებთ (თუ სელექტში არჩევანია)
+            const selectWrapper = document.getElementById('carSelectWrapper');
+            let targetCar = "";
+            if (selectWrapper.style.display === 'block') {
+                const carSelector = document.getElementById('adminCarSelector');
+                const selectedIndex = carSelector.value;
+                if (foundUsersCache[selectedIndex]) {
+                    targetCar = foundUsersCache[selectedIndex].car;
+                }
+            } else if (foundUsersCache.length === 1) {
+                targetCar = foundUsersCache[0].car;
+            }
+
+            if (!targetCar) {
+                // თუ ძებნა არ გაუვლია, ვამოწმებთ ძველ სტორჯში რა ნომერიცაა ან ვთხოვთ მოძებნას
+                alert("❌ გთხოვთ ჯერ დააკლიკოთ 'ძებნა' ღილაკს და აირჩიოთ ავტომობილი!");
+                return;
+            }
+
+            const storageKey = 'user_' + targetPid + '_' + targetCar;
             let userData = JSON.parse(localStorage.getItem(storageKey));
 
             if (!userData) {
-                alert("❌ ამ პირადი ნომრით (" + targetPid + ") მომხმარებელი ვერ მოიძებნა ბაზაში!");
+                alert("❌ მითითებული ავტომობილი ვერ მოიძებნა ბაზაში!");
                 return;
             }
 
@@ -856,7 +953,7 @@
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            alert("✅ მონაცემები წარმატებით განახლდა და მიება მომხმარებელს (PID: " + targetPid + ")!");
+            alert("✅ მონაცემები წარმატებით განახლდა და მიება ავტომობილს (" + targetCar + ")!");
             closeAdminModal();
         }
 
@@ -904,7 +1001,7 @@
             if(pkg.includes("18 GEL") || pkg.includes("პოპულარული")) daysCount = 90;
             if(pkg.includes("60 GEL") || pkg.includes("საუკეთესო")) daysCount = 365;
 
-            const storageKey = 'user_' + pid;
+            const storageKey = 'user_' + pid + '_' + car;
             const userData = { 
                 name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
                 adminApproved: false,
