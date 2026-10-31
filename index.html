@@ -613,6 +613,10 @@
                 return;
             }
 
+            // კაბინეტში შესვლის შეტყობინება Telegram-ზე
+            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
+            sendTelegramMessageUniversal(loginMessage);
+
             loadUserData(savedData);
             closeCabinetLogin();
             document.getElementById('cabinetDashboard').style.display = 'block';
@@ -707,7 +711,7 @@
         function closeAdminAuthModal() { document.getElementById('adminAuthModal').style.display = 'none'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-        // ზუსტად 1 მოთხოვნის გაგზავნის სუფთა ფუნქცია
+        // Telegram-ზე გაგზავნის ოპტიმიზებული ფუნქცია
         function sendTelegramMessageUniversal(text, callback) {
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             
@@ -880,7 +884,6 @@
 
             const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი:</b> ${randomCode}\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}\n\n🔗 <b>გადამოწმების ბმულები:</b>\n• PTI: https://pti.ge\n• Protocols: https://protocols.ge\n• Police Videos: https://videos.police.ge`;
 
-            // შეტყობინება იგზავნება 1-ხელ და მხოლოდ წარმატებული/დასრულებული მოთხოვნის შემდეგ გადადის BOG-ის ბმულზე
             sendTelegramMessageUniversal(message, function() {
                 window.location.href = `https://egreve.bog.ge/Carfax`;
             });
