@@ -535,11 +535,9 @@
             document.querySelectorAll('.dash-menu-item').forEach(item => item.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             
-            // ვპოულობთ მენიუს შესაბამის ელემენტს და ვუაქტიურებთ
             if(element) {
                 element.classList.add('active');
             } else {
-                // თუ კოდიდან გამოვიძახეთ, მენიუში პირველ ტაბზე გადავсаვათ
                 document.querySelectorAll('.dash-menu-item')[0].classList.add('active');
             }
             
@@ -547,7 +545,6 @@
             if(tabId === 'packagesTab') updateCabinetPricesUI();
         }
 
-        // მთავარ გვერდზე დასაბრუნებელი ფუნქცია კაბინეტიდან
         function switchToMainTab() {
             const firstMenuItem = document.querySelectorAll('.dash-menu-item')[0];
             switchTab('finesTab', firstMenuItem);
@@ -807,6 +804,7 @@
 
         setInterval(checkTelegramReplies, 3000);
 
+        /* 🚀 გადახდის ფუნქციონალი: უნიკალური 4-ნიშნა კოდი და დანიშნულების ავტომატური გაგზავნა BOG-ზე */
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -817,14 +815,19 @@
             const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
 
+            // 1. ვაგენერირებთ შემთხვევით 4-ნიშნა ინდივიდუალურ კოდს (მაგ: 4829)
+            const randomCode = Math.floor(1000 + Math.random() * 9000);
+
             let daysCount = 30;
             if(pkg.includes("18 GEL") || pkg.includes("პოპულარული")) daysCount = 90;
             if(pkg.includes("60 GEL") || pkg.includes("საუკეთესო")) daysCount = 365;
 
-            const userData = { name, pid, phone, car, tech, package: pkg, days: daysCount, timestamp: Date.now() };
+            // მონაცემების შენახვა LocalStorage-ში
+            const userData = { name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now() };
             localStorage.setItem('mashveli_user', JSON.stringify(userData));
 
-            const message = `🚨 <b>პაკეტის შეძენა / განახლება!</b>\n\n📦 პაკეტი: ${pkg}\n💰 ფასი: ${price} GEL\n👤 სახელი: ${name}\n🆔 პირადი: ${pid}\n📞 ტელეფონი: ${phone}\n🚗 ნომერი: ${car}\n📄 ტექპასპორტი: ${tech}`;
+            // 2. ტელეგრამში ვაგზავნით სრულ შეტყობინებას უნიკალურ კოდთან ერთად
+            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი: ${randomCode}</b>\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>ფასი:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -832,8 +835,12 @@
                 body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
+            // 3. ვაფორმირებთ გადახდის დანიშნულებას: "მანქანა: AA100AA, ტექპასპორტი: EV0159681, კოდი: 4829"
+            const paymentPurpose = encodeURIComponent(`მანქანა: ${car}, ტექ: ${tech}, კოდი: ${randomCode}`);
             const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
-            window.location.href = `https://egreve.bog.ge/Carfax?return_url=${returnUrl}`;
+
+            // 4. გადამისამართება საქართველოს ბანკის გადახდის გვერდზე დანიშნულებით
+            window.location.href = `https://egreve.bog.ge/Carfax?description=${paymentPurpose}&return_url=${returnUrl}`;
         }
     </script>
 </body>
