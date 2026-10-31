@@ -405,31 +405,31 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: გამოწერის პაკეტები -->
+                <!-- TAB 3: გამოწერის პაკეტები (კაბინეტიდან შეცვლა სპეციალური ფასებით) -->
                 <div class="dash-section" id="packagesTab">
                     <div class="dash-header">
                         <div class="dash-title">
                             <h2>გამოწერის პაკეტები</h2>
-                            <p>აირჩიეთ სასურველი პაკეტი ავტომობილის მონიტორინგისთვის</p>
+                            <p>აირჩიეთ პაკეტი განახლებისთვის ან შესაცვლელად</p>
                         </div>
                     </div>
 
                     <div class="packages-grid">
-                        <div class="package-card" onclick="openModal('საწყისი პაკეტი (7 GEL)')">
+                        <div class="package-card" onclick="selectCabinetPackage('საწყისი პაკეტი (7 GEL)', 30)">
                             <span class="package-badge">საწყისი</span>
-                            <h3>7 GEL</h3>
+                            <h3 id="cabPkg1Price">7 GEL</h3>
                             <h4>30 დღე</h4>
                             <p>1 ავტომობილის მონიტორინგი (0 დამატება).</p>
                         </div>
-                        <div class="package-card popular" onclick="openModal('პოპულარული პაკეტი (18 GEL)')">
+                        <div class="package-card popular" onclick="selectCabinetPackage('პოპულარული პაკეტი (18 GEL)', 90)">
                             <span class="package-badge">პოპულარული</span>
-                            <h3>18 GEL</h3>
+                            <h3 id="cabPkg2Price" style="color: #d9f96b;">18 GEL</h3>
                             <h4>90 დღე</h4>
                             <p>შესაძლებელია 1 ახალი ავტომობილის დამატება.</p>
                         </div>
-                        <div class="package-card" onclick="openModal('საუკეთესო ღირებულება (60 GEL)')">
+                        <div class="package-card" onclick="selectCabinetPackage('საუკეთესო ღირებულება (60 GEL)', 365)">
                             <span class="package-badge">საუკეთესო ღირებულება</span>
-                            <h3>60 GEL</h3>
+                            <h3 id="cabPkg3Price">60 GEL</h3>
                             <h4>365 დღე</h4>
                             <p>შესაძლებელია 2 ახალი ავტომობილის დამატება.</p>
                         </div>
@@ -478,12 +478,13 @@
             <h3 id="modalTitle">მოთხოვნის შევსება</h3>
             <form id="telegramForm" onsubmit="submitToTelegram(event)">
                 <input type="hidden" id="selectedPackage">
+                <input type="hidden" id="selectedPrice">
                 <div class="form-group"><label>სრული სახელი და გვარი</label><input type="text" id="clientName" required placeholder="სახელი და გვარი..."></div>
                 <div class="form-group"><label>პირადი ნომერი (11-ნიშნა)</label><input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრი"></div>
                 <div class="form-group"><label>ტელეფონის ნომერი</label><input type="tel" id="clientPhone" required placeholder="+995 ..."></div>
                 <div class="form-group"><label>ავტომობილის ნომერი</label><input type="text" id="clientCar" required placeholder="მაგ: AA110II"></div>
                 <div class="form-group"><label>ტექპასპორტის ნომერი</label><input type="text" id="clientTech" required placeholder="მაგ: EV0159681"></div>
-                <div class="form-group"><label>არჩეული პაკეტი</label><input type="text" id="displayPackage" readonly style="background:#e9ece5; font-weight:bold;"></div>
+                <div class="form-group"><label>არჩეული პაკეტი და ფასი</label><input type="text" id="displayPackage" readonly style="background:#e9ece5; font-weight:bold;"></div>
                 <button type="submit" class="form-submit-btn">გაგზავნა და გადახდა</button>
             </form>
         </div>
@@ -509,12 +510,19 @@
             else { moreText.style.display = 'block'; btn.textContent = "ნაკლების ჩვენება"; }
         }
 
+        /* მთავარი გვერდიდან გახსნა (სტანდარტული ფასები) */
         function openModal(packageName) {
+            let price = 7;
+            if(packageName.includes("18 GEL")) price = 18;
+            if(packageName.includes("60 GEL")) price = 60;
+
             document.getElementById('selectedPackage').value = packageName;
-            document.getElementById('displayPackage').value = packageName;
+            document.getElementById('selectedPrice').value = price;
+            document.getElementById('displayPackage').value = `${packageName} — ${price} GEL`;
             document.getElementById('modalTitle').textContent = packageName + ' - მოთხოვნა';
             document.getElementById('orderModal').style.display = 'flex';
         }
+
         function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
         function openCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'flex'; }
         function closeCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'none'; }
@@ -531,6 +539,59 @@
             element.classList.add('active');
             
             if(tabId === 'settingsTab') checkChatHours();
+            if(tabId === 'packagesTab') updateCabinetPricesUI();
+        }
+
+        /* კაბინეტიდან პაკეტის არჩევისას სპეციალური ფასების გათვლა */
+        function updateCabinetPricesUI() {
+            const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || { package: "7 GEL" };
+            const currentPkg = savedData.package;
+
+            let price7 = 7, price18 = 15, price60 = 50;
+
+            if (currentPkg.includes("18 GEL")) {
+                price7 = 13; price18 = 18; price60 = 50;
+            } else if (currentPkg.includes("60 GEL")) {
+                price7 = 13; price18 = 15; price60 = 50;
+            }
+
+            document.getElementById('cabPkg1Price').textContent = price7 + " GEL";
+            document.getElementById('cabPkg2Price').textContent = price18 + " GEL";
+            document.getElementById('cabPkg3Price').textContent = price60 + " GEL";
+        }
+
+        function selectCabinetPackage(targetPkgName, daysCount) {
+            const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || { package: "7 GEL" };
+            const currentPkg = savedData.package;
+
+            let price = 7;
+            if (currentPkg.includes("7 GEL")) {
+                if (targetPkgName.includes("18 GEL")) price = 15;
+                else if (targetPkgName.includes("60 GEL")) price = 50;
+                else price = 7;
+            } else if (currentPkg.includes("18 GEL")) {
+                if (targetPkgName.includes("7 GEL")) price = 13;
+                else if (targetPkgName.includes("60 GEL")) price = 50;
+                else price = 18;
+            } else if (currentPkg.includes("60 GEL")) {
+                if (targetPkgName.includes("7 GEL")) price = 13;
+                else if (targetPkgName.includes("18 GEL")) price = 15;
+                else price = 50;
+            }
+
+            // ავტوماتურად ვავსებთ მომხმარებლის მონაცემებს ფორმაში
+            document.getElementById('selectedPackage').value = targetPkgName;
+            document.getElementById('selectedPrice').value = price;
+            document.getElementById('displayPackage').value = `${targetPkgName} — ${price} GEL (კაბინეტიდან შეცვლა)`;
+            document.getElementById('modalTitle').textContent = targetPkgName + ' - განახლება / შეცვლა';
+            
+            document.getElementById('clientName').value = savedData.name || "";
+            document.getElementById('clientPid').value = savedData.pid || "";
+            document.getElementById('clientPhone').value = savedData.phone || "";
+            document.getElementById('clientCar').value = savedData.car || "";
+            document.getElementById('clientTech').value = savedData.tech || "";
+
+            document.getElementById('orderModal').style.display = 'flex';
         }
 
         function handleCabinetLogin(event) {
@@ -700,6 +761,7 @@
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
+            const price = document.getElementById('selectedPrice').value;
             const name = document.getElementById('clientName').value;
             const pid = document.getElementById('clientPid').value;
             const phone = document.getElementById('clientPhone').value;
@@ -707,13 +769,13 @@
             const tech = document.getElementById('clientTech').value;
 
             let daysCount = 30;
-            if(pkg.includes("18 GEL")) daysCount = 90;
-            if(pkg.includes("60 GEL")) daysCount = 365;
+            if(pkg.includes("18 GEL") || pkg.includes("პოპულარული")) daysCount = 90;
+            if(pkg.includes("60 GEL") || pkg.includes("საუკეთესო")) daysCount = 365;
 
             const userData = { name, pid, phone, car, tech, package: pkg, days: daysCount, timestamp: Date.now() };
             localStorage.setItem('mashveli_user', JSON.stringify(userData));
 
-            const message = `🚨 <b>ახალი მომხმარებლის რეგისტრაცია და პაკეტის შეძენა!</b>\n\n📦 პაკეტი: ${pkg}\n👤 სახელი: ${name}\n🆔 პირადი: ${pid}\n📞 ტელეფონი: ${phone}\n🚗 ნომერი: ${car}\n📄 ტექპასპორტი: ${tech}`;
+            const message = `🚨 <b>პაკეტის შეძენა / განახლება!</b>\n\n📦 პაკეტი: ${pkg}\n💰 ფასი: ${price} GEL\n👤 სახელი: ${name}\n🆔 პირადი: ${pid}\n📞 ტელეფონი: ${phone}\n🚗 ნომერი: ${car}\n📄 ტექპასპორტი: ${tech}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
