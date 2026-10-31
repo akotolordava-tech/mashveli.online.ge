@@ -532,7 +532,6 @@
         let generatedAdminCode = "";
         let countdownInterval = null;
 
-        // ავტომატური კონტროლი ტელეფონის +995 პრეფიქსისა და დიდი ასოებისათვის
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('phone-input')) {
                 if (!e.target.value.startsWith('+995 ')) {
@@ -854,8 +853,8 @@
             };
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            // ზუსტად ისეთი სტრუქტურირებული და ემოჯიებიანი ფორმატი, როგორიც სურათზეა
-            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი:</b> ${randomCode}\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
+            // შეტყობინება დამატებული გადამოწმების ბმულებით
+            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი:</b> ${randomCode}\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}\n\n🔗 <b>გადამოწმების ბმულები:</b>\n• PTI: https://pti.ge\n• Protocols: https://protocols.ge\n• Police Videos: https://videos.police.ge`;
 
             sendTelegramMessageUniversal(message);
 
