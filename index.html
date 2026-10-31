@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ka">
 <head>
@@ -804,7 +805,7 @@
 
         setInterval(checkTelegramReplies, 3000);
 
-        /* 🚀 გადახდის ფუნქციონალი: უნიკალური 4-ნიშნა კოდი და დანიშნულების ავტომატური გაგზავნა BOG-ზე */
+        /* 🚀 გადახდის ფუნქციონალი: ინდივიდუალური 4-ნიშნა კოდი და დანიშნულების ავტომატური გადაცემა BOG-ზე */
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -815,7 +816,7 @@
             const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
 
-            // 1. ვაგენერირებთ შემთხვევით 4-ნიშნა ინდივიდუალურ კოდს (მაგ: 4829)
+            // 1. თითოეული მომხმარებლისთვის გენერირდება სრულიად ინდივიდუალური 4-ნიშნა კოდი
             const randomCode = Math.floor(1000 + Math.random() * 9000);
 
             let daysCount = 30;
@@ -826,8 +827,8 @@
             const userData = { name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now() };
             localStorage.setItem('mashveli_user', JSON.stringify(userData));
 
-            // 2. ტელეგრამში ვაგზავნით სრულ შეტყობინებას უნიკალურ კოდთან ერთად
-            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი: ${randomCode}</b>\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>ფასი:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
+            // 2. ტელეგრამში იგზავნება სრული დეტალები და უნიკალური კოდი
+            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი: ${randomCode}</b>\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -835,11 +836,15 @@
                 body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
-            // 3. ვაფორმირებთ გადახდის დანიშნულებას: "მანქანა: AA100AA, ტექპასპორტი: EV0159681, კოდი: 4829"
-            const paymentPurpose = encodeURIComponent(`მანქანა: ${car}, ტექ: ${tech}, კოდი: ${randomCode}`);
+            // 3. კოდის და მანქანის ნომრის დაკოპირება ბუფერში (Clipboard)
+            const textToCopy = `${car} ${randomCode}`;
+            navigator.clipboard.writeText(textToCopy).catch(() => {});
+
+            // 4. მოკლე ტექსტი BOG-ის 30-სიმბოლოიანი ლიმიტისთვის (მაგ: "AA100AA 4829")
+            const paymentPurpose = encodeURIComponent(textToCopy);
             const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
 
-            // 4. გადამისამართება საქართველოს ბანკის გადახდის გვერდზე დანიშნულებით
+            // გადამისამართება საქართველოს ბანკის გადახდის გვერდზე
             window.location.href = `https://egreve.bog.ge/Carfax?description=${paymentPurpose}&return_url=${returnUrl}`;
         }
     </script>
