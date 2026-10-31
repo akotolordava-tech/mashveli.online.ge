@@ -147,7 +147,7 @@
             <div class="lang-switch">
                 <button class="lang-btn active" onclick="setLanguage('GEO')">GEO</button>
                 <button class="lang-btn" onclick="setLanguage('ENG')">ENG</button>
-                <button class="lang-btn" onclick="setLanguage('RUS')">RUS</button>
+                <button class="lang-btn" onclick="setLanguage('RUS')">Русский</button>
             </div>
         </div>
     </header>
@@ -607,7 +607,7 @@
         let currentDbTab = 'active';
         let currentLang = 'GEO';
 
-        // 🌍 ენების სრულფასოვანი ლექსიკონი
+        // 🌍 ენების ლექსიკონი
         const translations = {
             GEO: {
                 nav_services: "სერვისები",
@@ -978,16 +978,11 @@
             }
         });
 
-        function closeWelcomePopup() { 
-            const popup = document.getElementById('welcomePopup');
-            if (popup) {
-                popup.style.display = 'none';
-            }
-        }
-
+        function closeWelcomePopup() { document.getElementById('welcomePopup').style.display = 'none'; }
         function toggleReadMore() {
             const moreText = document.getElementById('moreText');
             const btn = document.getElementById('readMoreBtn');
+            const t = translations[currentLang];
             if (moreText.style.display === 'block') { 
                 moreText.style.display = 'none'; 
                 btn.textContent = currentLang === 'ENG' ? "Read more..." : (currentLang === 'RUS' ? "Читать далее..." : "მეტის წაკითხვა..."); 
@@ -1050,7 +1045,7 @@
                 return;
             }
 
-            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
+            const loginMessage = `👤 <b>مომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
             sendTelegramMessageUniversal(loginMessage);
 
             loadUserData(savedData);
@@ -1423,4 +1418,240 @@
 
             filtered.forEach(u => {
                 const card = document.createElement('div');
-                card.className = 'user-
+                card.className = 'user-db-card';
+                const historyHTML = u.packageHistory && u.packageHistory.length > 0 
+                    ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 <b>Package History:</b> ${u.packageHistory.join(' ← ')}</div>` 
+                    : '';
+
+                if (currentDbTab === 'active') {
+                    card.innerHTML = `
+                        <div class="user-db-header">
+                            <div>
+                                <span style="font-size: 16px; font-weight: bold; color: #d9f96b;">👤 ${u.name || '—'}</span>
+                                <span style="font-size: 12px; background: #17362a; color: #b0c2bc; padding: 3px 8px; border-radius: 6px; margin-left: 8px;">ID: ${u.pid}</span>
+                            </div>
+                            <div style="font-weight: bold; color: #4ade80; font-size: 13px;">📦 ${u.package}</div>
+                        </div>
+                        <div class="user-db-grid">
+                            <div><b>Car:</b> ${u.car}</div>
+                            <div><b>Tech:</b> ${u.tech || '—'}</div>
+                            <div><b>Phone:</b> ${u.phone || '—'}</div>
+                            <div><b>Time left:</b> <span class="db-live-timer" data-start="${u.timestamp}" data-days="${u.days}" style="color: #d9f96b; font-weight: bold;">...</span></div>
+                        </div>
+                        ${historyHTML}
+                        <div class="user-db-actions">
+                            <button class="user-db-btn btn-view" onclick="openAdminUserDetail('${u.storageKey}')">👀 View Details</button>
+                            <button class="user-db-btn" onclick="selectUserToEdit('${u.storageKey}')" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b;">✏️ Edit</button>
+                            <button class="user-db-btn btn-trash" onclick="moveUserToTrash('${u.storageKey}')">🗑️ Trash</button>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="user-db-header">
+                            <div>
+                                <span style="font-size: 16px; font-weight: bold; color: #f87171;">🗑️ ${u.name || '—'}</span>
+                                <span style="font-size: 12px; background: #17362a; color: #b0c2bc; padding: 3px 8px; border-radius: 6px; margin-left: 8px;">ID: ${u.pid}</span>
+                            </div>
+                            <div style="font-size: 12px; color: #f87171;">Deleted</div>
+                        </div>
+                        <div class="user-db-grid">
+                            <div><b>Car:</b> ${u.car}</div>
+                            <div><b>Tech:</b> ${u.tech || '—'}</div>
+                            <div><b>Phone:</b> ${u.phone || '—'}</div>
+                            <div><b>Package:</b> ${u.package}</div>
+                        </div>
+                        <div class="user-db-actions">
+                            <button class="user-db-btn btn-restore" onclick="restoreUserFromTrash('${u.storageKey}')">🔄 Restore</button>
+                            <button class="user-db-btn btn-perm-delete" onclick="permanentlyDeleteUser('${u.storageKey}')">❌ Delete Forever</button>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+            updateAllDbCountdowns();
+        }
+
+        function openAdminUserDetail(storageKey) {
+            const u = JSON.parse(localStorage.getItem(storageKey));
+            if (!u) return;
+
+            document.getElementById('detailModalTitle').textContent = `User: ${u.name || '—'} (${u.car})`;
+            let finesHtml = "";
+            let totalSum = 0;
+
+            if (u.noFine === true || !u.fines || u.fines.length === 0) {
+                finesHtml = `
+                <div class="dash-card" style="justify-content: center; text-align: center; padding: 25px; background: #17362a; border: 1px solid #1a3e30;">
+                    <div>
+                        <div style="font-size: 24px; margin-bottom: 6px;">🎉</div>
+                        <div style="font-size: 14px; font-weight: bold; color: #4ade80;">No fines recorded for vehicle ${u.car}</div>
+                    </div>
+                </div>`;
+            } else {
+                u.fines.forEach(f => {
+                    totalSum += parseFloat(f.sum) || 0;
+                    finesHtml += `
+                    <div class="dash-card" style="background: #17362a; border: 1px solid #1a3e30;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="car-badge">${u.car}</span>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 4px; font-size: 14px;">${f.desc}</div>
+                                <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | Receipt: #${f.receiptNo || '—'}</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 16px; font-weight: bold; color: #f87171;">${f.sum}</div>
+                        </div>
+                    </div>`;
+                });
+            }
+
+            document.getElementById('adminUserDetailContent').innerHTML = `
+                <div style="background: #132e23; padding: 20px; border-radius: 12px; border: 1px solid #1a3e30; margin-bottom: 20px;">
+                    <p style="margin-bottom: 8px; font-size: 14px;">👤 <b>Name:</b> ${u.name}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">🆔 <b>ID:</b> ${u.pid}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">📞 <b>Phone:</b> ${u.phone}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">🚗 <b>Car:</b> ${u.car}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">📄 <b>Tech Passport:</b> ${u.tech || '—'}</p>
+                    <p style="font-size: 14px; color: #d9f96b;">📦 <b>Package:</b> ${u.package}</p>
+                </div>
+                <div class="dash-stats" style="margin-bottom: 20px;">
+                    <div class="stat-card" style="background: #132e23; border: 1px solid #1a3e30;">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <h4>Total Unpaid Fines</h4>
+                            <p style="color: #f87171; font-size: 18px;">${totalSum} GEL</p>
+                        </div>
+                    </div>
+                </div>
+                <h4 style="margin-bottom: 12px; font-size: 16px; color: #d9f96b;">Current Violations and Inspection</h4>
+                ${finesHtml}
+                <div class="dash-card" style="margin-top: 15px; background: #17362a; border: 1px solid #1a3e30;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="car-badge">${u.car}</span>
+                        <div>
+                            <div style="font-weight: bold; margin-bottom: 4px;">Inspection Status</div>
+                            <div style="font-size: 12px; color: #b0c2bc;">${u.techStatus || "🔍 Status: Valid"}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('adminDbModal').style.display = 'none';
+            document.getElementById('adminUserDetailModal').style.display = 'flex';
+        }
+
+        function closeAdminUserDetail() {
+            document.getElementById('adminUserDetailModal').style.display = 'none';
+            document.getElementById('adminDbModal').style.display = 'flex';
+        }
+
+        function updateAllDbCountdowns() {
+            const timerElements = document.querySelectorAll('.db-live-timer');
+            const now = Date.now();
+            timerElements.forEach(el => {
+                const startTime = parseInt(el.getAttribute('data-start'));
+                const totalDays = parseInt(el.getAttribute('data-days'));
+                if (!startTime || !totalDays) return;
+                const expiryTime = startTime + (totalDays * 24 * 60 * 60 * 1000);
+                const distance = expiryTime - now;
+                if (distance < 0) {
+                    el.textContent = "Expired";
+                    el.style.color = "#ef4444";
+                    return;
+                }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                el.textContent = `${days}d ${hours}h ${minutes}m`;
+            });
+        }
+
+        function moveUserToTrash(key) {
+            let u = JSON.parse(localStorage.getItem(key));
+            if (u) { u.isDeleted = true; localStorage.setItem(key, JSON.stringify(u)); renderUserDatabaseList(); }
+        }
+
+        function restoreUserFromTrash(key) {
+            let u = JSON.parse(localStorage.getItem(key));
+            if (u) { u.isDeleted = false; localStorage.setItem(key, JSON.stringify(u)); renderUserDatabaseList(); }
+        }
+
+        function permanentlyDeleteUser(key) {
+            if (confirm("Permanently delete user?")) { localStorage.removeItem(key); renderUserDatabaseList(); }
+        }
+
+        function selectUserToEdit(key) {
+            const u = JSON.parse(localStorage.getItem(key));
+            if (u) { closeAdminUserDatabase(); document.getElementById('adminTargetPid').value = u.pid; searchUserByPid(); }
+        }
+
+        function selectCabinetPackage(newPkg, days) {
+            const currentPid = document.getElementById('profPid').textContent;
+            const currentCar = document.getElementById('dashMainCarBadge2').textContent;
+            const storageKey = 'user_' + currentPid + '_' + currentCar;
+            let userData = JSON.parse(localStorage.getItem(storageKey));
+            if (userData) {
+                if (!userData.packageHistory) userData.packageHistory = [];
+                userData.packageHistory.unshift(userData.package);
+                userData.package = newPkg;
+                userData.days = days;
+                userData.timestamp = Date.now();
+                localStorage.setItem(storageKey, JSON.stringify(userData));
+                alert(`✅ Package successfully changed to ${newPkg}`);
+                loadUserData(userData);
+                startLiveCountdown(userData.timestamp, userData.days);
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+                e.preventDefault();
+                openAdminAuthModal();
+            }
+        });
+
+        let clickCount = 0;
+        document.getElementById('footerText').addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
+            setTimeout(() => clickCount = 0, 1500);
+        });
+
+        function submitToTelegram(event) {
+            event.preventDefault();
+            if (isSubmitting) return;
+            isSubmitting = true;
+
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = "0.5"; submitBtn.textContent = "Sending..."; }
+
+            const pkg = document.getElementById('selectedPackage').value;
+            const price = document.getElementById('selectedPrice').value;
+            const name = document.getElementById('clientName').value;
+            const pid = document.getElementById('clientPid').value.trim();
+            const phone = document.getElementById('clientPhone').value;
+            const car = document.getElementById('clientCar').value.toUpperCase().trim();
+            const tech = document.getElementById('clientTech').value.toUpperCase().trim();
+            const randomCode = Math.floor(1000 + Math.random() * 9000);
+
+            let daysCount = 30;
+            if(pkg.includes("18 GEL")) daysCount = 90;
+            if(pkg.includes("60 GEL")) daysCount = 365;
+
+            const storageKey = 'user_' + pid + '_' + car;
+            const userData = { 
+                name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
+                adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
+            };
+            localStorage.setItem(storageKey, JSON.stringify(userData));
+
+            const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
+
+            sendTelegramMessageUniversal(message, function() {
+                window.location.href = `https://egreve.bog.ge/Carfax`;
+            });
+        }
+    </script>
+</body>
+</html>
