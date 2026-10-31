@@ -147,7 +147,7 @@
             <div class="lang-switch">
                 <button class="lang-btn active" onclick="setLanguage('GEO')">GEO</button>
                 <button class="lang-btn" onclick="setLanguage('ENG')">ENG</button>
-                <button class="lang-btn" onclick="setLanguage('RUS')">Русский</button>
+                <button class="lang-btn" onclick="setLanguage('RUS')">RUS</button>
             </div>
         </div>
     </header>
@@ -607,7 +607,7 @@
         let currentDbTab = 'active';
         let currentLang = 'GEO';
 
-        // 🌍 ენების ლექსიკონი
+        // 🌍 ენების სრულფასოვანი ლექსიკონი
         const translations = {
             GEO: {
                 nav_services: "სერვისები",
@@ -978,11 +978,16 @@
             }
         });
 
-        function closeWelcomePopup() { document.getElementById('welcomePopup').style.display = 'none'; }
+        function closeWelcomePopup() { 
+            const popup = document.getElementById('welcomePopup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+        }
+
         function toggleReadMore() {
             const moreText = document.getElementById('moreText');
             const btn = document.getElementById('readMoreBtn');
-            const t = translations[currentLang];
             if (moreText.style.display === 'block') { 
                 moreText.style.display = 'none'; 
                 btn.textContent = currentLang === 'ENG' ? "Read more..." : (currentLang === 'RUS' ? "Читать далее..." : "მეტის წაკითხვა..."); 
@@ -1045,7 +1050,7 @@
                 return;
             }
 
-            const loginMessage = `👤 <b>مომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
+            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
             sendTelegramMessageUniversal(loginMessage);
 
             loadUserData(savedData);
@@ -1366,4 +1371,56 @@
             const trashBtn = document.getElementById('tabTrashUsers');
 
             if (currentDbTab === 'active') {
-                activeBtn.style.background = '#d9f
+                activeBtn.style.background = '#d9f96b';
+                activeBtn.style.color = '#0d231a';
+                trashBtn.style.background = '#17362a';
+                trashBtn.style.color = '#ef4444';
+            } else {
+                activeBtn.style.background = '#17362a';
+                activeBtn.style.color = '#b0c2bc';
+                trashBtn.style.background = '#ef4444';
+                trashBtn.style.color = '#fff';
+            }
+        }
+
+        function getAllUsersFromStorage() {
+            let activeUsers = [];
+            let trashUsers = [];
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('user_')) {
+                    const u = JSON.parse(localStorage.getItem(key));
+                    if (u) {
+                        u.storageKey = key;
+                        if (u.isDeleted === true) trashUsers.push(u);
+                        else activeUsers.push(u);
+                    }
+                }
+            }
+            return { activeUsers, trashUsers };
+        }
+
+        function renderUserDatabaseList() {
+            const { activeUsers, trashUsers } = getAllUsersFromStorage();
+            document.getElementById('activeUsersCount').textContent = activeUsers.length;
+            document.getElementById('trashUsersCount').textContent = trashUsers.length;
+
+            const searchQuery = document.getElementById('dbSearchInput').value.toLowerCase().trim();
+            const targetList = currentDbTab === 'active' ? activeUsers : trashUsers;
+            const container = document.getElementById('dbUserCardsContainer');
+            container.innerHTML = '';
+
+            const filtered = targetList.filter(u => {
+                const text = `${u.name} ${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.package}`.toLowerCase();
+                return text.includes(searchQuery);
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: #b0c2bc; padding: 40px; font-size: 15px;">No records found.</div>`;
+                return;
+            }
+
+            filtered.forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'user-
