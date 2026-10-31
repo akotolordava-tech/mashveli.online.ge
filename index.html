@@ -267,22 +267,39 @@
         </div>
     </div>
 
-    <!-- ავტომობილის დამატების მოდალური ფანჯარა -->
-    <div class="modal-overlay" id="addCarModal" style="z-index: 6000;">
-        <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30;">
-            <button class="modal-close" style="color: #fff;" onclick="closeAddCarModal()">&times;</button>
-            <h3 style="color: #d9f96b;">🚗 ავტომობილის დამატება</h3>
-            <p style="font-size: 13px; color: #b0c2bc; margin-bottom: 20px;">შეიყვანეთ ახალი ავტომობილისა და ტექპასპორტის მონაცემები</p>
-            <form onsubmit="submitNewCar(event)">
+    <!-- ================= 🔐 ფარული ადმინ პანელი (ADMIN MODAL) ================= -->
+    <div class="modal-overlay" id="adminModal" style="z-index: 7000;">
+        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 520px;">
+            <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
+            <h3 style="color: #d9f96b; text-align: center; margin-bottom: 15px;">🛠️ ადმინისტრატორის პანელი</h3>
+            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">შეიყვანეთ მომხმარებლის 11-ნიშნა პირადი ნომერი მისსავე მონაცემთა სამართავად.</p>
+            
+            <form onsubmit="saveAdminData(event)">
                 <div class="form-group">
-                    <label style="color: #d9f96b;">ავტომობილის სახელმწიფო ნომერი</label>
-                    <input type="text" id="newCarPlate" required placeholder="მაგ: BB-777-BB" style="background: #081711; color: #fff; border: 1px solid #1a3e30;">
+                    <label style="color: #d9f96b;">მომხმარებლის პირადი ნომერი (11-ნიშნა)</label>
+                    <input type="text" id="adminTargetPid" required maxlength="11" pattern="\d{11}" placeholder="62004028505" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
                 <div class="form-group">
-                    <label style="color: #d9f96b;">ტექპასპორტის ნომერი</label>
-                    <input type="text" id="newCarTech" required placeholder="მაგ: EV0159681" style="background: #081711; color: #fff; border: 1px solid #1a3e30;">
+                    <label style="color: #d9f96b;">ჯარიმის თანხა (მაგ: 50 GEL)</label>
+                    <input type="text" id="adminInputFineSum" required placeholder="50 GEL ან 0 GEL" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
-                <button type="submit" class="form-submit-btn" style="background: #d9f96b; color: #0d231a;">დამატება</button>
+                <div class="form-group">
+                    <label style="color: #d9f96b;">ჯარიმის შინაარსი / აღწერა</label>
+                    <input type="text" id="adminInputFineDesc" placeholder="მაგ: სიჩქარის გადამეტება (15-20 კმ/სთ)" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+                <div class="form-group">
+                    <label style="color: #d9f96b;">თარიღი და ადგილი</label>
+                    <input type="text" id="adminInputFineDate" placeholder="მაგ: დღეს, 14:22 | თბილისი" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+                <div class="form-group">
+                    <label style="color: #d9f96b;">გადახდის / ჯარიმის ბმული (Link)</label>
+                    <input type="url" id="adminInputFineLink" placeholder="https://police.ge/..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+                <div class="form-group">
+                    <label style="color: #d9f96b;">ტექინსპექტირების სტატუსი</label>
+                    <input type="text" id="adminInputTechStatus" placeholder="მაგ: 🔍 სტატუსი: ძალაშია | 📅 ვადა: 2026-12-15" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+                <button type="submit" class="form-submit-btn" style="background: #d9f96b; color: #0d231a;">მონაცემების დადასტურება და გამოქვეყნება ✅</button>
             </form>
         </div>
     </div>
@@ -320,60 +337,71 @@
             <!-- Content -->
             <div class="dash-content">
                 
-                <!-- TAB 1: ჯარიმები -->
+                <!-- TAB 1: ჯარიმები და ინსპექტირება -->
                 <div class="dash-section active" id="finesTab">
                     <div class="dash-header">
                         <div class="dash-title">
-                            <h2>დარიცხული ჯარიმები</h2>
-                            <p>ლაივ რეჟიმში განახლებული ინფორმაცია სატრანსპორტო ბაზიდან</p>
+                            <h2>დარიცხული ჯარიმები და ინსპექტირება</h2>
+                            <p>ოფიციალური მონაცემები სატრანსპორტო პორტალიდან</p>
                         </div>
                     </div>
 
-                    <div class="dash-stats">
-                        <div class="stat-card">
-                            <div class="stat-icon">⚠️</div>
-                            <div class="stat-info">
-                                <h4>გადაუხდელი ჯარიმები</h4>
-                                <p style="color: #f87171;">50 GEL</p>
+                    <!-- 1. დამუშავების ბლოკი -->
+                    <div id="processingNotice" style="background: #132e23; border: 1px dashed #d9f96b; padding: 35px; border-radius: 16px; text-align: center; margin-bottom: 25px;">
+                        <div style="font-size: 36px; margin-bottom: 12px;">⏳</div>
+                        <h3 style="color: #d9f96b; margin-bottom: 12px; font-size: 20px;">თქვენი მონაცემები მუშავდება</h3>
+                        <p style="color: #b0c2bc; font-size: 15px; line-height: 1.6; max-width: 600px; margin: 0 auto;">თქვენი მონაცემები მუშავდება და რამდენიმე წუთში განახლებული ინფორმაცია გამოჩნდება თქვენს პირად კაბინეტში.</p>
+                    </div>
+
+                    <!-- 2. რეალური მონაცემების ბლოკი -->
+                    <div id="realDataContainer" style="display: none;">
+                        <div class="dash-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">⚠️</div>
+                                <div class="stat-info">
+                                    <h4>გადაუხდელი ჯარიმები</h4>
+                                    <p id="userDisplayFineSumHeader" style="color: #f87171;">0 GEL</p>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⏳</div>
+                                <div class="stat-info">
+                                    <h4>პაკეტის დარჩენილი ვადა</h4>
+                                    <p id="liveCountdown" style="color: #d9f96b; font-size: 16px;">იტვირთება...</p>
+                                </div>
                             </div>
                         </div>
-                        <div class="stat-card">
-                            <div class="stat-icon">⏳</div>
-                            <div class="stat-info">
-                                <h4>პაკეტის დარჩენილი ვადა</h4>
-                                <p id="liveCountdown" style="color: #d9f96b; font-size: 16px;">იტვირთება...</p>
+
+                        <h3 style="margin-bottom: 20px; font-size: 18px; color: #d9f96b;">მიმდინარე დარღვევები და ინსპექტირება</h3>
+
+                        <div class="dash-card">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="car-badge" id="dashMainCarBadge">AA-100-AA</span>
+                                <div>
+                                    <div id="userDisplayFineDesc" style="font-weight: bold; margin-bottom: 4px;">ჯარიმა არ იძებნება</div>
+                                    <div id="userDisplayFineDate" style="font-size: 12px; color: #b0c2bc;">სტატუსი: სუფთაა</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div id="userDisplayFineSum" style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">0 GEL</div>
+                                <a id="userDisplayFineLink" href="#" target="_blank" class="cabinet-btn" style="font-size: 12px; padding: 6px 12px; display: inline-block; text-decoration: none;">ნახვა / გადახდა</a>
+                            </div>
+                        </div>
+
+                        <div class="dash-card">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="car-badge" id="dashMainCarBadge2">AA-100-AA</span>
+                                <div>
+                                    <div style="font-weight: bold; margin-bottom: 4px;">ტექინსპექტირების გავლის ვადა</div>
+                                    <div id="userDisplayTechStatus" style="font-size: 12px; color: #b0c2bc;">🔍 სტატუსი: ძალაშია</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <span style="background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;">აქტიურია</span>
                             </div>
                         </div>
                     </div>
 
-                    <h3 style="margin-bottom: 20px; font-size: 18px; color: #d9f96b;">მიმდინარე დარღვევები</h3>
-
-                    <div class="dash-card">
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <span class="car-badge" id="dashMainCarBadge">AA-100-AA</span>
-                            <div>
-                                <div style="font-weight: bold; margin-bottom: 4px;">სიჩქარის გადამეტება (15-20 კმ/სთ)</div>
-                                <div style="font-size: 12px; color: #b0c2bc;">📅 დღეს, 14:22 &nbsp;|&nbsp; 📍 თბილისი, ჭავჭავაძის გამზირი #37</div>
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">50 GEL</div>
-                            <span style="background: rgba(248, 113, 113, 0.2); color: #f87171; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold;">გადასახდელი</span>
-                        </div>
-                    </div>
-
-                    <div class="dash-card">
-                        <div style="display: flex; align-items: center; gap: 15px;">
-                            <span class="car-badge" id="dashMainCarBadge2">AA-100-AA</span>
-                            <div>
-                                <div style="font-weight: bold; margin-bottom: 4px;">ტექინსპექტირების გავლის ვადა</div>
-                                <div style="font-size: 12px; color: #b0c2bc;">🔍 სტატუსი: ძალაშია &nbsp;|&nbsp; 📅 ვადა იწურება: 2026-12-15</div>
-                            </div>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;">აქტიურია</span>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- TAB 2: ჩემი ავტომობილები -->
@@ -383,7 +411,6 @@
                             <h2>ჩემი ავტომობილები</h2>
                             <p id="userPackageSubtitle">თქვენი აქტიური პაკეტი: <b>საწყისი პაკეტი (7 GEL)</b></p>
                         </div>
-                        <button class="cabinet-btn" onclick="openAddCarModal()">+ ავტომობილის დამატება</button>
                     </div>
 
                     <div class="cars-grid" id="userCarsContainer">
@@ -494,7 +521,7 @@
         <h3>დაგვიკავშირდით WhatsApp-ზე</h3>
         <a href="https://wa.me/995568965674" target="_blank" class="footer-phone">+995 568 96 56 74</a>
     </div>
-    <div class="footer-bottom">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</div>
+    <div class="footer-bottom" id="footerText">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</div>
 
     <script>
         const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
@@ -550,77 +577,22 @@
             switchTab('finesTab', firstMenuItem);
         }
 
-        function updateCabinetPricesUI() {
-            const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || { package: "7 GEL" };
-            const currentPkg = savedData.package;
-
-            let price7 = 7, price18 = 15, price60 = 50;
-
-            if (currentPkg.includes("18 GEL")) {
-                price7 = 13; price18 = 18; price60 = 50;
-            } else if (currentPkg.includes("60 GEL")) {
-                price7 = 13; price18 = 15; price60 = 50;
-            }
-
-            document.getElementById('cabPkg1Price').textContent = price7 + " GEL";
-            document.getElementById('cabPkg2Price').textContent = price18 + " GEL";
-            document.getElementById('cabPkg3Price').textContent = price60 + " GEL";
-        }
-
-        function selectCabinetPackage(targetPkgName, daysCount) {
-            const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || { package: "7 GEL" };
-            const currentPkg = savedData.package;
-
-            let price = 7;
-            if (currentPkg.includes("7 GEL")) {
-                if (targetPkgName.includes("18 GEL")) price = 15;
-                else if (targetPkgName.includes("60 GEL")) price = 50;
-                else price = 7;
-            } else if (currentPkg.includes("18 GEL")) {
-                if (targetPkgName.includes("7 GEL")) price = 13;
-                else if (targetPkgName.includes("60 GEL")) price = 50;
-                else price = 18;
-            } else if (currentPkg.includes("60 GEL")) {
-                if (targetPkgName.includes("7 GEL")) price = 13;
-                else if (targetPkgName.includes("18 GEL")) price = 15;
-                else price = 50;
-            }
-
-            document.getElementById('selectedPackage').value = targetPkgName;
-            document.getElementById('selectedPrice').value = price;
-            document.getElementById('displayPackage').value = `${targetPkgName} — ${price} GEL (კაბინეტიდან შეცვლა)`;
-            document.getElementById('modalTitle').textContent = targetPkgName + ' - განახლება / შეცვლა';
-            
-            document.getElementById('clientName').value = savedData.name || "";
-            document.getElementById('clientPid').value = savedData.pid || "";
-            document.getElementById('clientPhone').value = savedData.phone || "";
-            document.getElementById('clientCar').value = savedData.car || "";
-            document.getElementById('clientTech').value = savedData.tech || "";
-
-            document.getElementById('orderModal').style.display = 'flex';
-        }
-
+        /* 🔐 მომხმარებლის ავტორიზაცია (მხოლოდ თავისი მონაცემები) */
         function handleCabinetLogin(event) {
             event.preventDefault();
-            const pid = document.getElementById('cabPid').value;
-            const car = document.getElementById('cabCar').value.toUpperCase();
-            const phone = document.getElementById('cabPhone').value;
+            const pid = document.getElementById('cabPid').value.trim();
+            const car = document.getElementById('cabCar').value.trim().toUpperCase();
+            const phone = document.getElementById('cabPhone').value.trim();
 
-            const savedData = JSON.parse(localStorage.getItem('mashveli_user'));
+            // ვეძებთ ზუსტად ამ მომხმარებლის გასაღებს (მაგ: user_62004028505)
+            const storageKey = 'user_' + pid;
+            const savedData = JSON.parse(localStorage.getItem(storageKey));
 
-            if (!savedData || savedData.pid !== pid || savedData.car !== car) {
+            if (!savedData || savedData.car !== car) {
                 closeCabinetLogin();
-                showLimitNotice("❌ ასეთი აქტიური პაკეტით რეგისტრაცია ვერ მოიძებნა! გთხოვთ ჯერ შეიძინოთ პაკეტი მთავარი გვერდიდან.");
+                showLimitNotice("❌ ასეთი პირადი ნომრით და ავტომობილით რეგისტრაცია ვერ მოიძებნა! გთხოვთ შეამოწმოთ მონაცემები.");
                 return;
             }
-
-            const authMsg = `🔐 <b>კაბინეტში შესვლის მოთხოვნა!</b>\n\n👤 პირადი: ${pid}\n🚗 მანქანა: ${car}\n📄 ტექპასპორტი: ${savedData.tech || 'არ არის'}\n📞 ტელეფონი: ${phone}`;
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: authMsg, parse_mode: "HTML" })
-            }).catch(err => console.log(err));
 
             loadUserData(savedData);
             closeCabinetLogin();
@@ -628,6 +600,7 @@
             startLiveCountdown(savedData.timestamp, savedData.days);
         }
 
+        /* 📊 მონაცემების გამოტანა კაბინეტში */
         function loadUserData(data) {
             document.getElementById('profName').textContent = data.name;
             document.getElementById('profPid').textContent = data.pid;
@@ -637,11 +610,34 @@
             document.getElementById('carCard1Title').textContent = data.car;
             document.getElementById('carCard1Tech').textContent = data.tech;
             document.getElementById('userPackageSubtitle').innerHTML = `თქვენი აქტიური პაკეტი: <b>${data.package}</b>`;
+
+            // თუ ადმინმა დაადასტურა (adminApproved === true) -> უჩვენებს რეალურ მონაცემებს
+            if (data.adminApproved === true) {
+                document.getElementById('processingNotice').style.display = 'none';
+                document.getElementById('realDataContainer').style.display = 'block';
+
+                document.getElementById('userDisplayFineSumHeader').textContent = data.fineSum || "0 GEL";
+                document.getElementById('userDisplayFineSum').textContent = data.fineSum || "0 GEL";
+                document.getElementById('userDisplayFineDesc').textContent = data.fineDesc || "ჯარიმა არ იძებნება";
+                document.getElementById('userDisplayFineDate').textContent = data.fineDate || "სტატუსი: სუფთაა";
+                document.getElementById('userDisplayTechStatus').textContent = data.techStatus || "🔍 სტატუსი: ძალაშია";
+                
+                const linkBtn = document.getElementById('userDisplayFineLink');
+                if (data.fineLink) {
+                    linkBtn.href = data.fineLink;
+                    linkBtn.style.display = 'inline-block';
+                } else {
+                    linkBtn.style.display = 'none';
+                }
+            } else {
+                // წინააღმდეგ შემთხვევაში უჩვენებს დამუშავების ტექსტს
+                document.getElementById('processingNotice').style.display = 'block';
+                document.getElementById('realDataContainer').style.display = 'none';
+            }
         }
 
         function startLiveCountdown(startTime, totalDays) {
             const expiryTime = startTime + (totalDays * 24 * 60 * 60 * 1000);
-
             if(countdownInterval) clearInterval(countdownInterval);
 
             countdownInterval = setInterval(() => {
@@ -671,162 +667,89 @@
             document.getElementById('limitNoticeModal').style.display = 'none';
         }
 
-        function openAddCarModal() {
-            const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || { package: "საწყისი პაკეტი (7 GEL)" };
-            const carsContainer = document.getElementById('userCarsContainer');
-            const currentCarsCount = carsContainer.children.length;
+        /* 🛠️ ადმინ პანელის ფუნქციები (მომხმარებლის მონაცემების მართვა პირადი ნომრით) */
+        function openAdminModal() { document.getElementById('adminModal').style.display = 'flex'; }
+        function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-            if (savedData.package.includes("7 GEL") && currentCarsCount >= 1) {
-                showLimitNotice("არსებულ პაკეტში არარის შესაძლებელი დამატებით მეორე ავტომობილის დამატება");
-                return;
-            }
-            if (savedData.package.includes("18 GEL") && currentCarsCount >= 2) {
-                showLimitNotice("არსებულ პაკეტში შესაძლებელია მხოლოდ 1 ახალი ავტომობილის დამატება");
-                return;
-            }
-            if (savedData.package.includes("60 GEL") && currentCarsCount >= 3) {
-                showLimitNotice("არსებულ პაკეტში შესაძლებელია მხოლოდ 2 ახალი ავტომობილის დამატება");
-                return;
-            }
-
-            document.getElementById('addCarModal').style.display = 'flex';
-        }
-
-        function closeAddCarModal() {
-            document.getElementById('addCarModal').style.display = 'none';
-        }
-
-        function submitNewCar(event) {
+        function saveAdminData(event) {
             event.preventDefault();
-            const plate = document.getElementById('newCarPlate').value.toUpperCase();
-            const tech = document.getElementById('newCarTech').value;
+            const targetPid = document.getElementById('adminTargetPid').value.trim();
+            const fineSum = document.getElementById('adminInputFineSum').value;
+            const fineDesc = document.getElementById('adminInputFineDesc').value;
+            const fineDate = document.getElementById('adminInputFineDate').value;
+            const fineLink = document.getElementById('adminInputFineLink').value;
+            const techStatus = document.getElementById('adminInputTechStatus').value;
 
-            if(plate && tech) {
-                const container = document.getElementById('userCarsContainer');
-                const cardId = 'car-card-' + Date.now();
-                
-                const carCard = document.createElement('div');
-                carCard.className = 'car-manage-card';
-                carCard.id = cardId;
-                carCard.innerHTML = `
-                    <h4>${plate}</h4>
-                    <p style="font-size: 13px; color: #b0c2bc; margin-bottom: 6px;">ტექპასპორტი: <b>${tech}</b></p>
-                    <span class="car-status-badge status-active">✅ აქტიური მონიტორინგი</span><br>
-                    <button class="delete-car-btn" onclick="deleteCarCard('${cardId}')">წაშლა ✕</button>
-                `;
-                container.appendChild(carCard);
-                
-                document.getElementById('newCarPlate').value = '';
-                document.getElementById('newCarTech').value = '';
-                closeAddCarModal();
+            const storageKey = 'user_' + targetPid;
+            let userData = JSON.parse(localStorage.getItem(storageKey));
+
+            if (!userData) {
+                alert("❌ ამ პირადი ნომრით (" + targetPid + ") მომხმარებელი ვერ მოიძებნა ბაზაში!");
+                return;
             }
+
+            // ვანახლებთ კონკრეტული მომხმარებლის მონაცემებს და ვრთავთ დადასტურებას
+            userData.adminApproved = true;
+            userData.fineSum = fineSum;
+            userData.fineDesc = fineDesc;
+            userData.fineDate = fineDate;
+            userData.fineLink = fineLink;
+            userData.techStatus = techStatus;
+
+            localStorage.setItem(storageKey, JSON.stringify(userData));
+
+            alert("✅ მონაცემები წარმატებით განახლდა და მიება მომხმარებელს (PID: " + targetPid + ")!");
+            closeAdminModal();
         }
 
-        function deleteCarCard(cardId) {
-            const card = document.getElementById(cardId);
-            if(card && confirm("ნამდვილად გსურთ ამ ავტომობილის წაშლა?")) {
-                card.remove();
+        /* 🔑 ადმინ პანელის გამოძახება: Ctrl + Shift + A ან ფუტერზე 3 კლიკი */
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
+                e.preventDefault();
+                openAdminModal();
             }
-        }
+        });
 
-        function checkChatHours() {
-            const now = new Date();
-            const hours = now.getHours();
-            const dot = document.getElementById('chatStatusDot');
-            const text = document.getElementById('chatStatusText');
-
-            if (hours >= 10 && hours < 19) {
-                dot.style.background = "#4ade80";
-                text.textContent = "ოპერატორი ონლაინშია (10:00 - 19:00)";
-            } else {
-                dot.style.background = "#fb923c";
-                text.textContent = "ოპერატორი ოფლაინშია (სამუშაო საათები: 10:00 - 19:00). დატოვეთ შეტყობინება.";
+        let clickCount = 0;
+        document.getElementById('footerText').addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 3) {
+                openAdminModal();
+                clickCount = 0;
             }
-        }
+            setTimeout(() => clickCount = 0, 1500);
+        });
 
-        function sendChatMessage() {
-            const input = document.getElementById('chatInput');
-            const msgText = input.value.trim();
-            if (msgText !== "") {
-                const container = document.getElementById('chatMsgContainer');
-                const userMsg = document.createElement('div');
-                userMsg.className = 'msg user';
-                userMsg.textContent = msgText;
-                container.appendChild(userMsg);
-                input.value = "";
-                container.scrollTop = container.scrollHeight;
-
-                const user = JSON.parse(localStorage.getItem('mashveli_user')) || {
-                    name: "უცნობი",
-                    car: "მითითებული არ არის",
-                    tech: "მითითებული არ არის",
-                    pid: "მითითებული არ არის",
-                    phone: "მითითებული არ არის"
-                };
-
-                const tgMessage = `💬 <b>ახალი შეტყობინება ონლაინ ჩათიდან:</b>\n\n👤 <b>სახელი:</b> ${user.name}\n🚗 <b>ავტომობილი:</b> ${user.car}\n📄 <b>ტექპასპორტი:</b> ${user.tech}\n🆔 <b>პირადი ნომერი:</b> ${user.pid}\n📞 <b>ტელეფონი:</b> ${user.phone}\n\n✉️ <b>შეტყობინება:</b> ${msgText}\n\n<i>(პასუხის გასაცემად უბრალოდ მისწერეთ ტელეგრამის ბოტს)</i>`;
-
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: tgMessage, parse_mode: "HTML" })
-                }).catch(err => console.log(err));
-            }
-        }
-
-        let lastUpdateId = 0;
-
-        function checkTelegramReplies() {
-            fetch(`https://api.telegram.org/bot${botToken}/getUpdates?offset=${lastUpdateId + 1}&timeout=1`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok && data.result.length > 0) {
-                        data.result.forEach(update => {
-                            lastUpdateId = update.update_id;
-                            
-                            if (update.message && update.message.text) {
-                                const replyText = update.message.text;
-                                
-                                if (!replyText.includes("ახალი შეტყობინება ონლაინ ჩათიდან") && !replyText.includes("ახალი მომხმარებლის რეგისტრაცია") && !replyText.includes("პაკეტის შეძენა")) {
-                                    const container = document.getElementById('chatMsgContainer');
-                                    const supportMsg = document.createElement('div');
-                                    supportMsg.className = 'msg support';
-                                    supportMsg.textContent = replyText;
-                                    container.appendChild(supportMsg);
-                                    container.scrollTop = container.scrollHeight;
-                                }
-                            }
-                        });
-                    }
-                })
-                .catch(err => console.log("გადამოწმების შეცდომა:", err));
-        }
-
-        setInterval(checkTelegramReplies, 3000);
-
-        /* 🚀 გადახდის ძირითადი ფუნქციონალი */
+        /* 🚀 გადახდის და რეგისტრაციის ფუნქციონალი */
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
             const price = document.getElementById('selectedPrice').value;
             const name = document.getElementById('clientName').value;
-            const pid = document.getElementById('clientPid').value;
+            const pid = document.getElementById('clientPid').value.trim();
             const phone = document.getElementById('clientPhone').value;
-            const car = document.getElementById('clientCar').value.toUpperCase();
+            const car = document.getElementById('clientCar').value.toUpperCase().trim();
             const tech = document.getElementById('clientTech').value;
 
-            // 1. ინდივიდუალური 4-ნიშნა კოდი
             const randomCode = Math.floor(1000 + Math.random() * 9000);
 
             let daysCount = 30;
             if(pkg.includes("18 GEL") || pkg.includes("პოპულარული")) daysCount = 90;
             if(pkg.includes("60 GEL") || pkg.includes("საუკეთესო")) daysCount = 365;
 
-            // მონაცემების შენახვა LocalStorage-ში
-            const userData = { name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now() };
-            localStorage.setItem('mashveli_user', JSON.stringify(userData));
+            // თითოეული მომხმარებელი ინახება თავისი პირადი ნომრით უნიკალურად
+            const storageKey = 'user_' + pid;
+            const userData = { 
+                name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
+                adminApproved: false,
+                fineSum: "0 GEL",
+                fineDesc: "ჯარიმა არ იძებნება",
+                fineDate: "სტატუსი: სუფთაა",
+                fineLink: "",
+                techStatus: "🔍 სტატუსი: ძალაშია"
+            };
+            localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            // 2. ტელეგრამში გაგზავნა
             const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი: ${randomCode}</b>\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -835,7 +758,6 @@
                 body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
-            // 3. გადამისამართება BOG-ის გადახდის გვერდზე
             window.location.href = `https://egreve.bog.ge/Carfax`;
         }
     </script>
