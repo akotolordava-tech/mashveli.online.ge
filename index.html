@@ -294,7 +294,7 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ განახლებული ადმინ პანელი (მანქანისა და ტექპასპორტის ველებით) ================= -->
+    <!-- ================= 🛠️ განახლებული ადმინ პანელი (შეცვლილი ველებით) ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
         <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 580px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
@@ -310,7 +310,6 @@
                     </div>
                 </div>
 
-                <!-- მრავალი ავტომობილის არჩევის ველი -->
                 <div class="form-group" id="carSelectWrapper" style="display: none; background: #17362a; padding: 15px; border-radius: 12px; border: 1px solid #1a3e30;">
                     <label style="color: #d9f96b; margin-bottom: 8px;">აირჩიეთ ამ პირად ნომერზე რეგისტრირებული ავტომობილი:</label>
                     <select id="adminCarSelector" onchange="onCarSelected(this.value)" style="width: 100%; padding: 12px; background: #0d231a; color: #fff; border: 1px solid #1a3e30; border-radius: 8px; font-weight: bold; cursor: pointer;"></select>
@@ -682,12 +681,11 @@
                                 <span class="car-badge">${data.car}</span>
                                 <div>
                                     <div style="font-weight: bold; margin-bottom: 4px;">${f.desc}</div>
-                                    <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date}</div>
+                                    <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | ქვითარი: #${f.receiptNo || '—'}</div>
                                 </div>
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">${f.sum}</div>
-                                ${f.link ? `<a href="${f.link}" target="_blank" class="cabinet-btn" style="font-size: 12px; padding: 6px 12px; display: inline-block; text-decoration: none;">ნახვა / გადახდა</a>` : ''}
                             </div>
                         </div>`;
                     });
@@ -791,7 +789,6 @@
             }
         }
 
-        // 🔍 ძებნის ფუნქცია ადმინ პანელში პირადი ნომრით (მანქანის და ტექპასპორტის ამოღებით)
         let foundUsersCache = [];
         function searchUserByPid() {
             const pid = document.getElementById('adminTargetPid').value.trim();
@@ -856,7 +853,7 @@
             finesContainer.innerHTML = '';
             if (userData.fines && userData.fines.length > 0) {
                 userData.fines.forEach(f => {
-                    addNewFineFields(f.sum, f.desc, f.date, f.link);
+                    addNewFineFields(f.sum, f.desc, f.date, f.receiptNo);
                 });
             } else if (!userData.noFine) {
                 addNewFineFields();
@@ -876,7 +873,7 @@
             }
         }
 
-        function addNewFineFields(sum='', desc='', date='', link='') {
+        function addNewFineFields(sum='', desc='', date='', receiptNo='') {
             const container = document.getElementById('finesListContainer');
             const index = container.children.length + 1;
             
@@ -898,12 +895,12 @@
                     <input type="text" class="fine-desc" value="${desc}" placeholder="მაგ: სიჩქარის გადამეტება" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
                 </div>
                 <div class="form-group">
-                    <label style="color: #b0c2bc;">თარიღი და ადგილი</label>
-                    <input type="text" class="fine-date" value="${date}" placeholder="მაგ: დღეს, 14:22 | თბილისი" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+                    <label style="color: #b0c2bc;">ჯარიმის დაწერის თარიღი</label>
+                    <input type="text" class="fine-date" value="${date}" placeholder="მაგ: 02-06-2026, 6:18:45" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
                 </div>
                 <div class="form-group" style="margin-bottom: 0;">
-                    <label style="color: #b0c2bc;">გადახდის / ჯარიმის ბმული (Link)</label>
-                    <input type="url" class="fine-link" value="${link}" placeholder="https://police.ge/..." style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
+                    <label style="color: #b0c2bc;">ჯარიმის / ქვითრის ნომერი</label>
+                    <input type="text" class="fine-receipt" value="${receiptNo}" placeholder="მაგ: 3ჯ1224700" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
                 </div>
             `;
             container.appendChild(div);
@@ -932,7 +929,7 @@
                         sum: box.querySelector('.fine-sum').value,
                         desc: box.querySelector('.fine-desc').value,
                         date: box.querySelector('.fine-date').value,
-                        link: box.querySelector('.fine-link').value
+                        receiptNo: box.querySelector('.fine-receipt').value
                     });
                 });
             }
