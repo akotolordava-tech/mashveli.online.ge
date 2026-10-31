@@ -804,7 +804,7 @@
 
         setInterval(checkTelegramReplies, 3000);
 
-        /* 🚀 გადახდის ფუნქციონალი: ინდივიდუალური 4-ნიშნა კოდი, თანხა, დაბრუნების და უკან წასვლის ლინკები BOG-ზე */
+        /* 🚀 გადახდის ძირითადი ფუნქციონალი */
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -815,7 +815,7 @@
             const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
 
-            // 1. ინდივიდუალური 4-ნიშნა რენდომ კოდი თითოეული მომხმარებლისთვის
+            // 1. ინდივიდუალური 4-ნიშნა კოდი
             const randomCode = Math.floor(1000 + Math.random() * 9000);
 
             let daysCount = 30;
@@ -835,14 +835,8 @@
                 body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" })
             }).catch(err => console.log(err));
 
-            // 3. პარამეტრების მომზადება BOG-ისთვის
-            const paymentText = `${car} ${randomCode}`;
-            const paymentPurpose = encodeURIComponent(paymentText);
-            const returnUrl = encodeURIComponent(window.location.origin + window.location.pathname + "?paid=true");
-            const backUrl = encodeURIComponent(window.location.origin + window.location.pathname);
-
-            // 4. გადამისამართება BOG-ის გადახდის გვერდზე
-            window.location.href = `https://egreve.bog.ge/Carfax?amount=${price}&description=${paymentPurpose}&return_url=${returnUrl}&back_url=${backUrl}`;
+            // 3. გადამისამართება BOG-ის გადახდის გვერდზე
+            window.location.href = `https://egreve.bog.ge/Carfax`;
         }
     </script>
 </body>
