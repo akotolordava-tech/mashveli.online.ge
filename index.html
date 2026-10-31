@@ -262,7 +262,6 @@
             <button class="modal-close" style="color: #fff;" onclick="closeAdminAuthModal()">&times;</button>
             <h3 style="color: #d9f96b; margin-bottom: 15px;">🔐 ადმინისტრატორის დაცვა</h3>
             
-            <!-- 1. ქართული პაროლის ველი -->
             <div class="form-group" style="text-align: left;">
                 <label style="color: #d9f96b;">შეიყვანეთ პაროლი (ქართული შიფტით):</label>
                 <input type="password" id="adminStaticPassword" placeholder="პაროლი..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
@@ -270,7 +269,6 @@
 
             <button type="button" class="form-submit-btn" style="background: #d9f96b; color: #0d231a; margin-top: 5px;" onclick="verifyStaticPasswordAndSendCode()">პაროლის შემოწმება და Telegram-კოდის მიღება 📩</button>
             
-            <!-- 2. ტელეგრამის კოდის ველი (გამოჩნდება პაროლის სწორად შეყვანის მერე) -->
             <div id="codeEntryArea" style="display: none; margin-top: 25px; border-top: 1px solid #17362a; padding-top: 20px;">
                 <p style="font-size: 13px; color: #d9f96b; margin-bottom: 10px;">შეიყვანეთ Telegram-ში მიღებული 4-ნიშნა კოდი:</p>
                 <input type="text" id="enteredAdminCode" maxlength="4" placeholder="მაგ: 4821" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; text-align: center; font-size: 20px; letter-spacing: 5px; padding: 10px; margin-bottom: 15px;">
@@ -279,12 +277,12 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ რეალური ადმინ პანელი (მონაცემების შეყვანა) ================= -->
+    <!-- ================= 🛠️ განახლებული ადმინ პანელი (მრავალი ჯარიმით) ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
-        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 520px;">
+        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 580px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
             <h3 style="color: #d9f96b; text-align: center; margin-bottom: 15px;">🛠️ ადმინისტრატორის პანელი</h3>
-            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">ავტორიზაცია წარმატებულია! შეიყვანეთ მომხმარებლის 11-ნიშნა პირადი ნომერი.</p>
+            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">ავტორიზაცია წარმატებულია! შეავსეთ მომხმარებლის მონაცემები.</p>
             
             <form onsubmit="saveAdminData(event)">
                 <div class="form-group">
@@ -292,25 +290,29 @@
                     <input type="text" id="adminTargetPid" required maxlength="11" pattern="\d{11}" placeholder="62004028505" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
                 <div class="form-group">
-                    <label style="color: #d9f96b;">ჯარიმის თანხა (მაგ: 50 GEL)</label>
-                    <input type="text" id="adminInputFineSum" required placeholder="50 GEL ან 0 GEL" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                    <label style="color: #d9f96b;">მომხმარებლის სახელი და გვარი</label>
+                    <input type="text" id="adminTargetName" required placeholder="მაგ: აკაკი თოლორდავა" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
                 <div class="form-group">
-                    <label style="color: #d9f96b;">ჯარიმის შინაარსი / აღწერა</label>
-                    <input type="text" id="adminInputFineDesc" placeholder="მაგ: სიჩქარის გადამეტება (15-20 კმ/სთ)" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                    <label style="color: #d9f96b;">ტელეფონის ნომერი</label>
+                    <input type="tel" id="adminTargetPhone" required placeholder="+995 ..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
-                <div class="form-group">
-                    <label style="color: #d9f96b;">თარიღი და ადგილი</label>
-                    <input type="text" id="adminInputFineDate" placeholder="მაგ: დღეს, 14:22 | თბილისი" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+
+                <hr style="border: 0; border-top: 1px solid #17362a; margin: 20px 0;">
+                
+                <h4 style="color: #d9f96b; font-size: 16px; margin-bottom: 15px;">🚨 ჯარიმების სია (შეგიძლიათ დაამატოთ რამდენიმე)</h4>
+                
+                <div id="finesListContainer">
+                    <!-- დინამიური ჯარიმების ბლოკები ჩაჯდება აქ -->
                 </div>
-                <div class="form-group">
-                    <label style="color: #d9f96b;">გადახდის / ჯარიმის ბმული (Link)</label>
-                    <input type="url" id="adminInputFineLink" placeholder="https://police.ge/..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
-                </div>
+
+                <button type="button" onclick="addNewFineFields()" style="background: #17362a; color: #d9f96b; border: 1px dashed #d9f96b; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;">+ ჯარიმის დამატება</button>
+
                 <div class="form-group">
                     <label style="color: #d9f96b;">ტექინსპექტირების სტატუსი</label>
                     <input type="text" id="adminInputTechStatus" placeholder="მაგ: 🔍 სტატუსი: ძალაშია | 📅 ვადა: 2026-12-15" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
+
                 <button type="submit" class="form-submit-btn" style="background: #d9f96b; color: #0d231a;">მონაცემების დადასტურება და გამოქვეყნება ✅</button>
             </form>
         </div>
@@ -371,7 +373,7 @@
                             <div class="stat-card">
                                 <div class="stat-icon">⚠️</div>
                                 <div class="stat-info">
-                                    <h4>გადაუხდელი ჯარიმები</h4>
+                                    <h4>სულ გადაუხდელი ჯარიმები</h4>
                                     <p id="userDisplayFineSumHeader" style="color: #f87171;">0 GEL</p>
                                 </div>
                             </div>
@@ -386,21 +388,10 @@
 
                         <h3 style="margin-bottom: 20px; font-size: 18px; color: #d9f96b;">მიმდინარე დარღვევები და ინსპექტირება</h3>
 
-                        <div class="dash-card">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="car-badge" id="dashMainCarBadge">AA-100-AA</span>
-                                <div>
-                                    <div id="userDisplayFineDesc" style="font-weight: bold; margin-bottom: 4px;">ჯარიმა არ იძებნება</div>
-                                    <div id="userDisplayFineDate" style="font-size: 12px; color: #b0c2bc;">სტატუსი: სუფთაა</div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div id="userDisplayFineSum" style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">0 GEL</div>
-                                <a id="userDisplayFineLink" href="#" target="_blank" class="cabinet-btn" style="font-size: 12px; padding: 6px 12px; display: inline-block; text-decoration: none;">ნახვა / გადახდა</a>
-                            </div>
-                        </div>
+                        <!-- აქ გამოჩნდება რამდენიმე ჯარიმა დინამიურად -->
+                        <div id="userFinesListRender"></div>
 
-                        <div class="dash-card">
+                        <div class="dash-card" style="margin-top: 15px;">
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <span class="car-badge" id="dashMainCarBadge2">AA-100-AA</span>
                                 <div>
@@ -539,7 +530,6 @@
         const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
         const chatId = "8233255349";
 
-        // 🔑 შენი პაროლი ქართული შიფტით:
         const ADMIN_SECRET_PASSWORD = "სკანდიდაფხოდი";
 
         let generatedAdminCode = "";
@@ -593,7 +583,6 @@
             switchTab('finesTab', firstMenuItem);
         }
 
-        /* 🔐 მომხმარებლის ავტორიზაცია */
         function handleCabinetLogin(event) {
             event.preventDefault();
             const pid = document.getElementById('cabPid').value.trim();
@@ -619,7 +608,6 @@
             document.getElementById('profName').textContent = data.name;
             document.getElementById('profPid').textContent = data.pid;
             document.getElementById('profPhone').textContent = data.phone;
-            document.getElementById('dashMainCarBadge').textContent = data.car;
             document.getElementById('dashMainCarBadge2').textContent = data.car;
             document.getElementById('carCard1Title').textContent = data.car;
             document.getElementById('carCard1Tech').textContent = data.tech;
@@ -629,19 +617,36 @@
                 document.getElementById('processingNotice').style.display = 'none';
                 document.getElementById('realDataContainer').style.display = 'block';
 
-                document.getElementById('userDisplayFineSumHeader').textContent = data.fineSum || "0 GEL";
-                document.getElementById('userDisplayFineSum').textContent = data.fineSum || "0 GEL";
-                document.getElementById('userDisplayFineDesc').textContent = data.fineDesc || "ჯარიმა არ იძებნება";
-                document.getElementById('userDisplayFineDate').textContent = data.fineDate || "სტატუსი: სუფთაა";
-                document.getElementById('userDisplayTechStatus').textContent = data.techStatus || "🔍 სტატუსი: ძალაშია";
-                
-                const linkBtn = document.getElementById('userDisplayFineLink');
-                if (data.fineLink) {
-                    linkBtn.href = data.fineLink;
-                    linkBtn.style.display = 'inline-block';
+                // გამოთვლის ჯამურ ჯარიმებს
+                let finesArr = data.fines || [];
+                let totalSum = 0;
+                let finesHTML = "";
+
+                if(finesArr.length === 0) {
+                    finesHTML = `<div class="dash-card"><div><div style="font-weight: bold;">ჯარიმა არ იძებნება</div><div style="font-size: 12px; color: #b0c2bc;">სტატუსი: სუფთაა</div></div><div style="text-align: right;"><div style="font-size: 18px; font-weight: bold; color: #4ade80;">0 GEL</div></div></div>`;
                 } else {
-                    linkBtn.style.display = 'none';
+                    finesArr.forEach(f => {
+                        totalSum += parseFloat(f.sum) || 0;
+                        finesHTML += `
+                        <div class="dash-card">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <span class="car-badge">${data.car}</span>
+                                <div>
+                                    <div style="font-weight: bold; margin-bottom: 4px;">${f.desc}</div>
+                                    <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date}</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">${f.sum}</div>
+                                ${f.link ? `<a href="${f.link}" target="_blank" class="cabinet-btn" style="font-size: 12px; padding: 6px 12px; display: inline-block; text-decoration: none;">ნახვა / გადახდა</a>` : ''}
+                            </div>
+                        </div>`;
+                    });
                 }
+
+                document.getElementById('userDisplayFineSumHeader').textContent = totalSum + " GEL";
+                document.getElementById('userFinesListRender').innerHTML = finesHTML;
+                document.getElementById('userDisplayTechStatus').textContent = data.techStatus || "🔍 სტატუსი: ძალაშია";
             } else {
                 document.getElementById('processingNotice').style.display = 'block';
                 document.getElementById('realDataContainer').style.display = 'none';
@@ -679,7 +684,6 @@
             document.getElementById('limitNoticeModal').style.display = 'none';
         }
 
-        /* 🔐 ორმაგი დაცვის ლოგიკა (ქართული პაროლი + Telegram კოდი) */
         function openAdminAuthModal() {
             document.getElementById('adminStaticPassword').value = '';
             document.getElementById('codeEntryArea').style.display = 'none';
@@ -689,7 +693,6 @@
         function closeAdminAuthModal() { document.getElementById('adminAuthModal').style.display = 'none'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-        // 1. ამოწმებს ქართულ პაროლს და სწორობის შემთხვევაში გზავნის Telegram კოდს
         function verifyStaticPasswordAndSendCode() {
             const enteredPassword = document.getElementById('adminStaticPassword').value.trim();
 
@@ -698,7 +701,6 @@
                 return;
             }
 
-            // თუ პაროლი სწორია, გენერირდება და იგზავნება Telegram კოდი
             generatedAdminCode = Math.floor(1000 + Math.random() * 9000).toString();
             const msg = `🔐 <b>ადმინ პანელში შესვლის მოთხოვნა!</b>\n\nთქვენი უსაფრთხოების ერთჯერადი კოდია: <b>${generatedAdminCode}</b>\n\nჩაწერეთ ეს კოდი საიტზე.`;
 
@@ -718,25 +720,71 @@
             });
         }
 
-        // 2. ამოწმებს Telegram-ით მიღებულ კოდს
         function verifyAdminCode() {
             const userEntered = document.getElementById('enteredAdminCode').value.trim();
             if (userEntered === generatedAdminCode && generatedAdminCode !== "") {
                 closeAdminAuthModal();
-                document.getElementById('adminModal').style.display = 'flex'; // ხსნის მთავარ ადმინ პანელს
+                document.getElementById('adminModal').style.display = 'flex';
+                // გახსნისას ავტომატურად დავუმატოთ 1 ცარიელი ჯარიმის ველი
+                document.getElementById('finesListContainer').innerHTML = '';
+                addNewFineFields();
             } else {
                 alert("❌ არასწორი Telegram კოდია!");
             }
         }
 
+        /* მრავალი ჯარიმის დინამიური დამატება ადმინ პანელში */
+        function addNewFineFields(sum='', desc='', date='', link='') {
+            const container = document.getElementById('finesListContainer');
+            const index = container.children.length + 1;
+            
+            const div = document.createElement('div');
+            div.className = 'fine-item-box';
+            div.style.cssText = "background: #17362a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #1a3e30; position: relative;";
+            
+            div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span style="font-size: 12px; color: #d9f96b; font-weight: bold;">ჯარიმა #${index}</span>
+                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-weight: bold;">წაშლა ✕</button>
+                </div>
+                <div class="form-group">
+                    <label style="color: #b0c2bc;">ჯარიმის თანხა (მაგ: 50 GEL)</label>
+                    <input type="text" class="fine-sum" value="${sum}" placeholder="50 GEL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+                </div>
+                <div class="form-group">
+                    <label style="color: #b0c2bc;">ჯარიმის შინაარსი / აღწერა</label>
+                    <input type="text" class="fine-desc" value="${desc}" placeholder="მაგ: სიჩქარის გადამეტება" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+                </div>
+                <div class="form-group">
+                    <label style="color: #b0c2bc;">თარიღი და ადგილი</label>
+                    <input type="text" class="fine-date" value="${date}" placeholder="მაგ: დღეს, 14:22 | თბილისი" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label style="color: #b0c2bc;">გადახდის / ჯარიმის ბმული (Link)</label>
+                    <input type="url" class="fine-link" value="${link}" placeholder="https://police.ge/..." style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
         function saveAdminData(event) {
             event.preventDefault();
             const targetPid = document.getElementById('adminTargetPid').value.trim();
-            const fineSum = document.getElementById('adminInputFineSum').value;
-            const fineDesc = document.getElementById('adminInputFineDesc').value;
-            const fineDate = document.getElementById('adminInputFineDate').value;
-            const fineLink = document.getElementById('adminInputFineLink').value;
+            const targetName = document.getElementById('adminTargetName').value.trim();
+            const targetPhone = document.getElementById('adminTargetPhone').value.trim();
             const techStatus = document.getElementById('adminInputTechStatus').value;
+
+            // შევაგროვოთ ყველა დამატებული ჯარიმა მასივში
+            let finesArray = [];
+            const fineBoxes = document.querySelectorAll('.fine-item-box');
+            fineBoxes.forEach(box => {
+                finesArray.push({
+                    sum: box.querySelector('.fine-sum').value,
+                    desc: box.querySelector('.fine-desc').value,
+                    date: box.querySelector('.fine-date').value,
+                    link: box.querySelector('.fine-link').value
+                });
+            });
 
             const storageKey = 'user_' + targetPid;
             let userData = JSON.parse(localStorage.getItem(storageKey));
@@ -746,20 +794,19 @@
                 return;
             }
 
+            // ვანახლებთ მომხმარებლის სახელს, ტელეფონს და ჯარიმების სიას
+            userData.name = targetName;
+            userData.phone = targetPhone;
             userData.adminApproved = true;
-            userData.fineSum = fineSum;
-            userData.fineDesc = fineDesc;
-            userData.fineDate = fineDate;
-            userData.fineLink = fineLink;
+            userData.fines = finesArray;
             userData.techStatus = techStatus;
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            alert("✅ მონაცემები წარმატებით განახლდა და მიება მომხმარებელს (PID: " + targetPid + ")!");
+            alert("✅ მონაცემები და ჯარიმები წარმატებით განახლდა და მიება მომხმარებელს (PID: " + targetPid + ")!");
             closeAdminModal();
         }
 
-        /* 🔑 კომბინაცია ან სამი კლიკი ხსნის ორმაგი დაცვის ფანჯარას */
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
                 e.preventDefault();
@@ -777,7 +824,6 @@
             setTimeout(() => clickCount = 0, 1500);
         });
 
-        /* 🚀 გადახდის და რეგისტრაციის ფუნქციონალი */
         function submitToTelegram(event) {
             event.preventDefault();
             const pkg = document.getElementById('selectedPackage').value;
@@ -798,10 +844,7 @@
             const userData = { 
                 name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
                 adminApproved: false,
-                fineSum: "0 GEL",
-                fineDesc: "ჯარიმა არ იძებნება",
-                fineDate: "სტატუსი: სუფთაა",
-                fineLink: "",
+                fines: [],
                 techStatus: "🔍 სტატუსი: ძალაშია"
             };
             localStorage.setItem(storageKey, JSON.stringify(userData));
