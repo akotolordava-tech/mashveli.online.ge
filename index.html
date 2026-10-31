@@ -294,7 +294,7 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ განახლებული ადმინ პანელი (ძებნის ფუნქციით) ================= -->
+    <!-- ================= 🛠️ განახლებული ადმინ პანელი (მანქანისა და ტექპასპორტის ველებით) ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
         <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 580px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
@@ -310,7 +310,7 @@
                     </div>
                 </div>
 
-                <!-- მრავალი ავტომობილის არჩევის ველი (დინამიურად გამოჩნდება) -->
+                <!-- მრავალი ავტომობილის არჩევის ველი -->
                 <div class="form-group" id="carSelectWrapper" style="display: none; background: #17362a; padding: 15px; border-radius: 12px; border: 1px solid #1a3e30;">
                     <label style="color: #d9f96b; margin-bottom: 8px;">აირჩიეთ ამ პირად ნომერზე რეგისტრირებული ავტომობილი:</label>
                     <select id="adminCarSelector" onchange="onCarSelected(this.value)" style="width: 100%; padding: 12px; background: #0d231a; color: #fff; border: 1px solid #1a3e30; border-radius: 8px; font-weight: bold; cursor: pointer;"></select>
@@ -320,6 +320,17 @@
                     <label style="color: #d9f96b;">მომხმარებლის სახელი და გვარი</label>
                     <input type="text" id="adminTargetName" required placeholder="მაგ: აკაკი თოლორდავა" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
                 </div>
+                
+                <div class="form-group">
+                    <label style="color: #d9f96b;">ავტომობილის სახელმწიფო ნომერი</label>
+                    <input type="text" id="adminTargetCar" class="uppercase-input" required placeholder="მაგ: AA110II" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+
+                <div class="form-group">
+                    <label style="color: #d9f96b;">ტექპასპორტის ნომერი</label>
+                    <input type="text" id="adminTargetTech" class="uppercase-input" required placeholder="მაგ: EV0159681" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                </div>
+
                 <div class="form-group">
                     <label style="color: #d9f96b;">ტელეფონის ნომერი</label>
                     <input type="tel" id="adminTargetPhone" class="phone-input" required value="+995 " placeholder="+995 ..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
@@ -780,7 +791,7 @@
             }
         }
 
-        // 🔍 ძებნის ფუნქცია ადმინ პანელში პირადი ნომრით
+        // 🔍 ძებნის ფუნქცია ადმინ პანელში პირადი ნომრით (მანქანის და ტექპასპორტის ამოღებით)
         let foundUsersCache = [];
         function searchUserByPid() {
             const pid = document.getElementById('adminTargetPid').value.trim();
@@ -818,7 +829,7 @@
                 foundUsersCache.forEach((u, index) => {
                     const opt = document.createElement('option');
                     opt.value = index;
-                    opt.textContent = `🚗 მანქანა: ${u.car} (პაკეტი: ${u.package})`;
+                    opt.textContent = `🚗 ნომერი: ${u.car} | 📄 ტექპასპორტი: ${u.tech || '—'}`;
                     carSelector.appendChild(opt);
                 });
                 fillAdminFormWithUser(foundUsersCache[0]);
@@ -834,6 +845,8 @@
 
         function fillAdminFormWithUser(userData) {
             document.getElementById('adminTargetName').value = userData.name || '';
+            document.getElementById('adminTargetCar').value = userData.car || '';
+            document.getElementById('adminTargetTech').value = userData.tech || '';
             document.getElementById('adminTargetPhone').value = userData.phone || '+995 ';
             document.getElementById('adminInputTechStatus').value = userData.techStatus || '';
             document.getElementById('adminNoFineCheck').checked = userData.noFine || false;
@@ -900,9 +913,16 @@
             event.preventDefault();
             const targetPid = document.getElementById('adminTargetPid').value.trim();
             const targetName = document.getElementById('adminTargetName').value.trim();
+            const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
+            const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
             const targetPhone = document.getElementById('adminTargetPhone').value.trim();
             const techStatus = document.getElementById('adminInputTechStatus').value;
             const noFineChecked = document.getElementById('adminNoFineCheck').checked;
+
+            if (!targetCar) {
+                alert("❌ გთხოვთ შეიყვანოთ ან მოძებნოთ ავტომობილის ნომერი!");
+                return;
+            }
 
             let finesArray = [];
             if (!noFineChecked) {
@@ -917,34 +937,13 @@
                 });
             }
 
-            // ვპოულობთ რომელ მანქანას ვასწორებთ (თუ სელექტში არჩევანია)
-            const selectWrapper = document.getElementById('carSelectWrapper');
-            let targetCar = "";
-            if (selectWrapper.style.display === 'block') {
-                const carSelector = document.getElementById('adminCarSelector');
-                const selectedIndex = carSelector.value;
-                if (foundUsersCache[selectedIndex]) {
-                    targetCar = foundUsersCache[selectedIndex].car;
-                }
-            } else if (foundUsersCache.length === 1) {
-                targetCar = foundUsersCache[0].car;
-            }
-
-            if (!targetCar) {
-                // თუ ძებნა არ გაუვლია, ვამოწმებთ ძველ სტორჯში რა ნომერიცაა ან ვთხოვთ მოძებნას
-                alert("❌ გთხოვთ ჯერ დააკლიკოთ 'ძებნა' ღილაკს და აირჩიოთ ავტომობილი!");
-                return;
-            }
-
             const storageKey = 'user_' + targetPid + '_' + targetCar;
-            let userData = JSON.parse(localStorage.getItem(storageKey));
+            let userData = JSON.parse(localStorage.getItem(storageKey)) || {};
 
-            if (!userData) {
-                alert("❌ მითითებული ავტომობილი ვერ მოიძებნა ბაზაში!");
-                return;
-            }
-
+            userData.pid = targetPid;
             userData.name = targetName;
+            userData.car = targetCar;
+            userData.tech = targetTech;
             userData.phone = targetPhone;
             userData.adminApproved = true;
             userData.noFine = noFineChecked;
@@ -953,7 +952,7 @@
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            alert("✅ მონაცემები წარმატებით განახლდა და მიება ავტომობილს (" + targetCar + ")!");
+            alert("✅ მონაცემები წარმატებით განახლდა ავტომობილისთვის: " + targetCar + "!");
             closeAdminModal();
         }
 
