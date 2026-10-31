@@ -103,27 +103,21 @@
         .dash-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .car-badge { background: #d9f96b; color: #0d231a; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 13px; }
 
-        .cars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .car-manage-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; position: relative; }
-        .car-manage-card h4 { font-size: 18px; color: #d9f96b; margin-bottom: 6px; }
-        .car-status-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; margin-bottom: 12px; }
-        .status-active { background: rgba(74, 222, 128, 0.2); color: #4ade80; }
-
-        .footer-banner { background-color: #d9f96b; padding: 50px 20px; text-align: center; }
-        .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
-        .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
-
-        /* სტილები მომხმარებელთა ბაზის ბარათებისთვის */
         .user-db-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 14px; padding: 18px; margin-bottom: 14px; transition: 0.2s; }
         .user-db-card:hover { border-color: #d9f96b; }
         .user-db-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #17362a; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
         .user-db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 13px; color: #b0c2bc; }
         .user-db-grid div b { color: #fff; }
-        .user-db-actions { display: flex; gap: 8px; margin-top: 14px; justify-content: flex-end; }
+        .user-db-actions { display: flex; gap: 8px; margin-top: 14px; justify-content: flex-end; flex-wrap: wrap; }
         .user-db-btn { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; }
+        .btn-view { background: #d9f96b; color: #0d231a; }
         .btn-trash { background: #ef4444; color: #fff; }
         .btn-restore { background: #4ade80; color: #0d231a; }
         .btn-perm-delete { background: #991b1b; color: #fff; }
+
+        .footer-banner { background-color: #d9f96b; padding: 50px 20px; text-align: center; }
+        .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
+        .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
 
         @media (max-width: 768px) {
             header { padding: 15px 20px; flex-direction: column; gap: 15px; }
@@ -306,13 +300,12 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ განახლებული ადმინ პანელი (ბაზის ღილაკით) ================= -->
+    <!-- ================= 🛠️ მთავარი ადმინ პანელი ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
         <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 620px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
             <h3 style="color: #d9f96b; text-align: center; margin-bottom: 15px;">🛠️ ადმინისტრატორის პანელი</h3>
             
-            <!-- 👥 მომხმარებელთა ერთიანი ბაზის გახსნის ღილაკი -->
             <button type="button" onclick="openAdminUserDatabase()" style="background: #d9f96b; color: #0d231a; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 👥 მომხმარებელთა ერთიანი ბაზა (სრული სია) 🔍
             </button>
@@ -376,7 +369,7 @@
         </div>
     </div>
 
-    <!-- ================= 👥 მომხმარებელთა ერთიანი ბაზის მოდალი (Trash / ურნის მხარდაჭერით) ================= -->
+    <!-- ================= 👥 მომხმარებელთა ერთიანი ბაზის მოდალი ================= -->
     <div class="modal-overlay" id="adminDbModal" style="z-index: 9000;">
         <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 900px; width: 95%;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #17362a; padding-bottom: 15px;">
@@ -385,19 +378,31 @@
                 <button class="modal-close" style="color: #fff; position: static;" onclick="closeAdminUserDatabase()">&times;</button>
             </div>
 
-            <!-- ჩანართები: აქტიური მომხმარებლები vs ნაგვის ურნა -->
             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                 <button type="button" id="tabActiveUsers" onclick="switchDbTab('active')" style="background: #d9f96b; color: #0d231a; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">✅ აქტიური მომხმარებლები (<span id="activeUsersCount">0</span>)</button>
                 <button type="button" id="tabTrashUsers" onclick="switchDbTab('trash')" style="background: #17362a; color: #ef4444; border: 1px solid #ef4444; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">🗑️ ნაგვის ურნა (<span id="trashUsersCount">0</span>)</button>
             </div>
 
-            <!-- საძიებო ველები -->
             <div style="margin-bottom: 20px;">
                 <input type="text" id="dbSearchInput" oninput="renderUserDatabaseList()" placeholder="🔍 ძებნა: სახელი, პირადი, მანქანის ნომერი, ტექპასპორტი, ტელეფონი..." style="width: 100%; padding: 12px; background: #17362a; color: #fff; border: 1px solid #1a3e30; border-radius: 10px;">
             </div>
 
-            <!-- სიის კონტეინერი -->
             <div id="dbUserCardsContainer" style="max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
+        </div>
+    </div>
+
+    <!-- ================= 👁️ ინდივიდუალური მომხმარებლის დეტალური ნახვის ფანჯარა (ადმინისთვის) ================= -->
+    <div class="modal-overlay" id="adminUserDetailModal" style="z-index: 10000;">
+        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 650px; width: 95%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #17362a; padding-bottom: 15px;">
+                <button type="button" onclick="closeAdminUserDetail()" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b; padding: 6px 14px; border-radius: 8px; font-weight: bold; cursor: pointer;">← ბაზაში დაბრუნება</button>
+                <h3 style="color: #d9f96b; font-size: 18px; margin: 0;" id="detailModalTitle">მომხმარებლის პროფილი</h3>
+                <button class="modal-close" style="color: #fff; position: static;" onclick="closeAdminUserDetail()">&times;</button>
+            </div>
+
+            <div id="adminUserDetailContent" style="max-height: 60vh; overflow-y: auto; padding-right: 5px;">
+                <!-- აქ ჩაიტვირთება ზუსტად იგივე ვიზუალი, რასაც მომხმარებელი ხედავს პირად კაბინეტში -->
+            </div>
         </div>
     </div>
 
@@ -602,7 +607,7 @@
         let dbLiveTimer = null;
         let isSubmitting = false;
 
-        let currentDbTab = 'active'; // 'active' ან 'trash'
+        let currentDbTab = 'active';
 
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('phone-input')) {
@@ -1015,7 +1020,7 @@
         function closeAdminUserDatabase() {
             document.getElementById('adminDbModal').style.display = 'none';
             if (dbLiveTimer) clearInterval(dbLiveTimer);
-            document.getElementById('adminModal').style.display = 'flex'; // ვბრუნდებით მთავარ ადმინ პანელში
+            document.getElementById('adminModal').style.display = 'flex';
         }
 
         function switchDbTab(tab) {
@@ -1108,6 +1113,7 @@
                         </div>
                         ${historyHTML}
                         <div class="user-db-actions">
+                            <button class="user-db-btn btn-view" onclick="openAdminUserDetail('${u.storageKey}')">👀 დეტალები / ნახვა</button>
                             <button class="user-db-btn" onclick="selectUserToEdit('${u.storageKey}')" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b;">✏️ რედაქტირება</button>
                             <button class="user-db-btn btn-trash" onclick="moveUserToTrash('${u.storageKey}')">🗑️ ურნაში გადატანა</button>
                         </div>
@@ -1137,6 +1143,87 @@
             });
 
             updateAllDbCountdowns();
+        }
+
+        // ================= 👁️ ინდივიდუალური მომხმარებლის დეტალური პროფილის გახსნა ადმინისთვის =================
+        function openAdminUserDetail(storageKey) {
+            const u = JSON.parse(localStorage.getItem(storageKey));
+            if (!u) return;
+
+            document.getElementById('detailModalTitle').textContent = `მომხმარებელი: ${u.name || '—'} (${u.car})`;
+            
+            let finesHtml = "";
+            let totalSum = 0;
+
+            if (u.noFine === true || !u.fines || u.fines.length === 0) {
+                finesHtml = `
+                <div class="dash-card" style="justify-content: center; text-align: center; padding: 25px; background: #17362a; border: 1px solid #1a3e30;">
+                    <div>
+                        <div style="font-size: 24px; margin-bottom: 6px;">🎉</div>
+                        <div style="font-size: 14px; font-weight: bold; color: #4ade80;">ავტომობილის სახელმწიფო ნომრით ${u.car} მიმდინარე ჯარიმა არ ფიქსირდება</div>
+                    </div>
+                </div>`;
+            } else {
+                u.fines.forEach(f => {
+                    totalSum += parseFloat(f.sum) || 0;
+                    finesHtml += `
+                    <div class="dash-card" style="background: #17362a; border: 1px solid #1a3e30;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span class="car-badge">${u.car}</span>
+                            <div>
+                                <div style="font-weight: bold; margin-bottom: 4px; font-size: 14px;">${f.desc}</div>
+                                <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | ქვითარი: #${f.receiptNo || '—'}</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 16px; font-weight: bold; color: #f87171;">${f.sum}</div>
+                        </div>
+                    </div>`;
+                });
+            }
+
+            const contentDiv = document.getElementById('adminUserDetailContent');
+            contentDiv.innerHTML = `
+                <div style="background: #132e23; padding: 20px; border-radius: 12px; border: 1px solid #1a3e30; margin-bottom: 20px;">
+                    <p style="margin-bottom: 8px; font-size: 14px;">👤 <b>სახელი:</b> ${u.name}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">🆔 <b>პირადი ნომერი:</b> ${u.pid}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">📞 <b>ტელეფონი:</b> ${u.phone}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">🚗 <b>ავტომობილი:</b> ${u.car}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px;">📄 <b>ტექპასპორტი:</b> ${u.tech || '—'}</p>
+                    <p style="font-size: 14px; color: #d9f96b;">📦 <b>აქტიური პაკეტი:</b> ${u.package}</p>
+                </div>
+
+                <div class="dash-stats" style="margin-bottom: 20px;">
+                    <div class="stat-card" style="background: #132e23; border: 1px solid #1a3e30;">
+                        <div class="stat-icon">⚠️</div>
+                        <div class="stat-info">
+                            <h4>სულ გადაუხდელი ჯარიმები</h4>
+                            <p style="color: #f87171; font-size: 18px;">${totalSum} GEL</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin-bottom: 12px; font-size: 16px; color: #d9f96b;">მიმდინარე დარღვევები და ინსპექტირება</h4>
+                ${finesHtml}
+
+                <div class="dash-card" style="margin-top: 15px; background: #17362a; border: 1px solid #1a3e30;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span class="car-badge">${u.car}</span>
+                        <div>
+                            <div style="font-weight: bold; margin-bottom: 4px;">ტექინსპექტირების გავლის ვადა</div>
+                            <div style="font-size: 12px; color: #b0c2bc;">${u.techStatus || "🔍 სტატუსი: ძალაშია"}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('adminDbModal').style.display = 'none';
+            document.getElementById('adminUserDetailModal').style.display = 'flex';
+        }
+
+        function closeAdminUserDetail() {
+            document.getElementById('adminUserDetailModal').style.display = 'none';
+            document.getElementById('adminDbModal').style.display = 'flex';
         }
 
         function updateAllDbCountdowns() {
@@ -1208,7 +1295,7 @@
             let userData = JSON.parse(localStorage.getItem(storageKey));
             if (userData) {
                 if (!userData.packageHistory) userData.packageHistory = [];
-                userData.packageHistory.unshift(userData.package); // ვინახავთ ძველ პაკეტს ისტორიაში
+                userData.packageHistory.unshift(userData.package);
 
                 userData.package = newPkg;
                 userData.days = days;
@@ -1220,8 +1307,6 @@
                 startLiveCountdown(userData.timestamp, userData.days);
             }
         }
-
-        // =========================================================================
 
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
