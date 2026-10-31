@@ -12,8 +12,11 @@
         header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; }
-        .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 6px 16px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; }
+        
+        .header-right { display: flex; gap: 15px; align-items: center; }
+        .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 8px 18px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.2s; }
         .header-nav-btn:hover { background: #d9f96b; color: #0d231a; }
+        
         .cabinet-btn { background: #d9f96b; color: #0d231a; border: none; padding: 8px 18px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
         .cabinet-btn:hover { background: #c5eb52; }
         
@@ -138,9 +141,9 @@
     <header>
         <div class="header-left">
             <a href="#" class="logo">mashveli.online.ge</a>
-            <a href="#individual-services" class="header-nav-btn">სერვისები</a>
         </div>
-        <div style="display: flex; gap: 15px; align-items: center;">
+        <div class="header-right">
+            <a href="#services" class="header-nav-btn">სერვისები</a>
             <button class="cabinet-btn" onclick="openCabinetLogin()">პირადი კაბინეტი</button>
             <div class="lang-switch">
                 <button class="lang-btn active">GEO</button>
@@ -530,7 +533,6 @@
             if(tabId === 'settingsTab') checkChatHours();
         }
 
-        /* მკაცრი შემოწმება: თუ არ არის რეგისტრირებული/შეძენილი, არ შეუშვებს კაბინეტში */
         function handleCabinetLogin(event) {
             event.preventDefault();
             const pid = document.getElementById('cabPid').value;
@@ -539,7 +541,6 @@
 
             const savedData = JSON.parse(localStorage.getItem('mashveli_user'));
 
-            // თუ მონაცემები არ არსებობს ან არ ემთხვევა რეგისტრაციისას შეტანილ მონაცემებს
             if (!savedData || savedData.pid !== pid || savedData.car !== car) {
                 closeCabinetLogin();
                 showLimitNotice("❌ ასეთი აქტიური პაკეტით რეგისტრაცია ვერ მოიძებნა! გთხოვთ ჯერ შეიძინოთ პაკეტი მთავარი გვერდიდან.");
@@ -571,7 +572,6 @@
             document.getElementById('userPackageSubtitle').innerHTML = `თქვენი აქტიური პაკეტი: <b>${data.package}</b>`;
         }
 
-        /* ლაივ რეჟიმში დღეების, საათების და წუთების ათვლა */
         function startLiveCountdown(startTime, totalDays) {
             const expiryTime = startTime + (totalDays * 24 * 60 * 60 * 1000);
 
