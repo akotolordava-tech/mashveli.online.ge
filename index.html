@@ -113,6 +113,18 @@
         .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
         .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
 
+        /* სტილები მომხმარებელთა ბაზის ბარათებისთვის */
+        .user-db-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 14px; padding: 18px; margin-bottom: 14px; transition: 0.2s; }
+        .user-db-card:hover { border-color: #d9f96b; }
+        .user-db-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #17362a; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .user-db-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; font-size: 13px; color: #b0c2bc; }
+        .user-db-grid div b { color: #fff; }
+        .user-db-actions { display: flex; gap: 8px; margin-top: 14px; justify-content: flex-end; }
+        .user-db-btn { padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; border: none; }
+        .btn-trash { background: #ef4444; color: #fff; }
+        .btn-restore { background: #4ade80; color: #0d231a; }
+        .btn-perm-delete { background: #991b1b; color: #fff; }
+
         @media (max-width: 768px) {
             header { padding: 15px 20px; flex-direction: column; gap: 15px; }
             .header-right { flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -294,12 +306,18 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ განახლებული ადმინ პანელი (შეცვლილი ველებით) ================= -->
+    <!-- ================= 🛠️ განახლებული ადმინ პანელი (ბაზის ღილაკით) ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
-        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 580px;">
+        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 620px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
             <h3 style="color: #d9f96b; text-align: center; margin-bottom: 15px;">🛠️ ადმინისტრატორის პანელი</h3>
-            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">ავტორიზაცია წარმატებულია! მოძებნეთ და მართეთ მომხმარებელი.</p>
+            
+            <!-- 👥 მომხმარებელთა ერთიანი ბაზის გახსნის ღილაკი -->
+            <button type="button" onclick="openAdminUserDatabase()" style="background: #d9f96b; color: #0d231a; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 15px; cursor: pointer; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                👥 მომხმარებელთა ერთიანი ბაზა (სრული სია) 🔍
+            </button>
+
+            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;">მოძებნეთ კონკრეტული მომხმარებელი პირადი ნომრით:</p>
             
             <form onsubmit="saveAdminData(event)">
                 <div class="form-group">
@@ -355,6 +373,31 @@
 
                 <button type="submit" class="form-submit-btn" style="background: #d9f96b; color: #0d231a;">მონაცემების დადასტურება და გამოქვეყნება ✅</button>
             </form>
+        </div>
+    </div>
+
+    <!-- ================= 👥 მომხმარებელთა ერთიანი ბაზის მოდალი (Trash / ურნის მხარდაჭერით) ================= -->
+    <div class="modal-overlay" id="adminDbModal" style="z-index: 9000;">
+        <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 900px; width: 95%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #17362a; padding-bottom: 15px;">
+                <button type="button" onclick="closeAdminUserDatabase()" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b; padding: 8px 16px; border-radius: 10px; font-weight: bold; cursor: pointer;">← უკან დაბრუნება (ადმინ პანელში)</button>
+                <h3 style="color: #d9f96b; font-size: 20px; margin: 0;">👥 მომხმარებელთა ბაზა</h3>
+                <button class="modal-close" style="color: #fff; position: static;" onclick="closeAdminUserDatabase()">&times;</button>
+            </div>
+
+            <!-- ჩანართები: აქტიური მომხმარებლები vs ნაგვის ურნა -->
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <button type="button" id="tabActiveUsers" onclick="switchDbTab('active')" style="background: #d9f96b; color: #0d231a; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">✅ აქტიური მომხმარებლები (<span id="activeUsersCount">0</span>)</button>
+                <button type="button" id="tabTrashUsers" onclick="switchDbTab('trash')" style="background: #17362a; color: #ef4444; border: 1px solid #ef4444; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">🗑️ ნაგვის ურნა (<span id="trashUsersCount">0</span>)</button>
+            </div>
+
+            <!-- საძიებო ველები -->
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="dbSearchInput" oninput="renderUserDatabaseList()" placeholder="🔍 ძებნა: სახელი, პირადი, მანქანის ნომერი, ტექპასპორტი, ტელეფონი..." style="width: 100%; padding: 12px; background: #17362a; color: #fff; border: 1px solid #1a3e30; border-radius: 10px;">
+            </div>
+
+            <!-- სიის კონტეინერი -->
+            <div id="dbUserCardsContainer" style="max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
         </div>
     </div>
 
@@ -556,7 +599,10 @@
 
         let generatedAdminCode = "";
         let countdownInterval = null;
+        let dbLiveTimer = null;
         let isSubmitting = false;
+
+        let currentDbTab = 'active'; // 'active' ან 'trash'
 
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('phone-input')) {
@@ -632,7 +678,7 @@
             const storageKey = 'user_' + pid + '_' + car;
             const savedData = JSON.parse(localStorage.getItem(storageKey));
 
-            if (!savedData) {
+            if (!savedData || savedData.isDeleted === true) {
                 closeCabinetLogin();
                 showLimitNotice("❌ ასეთი პირადი ნომრით და ავტომობილით რეგისტრაცია ვერ მოიძებნა! გთხოვთ შეამოწმოთ მონაცემები.");
                 return;
@@ -802,7 +848,7 @@
                 const key = localStorage.key(i);
                 if (key.startsWith('user_')) {
                     const val = JSON.parse(localStorage.getItem(key));
-                    if (val && val.pid === pid) {
+                    if (val && val.pid === pid && val.isDeleted !== true) {
                         foundUsersCache.push(val);
                     }
                 }
@@ -813,7 +859,7 @@
             carSelector.innerHTML = '';
 
             if (foundUsersCache.length === 0) {
-                alert("❌ ამ პირადი ნომრით მომხმარებელი ვერ მოიძებნა!");
+                alert("❌ ამ პირადი ნომრით აქტიური მომხმარებელი ვერ მოიძებნა!");
                 selectWrapper.style.display = 'none';
                 return;
             }
@@ -953,6 +999,230 @@
             closeAdminModal();
         }
 
+        // ================= 👥 მომხმარებელთა ერთიანი ბაზის ლოგიკა =================
+
+        function openAdminUserDatabase() {
+            closeAdminModal();
+            document.getElementById('adminDbModal').style.display = 'flex';
+            currentDbTab = 'active';
+            updateDbTabStyles();
+            renderUserDatabaseList();
+
+            if (dbLiveTimer) clearInterval(dbLiveTimer);
+            dbLiveTimer = setInterval(updateAllDbCountdowns, 1000);
+        }
+
+        function closeAdminUserDatabase() {
+            document.getElementById('adminDbModal').style.display = 'none';
+            if (dbLiveTimer) clearInterval(dbLiveTimer);
+            document.getElementById('adminModal').style.display = 'flex'; // ვბრუნდებით მთავარ ადმინ პანელში
+        }
+
+        function switchDbTab(tab) {
+            currentDbTab = tab;
+            updateDbTabStyles();
+            renderUserDatabaseList();
+        }
+
+        function updateDbTabStyles() {
+            const activeBtn = document.getElementById('tabActiveUsers');
+            const trashBtn = document.getElementById('tabTrashUsers');
+
+            if (currentDbTab === 'active') {
+                activeBtn.style.background = '#d9f96b';
+                activeBtn.style.color = '#0d231a';
+                trashBtn.style.background = '#17362a';
+                trashBtn.style.color = '#ef4444';
+            } else {
+                activeBtn.style.background = '#17362a';
+                activeBtn.style.color = '#b0c2bc';
+                trashBtn.style.background = '#ef4444';
+                trashBtn.style.color = '#fff';
+            }
+        }
+
+        function getAllUsersFromStorage() {
+            let activeUsers = [];
+            let trashUsers = [];
+
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('user_')) {
+                    const u = JSON.parse(localStorage.getItem(key));
+                    if (u) {
+                        u.storageKey = key;
+                        if (u.isDeleted === true) {
+                            trashUsers.push(u);
+                        } else {
+                            activeUsers.push(u);
+                        }
+                    }
+                }
+            }
+            return { activeUsers, trashUsers };
+        }
+
+        function renderUserDatabaseList() {
+            const { activeUsers, trashUsers } = getAllUsersFromStorage();
+
+            document.getElementById('activeUsersCount').textContent = activeUsers.length;
+            document.getElementById('trashUsersCount').textContent = trashUsers.length;
+
+            const searchQuery = document.getElementById('dbSearchInput').value.toLowerCase().trim();
+            const targetList = currentDbTab === 'active' ? activeUsers : trashUsers;
+            const container = document.getElementById('dbUserCardsContainer');
+            container.innerHTML = '';
+
+            const filtered = targetList.filter(u => {
+                const text = `${u.name} ${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.package}`.toLowerCase();
+                return text.includes(searchQuery);
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div style="text-align: center; color: #b0c2bc; padding: 40px; font-size: 15px;">მონაცემები ვერ მოიძებნა.</div>`;
+                return;
+            }
+
+            filtered.forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'user-db-card';
+
+                const historyHTML = u.packageHistory && u.packageHistory.length > 0 
+                    ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 <b>პაკეტის ცვლილება:</b> ${u.packageHistory.join(' ← ')}</div>` 
+                    : '';
+
+                if (currentDbTab === 'active') {
+                    card.innerHTML = `
+                        <div class="user-db-header">
+                            <div>
+                                <span style="font-size: 16px; font-weight: bold; color: #d9f96b;">👤 ${u.name || '—'}</span>
+                                <span style="font-size: 12px; background: #17362a; color: #b0c2bc; padding: 3px 8px; border-radius: 6px; margin-left: 8px;">🆔 ${u.pid}</span>
+                            </div>
+                            <div style="font-weight: bold; color: #4ade80; font-size: 13px;">📦 ${u.package}</div>
+                        </div>
+                        <div class="user-db-grid">
+                            <div><b>🚗 ავტომობილი:</b> ${u.car}</div>
+                            <div><b>📄 ტექპასპორტი:</b> ${u.tech || '—'}</div>
+                            <div><b>📞 ტელეფონი:</b> ${u.phone || '—'}</div>
+                            <div><b>⏳ დარჩენილი დრო:</b> <span class="db-live-timer" data-start="${u.timestamp}" data-days="${u.days}" style="color: #d9f96b; font-weight: bold;">...</span></div>
+                        </div>
+                        ${historyHTML}
+                        <div class="user-db-actions">
+                            <button class="user-db-btn" onclick="selectUserToEdit('${u.storageKey}')" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b;">✏️ რედაქტირება</button>
+                            <button class="user-db-btn btn-trash" onclick="moveUserToTrash('${u.storageKey}')">🗑️ ურნაში გადატანა</button>
+                        </div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="user-db-header">
+                            <div>
+                                <span style="font-size: 16px; font-weight: bold; color: #f87171;">🗑️ ${u.name || '—'}</span>
+                                <span style="font-size: 12px; background: #17362a; color: #b0c2bc; padding: 3px 8px; border-radius: 6px; margin-left: 8px;">🆔 ${u.pid}</span>
+                            </div>
+                            <div style="font-size: 12px; color: #f87171;">წაშლილია</div>
+                        </div>
+                        <div class="user-db-grid">
+                            <div><b>🚗 ავტომობილი:</b> ${u.car}</div>
+                            <div><b>📄 ტექპასპორტი:</b> ${u.tech || '—'}</div>
+                            <div><b>📞 ტელეფონი:</b> ${u.phone || '—'}</div>
+                            <div><b>📦 პაკეტი:</b> ${u.package}</div>
+                        </div>
+                        <div class="user-db-actions">
+                            <button class="user-db-btn btn-restore" onclick="restoreUserFromTrash('${u.storageKey}')">🔄 უკან აღდგენა</button>
+                            <button class="user-db-btn btn-perm-delete" onclick="permanentlyDeleteUser('${u.storageKey}')">❌ სამუდამოდ წაშლა</button>
+                        </div>
+                    `;
+                }
+                container.appendChild(card);
+            });
+
+            updateAllDbCountdowns();
+        }
+
+        function updateAllDbCountdowns() {
+            const timerElements = document.querySelectorAll('.db-live-timer');
+            const now = Date.now();
+
+            timerElements.forEach(el => {
+                const startTime = parseInt(el.getAttribute('data-start'));
+                const totalDays = parseInt(el.getAttribute('data-days'));
+                if (!startTime || !totalDays) return;
+
+                const expiryTime = startTime + (totalDays * 24 * 60 * 60 * 1000);
+                const distance = expiryTime - now;
+
+                if (distance < 0) {
+                    el.textContent = "ვადა ამოწურულია";
+                    el.style.color = "#ef4444";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+                el.textContent = `${days}დღე ${hours}სთ ${minutes}წთ`;
+            });
+        }
+
+        function moveUserToTrash(key) {
+            let u = JSON.parse(localStorage.getItem(key));
+            if (u) {
+                u.isDeleted = true;
+                localStorage.setItem(key, JSON.stringify(u));
+                renderUserDatabaseList();
+            }
+        }
+
+        function restoreUserFromTrash(key) {
+            let u = JSON.parse(localStorage.getItem(key));
+            if (u) {
+                u.isDeleted = false;
+                localStorage.setItem(key, JSON.stringify(u));
+                renderUserDatabaseList();
+            }
+        }
+
+        function permanentlyDeleteUser(key) {
+            if (confirm("ნამდვილად გსურთ მომხმარებლის სამუდამოდ წაშლა ბაზიდან?")) {
+                localStorage.removeItem(key);
+                renderUserDatabaseList();
+            }
+        }
+
+        function selectUserToEdit(key) {
+            const u = JSON.parse(localStorage.getItem(key));
+            if (u) {
+                closeAdminUserDatabase();
+                document.getElementById('adminTargetPid').value = u.pid;
+                searchUserByPid();
+            }
+        }
+
+        function selectCabinetPackage(newPkg, days) {
+            const currentName = document.getElementById('profName').textContent;
+            const currentPid = document.getElementById('profPid').textContent;
+            const currentCar = document.getElementById('dashMainCarBadge2').textContent;
+            const storageKey = 'user_' + currentPid + '_' + currentCar;
+
+            let userData = JSON.parse(localStorage.getItem(storageKey));
+            if (userData) {
+                if (!userData.packageHistory) userData.packageHistory = [];
+                userData.packageHistory.unshift(userData.package); // ვინახავთ ძველ პაკეტს ისტორიაში
+
+                userData.package = newPkg;
+                userData.days = days;
+                userData.timestamp = Date.now();
+
+                localStorage.setItem(storageKey, JSON.stringify(userData));
+                alert(`✅ პაკეტი წარმატებით შეიცვალა! ახალი პაკეტი: ${newPkg}`);
+                loadUserData(userData);
+                startLiveCountdown(userData.timestamp, userData.days);
+            }
+        }
+
+        // =========================================================================
+
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
                 e.preventDefault();
@@ -1003,7 +1273,9 @@
                 adminApproved: false,
                 noFine: false,
                 fines: [],
-                techStatus: "🔍 სტატუსი: ძალაშია"
+                techStatus: "🔍 სტატუსი: ძალაშია",
+                isDeleted: false,
+                packageHistory: []
             };
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
