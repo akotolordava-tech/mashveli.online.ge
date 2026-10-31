@@ -294,7 +294,7 @@
         </div>
     </div>
 
-    <!-- ================= 🛠️ განახლებული ადმინ პანელი (მრავალი ჯარიმით) ================= -->
+    <!-- ================= 🛠️ განახლებული ადმინ პანელი (ჯარიმის არარსებობის ჩამრთველით) ================= -->
     <div class="modal-overlay" id="adminModal" style="z-index: 8000;">
         <div class="modal-content" style="background: #0d231a; color: #fff; border: 2px solid #d9f96b; max-width: 580px;">
             <button class="modal-close" style="color: #fff;" onclick="closeAdminModal()">&times;</button>
@@ -317,11 +317,17 @@
 
                 <hr style="border: 0; border-top: 1px solid #17362a; margin: 20px 0;">
                 
-                <h4 style="color: #d9f96b; font-size: 16px; margin-bottom: 15px;">🚨 ჯარიმების სია (შეგიძლიათ დაამატოთ რამდენიმე)</h4>
-                
-                <div id="finesListContainer"></div>
+                <!-- 🔘 ჯარიმა არ ფიქსირდება ჩამრთველი -->
+                <div class="form-group" style="background: #17362a; padding: 15px; border-radius: 12px; border: 1px solid #1a3e30; display: flex; align-items: center; gap: 12px;">
+                    <input type="checkbox" id="adminNoFineCheck" style="width: 20px; height: 20px; accent-color: #d9f96b; cursor: pointer;" onchange="toggleFineInputsState(this.checked)">
+                    <label for="adminNoFineCheck" style="color: #d9f96b; font-size: 15px; font-weight: bold; margin-bottom: 0; cursor: pointer;">ავტომობილზე ჯარიმა არ ფიქსირდება (მოინიშნოს ჯარიმების არარსებობისას)</label>
+                </div>
 
-                <button type="button" onclick="addNewFineFields()" style="background: #17362a; color: #d9f96b; border: 1px dashed #d9f96b; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;">+ ჯარიმის დამატება</button>
+                <div id="finesSectionWrapper">
+                    <h4 style="color: #d9f96b; font-size: 16px; margin-bottom: 15px;">🚨 ჯარიმების სია (შეგიძლიათ დაამატოთ რამდენიმე)</h4>
+                    <div id="finesListContainer"></div>
+                    <button type="button" id="addFineBtn" onclick="addNewFineFields()" style="background: #17362a; color: #d9f96b; border: 1px dashed #d9f96b; width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 20px;">+ ჯარიმის დამატება</button>
+                </div>
 
                 <div class="form-group">
                     <label style="color: #d9f96b;">ტექინსპექტირების სტატუსი</label>
@@ -613,7 +619,6 @@
                 return;
             }
 
-            // კაბინეტში შესვლის შეტყობინება Telegram-ზე
             const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
             sendTelegramMessageUniversal(loginMessage);
 
@@ -640,8 +645,15 @@
                 let totalSum = 0;
                 let finesHTML = "";
 
-                if(finesArr.length === 0) {
-                    finesHTML = `<div class="dash-card"><div><div style="font-weight: bold;">ჯარიმა არ იძებნება</div><div style="font-size: 12px; color: #b0c2bc;">სტატუსი: სუფთაა</div></div><div style="text-align: right;"><div style="font-size: 18px; font-weight: bold; color: #4ade80;">0 GEL</div></div></div>`;
+                // თუ ადმინმა მონიშნა რომ ჯარიმა არ ფიქსირდება ან სია ცარიელია
+                if (data.noFine === true || finesArr.length === 0) {
+                    finesHTML = `
+                    <div class="dash-card" style="justify-content: center; text-align: center; padding: 30px;">
+                        <div>
+                            <div style="font-size: 28px; margin-bottom: 8px;">🎉</div>
+                            <div style="font-size: 16px; font-weight: bold; color: #4ade80;">ავტომობილის სახელმწიფო ნომრით ${data.car} მიმდინარე ჯარიმა არ ფიქსირდება</div>
+                        </div>
+                    </div>`;
                 } else {
                     finesArr.forEach(f => {
                         totalSum += parseFloat(f.sum) || 0;
@@ -711,7 +723,6 @@
         function closeAdminAuthModal() { document.getElementById('adminAuthModal').style.display = 'none'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-        // Telegram-ზე გაგზავნის ოპტიმიზებული ფუნქცია
         function sendTelegramMessageUniversal(text, callback) {
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
             
@@ -751,10 +762,26 @@
             if (userEntered === generatedAdminCode && generatedAdminCode !== "") {
                 closeAdminAuthModal();
                 document.getElementById('adminModal').style.display = 'flex';
+                document.getElementById('adminNoFineCheck').checked = false;
+                toggleFineInputsState(false);
                 document.getElementById('finesListContainer').innerHTML = '';
                 addNewFineFields();
             } else {
                 alert("❌ არასწორი Telegram კოდია!");
+            }
+        }
+
+        // როდესაც ადმინი მონიშნავს "ჯარიმა არ ფიქსირდება" ჩამრთველს, ჯარიმების დამატების ღილაკი და სია იფარება
+        function toggleFineInputsState(isChecked) {
+            const wrapper = document.getElementById('finesSectionWrapper');
+            if (isChecked) {
+                wrapper.style.display = 'none';
+                document.getElementById('finesListContainer').innerHTML = '';
+            } else {
+                wrapper.style.display = 'block';
+                if(document.getElementById('finesListContainer').children.length === 0) {
+                    addNewFineFields();
+                }
             }
         }
 
@@ -797,17 +824,20 @@
             const targetName = document.getElementById('adminTargetName').value.trim();
             const targetPhone = document.getElementById('adminTargetPhone').value.trim();
             const techStatus = document.getElementById('adminInputTechStatus').value;
+            const noFineChecked = document.getElementById('adminNoFineCheck').checked;
 
             let finesArray = [];
-            const fineBoxes = document.querySelectorAll('.fine-item-box');
-            fineBoxes.forEach(box => {
-                finesArray.push({
-                    sum: box.querySelector('.fine-sum').value,
-                    desc: box.querySelector('.fine-desc').value,
-                    date: box.querySelector('.fine-date').value,
-                    link: box.querySelector('.fine-link').value
+            if (!noFineChecked) {
+                const fineBoxes = document.querySelectorAll('.fine-item-box');
+                fineBoxes.forEach(box => {
+                    finesArray.push({
+                        sum: box.querySelector('.fine-sum').value,
+                        desc: box.querySelector('.fine-desc').value,
+                        date: box.querySelector('.fine-date').value,
+                        link: box.querySelector('.fine-link').value
+                    });
                 });
-            });
+            }
 
             const storageKey = 'user_' + targetPid;
             let userData = JSON.parse(localStorage.getItem(storageKey));
@@ -820,12 +850,13 @@
             userData.name = targetName;
             userData.phone = targetPhone;
             userData.adminApproved = true;
+            userData.noFine = noFineChecked;
             userData.fines = finesArray;
             userData.techStatus = techStatus;
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            alert("✅ მონაცემები და ჯარიმები წარმატებით განახლდა და მიება მომხმარებელს (PID: " + targetPid + ")!");
+            alert("✅ მონაცემები წარმატებით განახლდა და მიება მომხმარებელს (PID: " + targetPid + ")!");
             closeAdminModal();
         }
 
@@ -877,6 +908,7 @@
             const userData = { 
                 name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
                 adminApproved: false,
+                noFine: false,
                 fines: [],
                 techStatus: "🔍 სტატუსი: ძალაშია"
             };
