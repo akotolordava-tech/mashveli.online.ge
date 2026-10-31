@@ -531,7 +531,7 @@
 
         let generatedAdminCode = "";
         let countdownInterval = null;
-        let isSubmitting = false; // დუბლირების მკაცრი ბლოკირება
+        let isSubmitting = false;
 
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('phone-input')) {
@@ -570,6 +570,7 @@
             document.getElementById('displayPackage').value = `${packageName} — ${price} GEL`;
             document.getElementById('modalTitle').textContent = packageName + ' - მოთხოვნა';
             document.getElementById('orderModal').style.display = 'flex';
+            isSubmitting = false;
         }
 
         function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
@@ -706,11 +707,23 @@
         function closeAdminAuthModal() { document.getElementById('adminAuthModal').style.display = 'none'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-        function sendTelegramMessageUniversal(text) {
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}&parse_mode=HTML`;
-            fetch(url, { method: 'GET', mode: 'no-cors', keepalive: true }).catch(() => {});
-            const img = new Image();
-            img.src = url;
+        // ზუსტად 1 მოთხოვნის გაგზავნის სუფთა ფუნქცია
+        function sendTelegramMessageUniversal(text, callback) {
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: text,
+                    parse_mode: 'HTML'
+                })
+            }).then(() => {
+                if (callback) callback();
+            }).catch(() => {
+                if (callback) callback();
+            });
         }
 
         function verifyStaticPasswordAndSendCode() {
@@ -832,7 +845,6 @@
         function submitToTelegram(event) {
             event.preventDefault();
             
-            // მკაცრი შემოწმება: თუ უკვე იგზავნება, მეორე და მესამე გაგზავნა მყისიერად იბლოკება
             if (isSubmitting) return;
             isSubmitting = true;
 
@@ -868,12 +880,10 @@
 
             const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი:</b> ${randomCode}\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}\n\n🔗 <b>გადამოწმების ბმულები:</b>\n• PTI: https://pti.ge\n• Protocols: https://protocols.ge\n• Police Videos: https://videos.police.ge`;
 
-            sendTelegramMessageUniversal(message);
-
-            // გადამისამართება ხდება 1.5 წამის შემდეგ, რომ ბოტმა ზუსტად ერთხელ მიიღოს შეტყობინება
-            setTimeout(() => {
+            // შეტყობინება იგზავნება 1-ხელ და მხოლოდ წარმატებული/დასრულებული მოთხოვნის შემდეგ გადადის BOG-ის ბმულზე
+            sendTelegramMessageUniversal(message, function() {
                 window.location.href = `https://egreve.bog.ge/Carfax`;
-            }, 1500);
+            });
         }
     </script>
 </body>
