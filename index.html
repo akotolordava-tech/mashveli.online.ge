@@ -66,7 +66,6 @@
         .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
         .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
 
-        /* ავტომობილის და ტექპასპორტის ველების დიდი ასოებით ჩვენება */
         .uppercase-input { text-transform: uppercase; }
 
         #welcomePopup { display: flex; }
@@ -535,19 +534,16 @@
 
         // ავტომატური კონტროლი ტელეფონის +995 პრეფიქსისა და დიდი ასოებისათვის
         document.addEventListener('input', function(e) {
-            // ტელეფონის ნომრის ველებისთვის
             if (e.target.classList.contains('phone-input')) {
                 if (!e.target.value.startsWith('+995 ')) {
                     e.target.value = '+995 ';
                 }
             }
-            // ავტომობილისა და ტექპასპორტის ველებისთვის (მხოლოდ დიდი ასოები)
             if (e.target.classList.contains('uppercase-input')) {
                 e.target.value = e.target.value.toUpperCase();
             }
         });
 
-        // კლავიატურიდან წაშლის კონტროლი, რომ +995 არ წაიშალოს
         document.addEventListener('keydown', function(e) {
             if (e.target.classList.contains('phone-input')) {
                 if ((e.key === 'Backspace' || e.key === 'Delete') && e.target.selectionStart <= 5) {
@@ -858,7 +854,8 @@
             };
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი: ${randomCode}</b>\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
+            // ზუსტად ისეთი სტრუქტურირებული და ემოჯიებიანი ფორმატი, როგორიც სურათზეა
+            const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი:</b> ${randomCode}\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}`;
 
             sendTelegramMessageUniversal(message);
 
