@@ -306,6 +306,9 @@
                         <li class="dash-menu-item" onclick="switchTab('packagesTab', this)">
                             💳 გამოწერის პაკეტები
                         </li>
+                        <li class="dash-menu-item" onclick="switchTab('chatTab', this)">
+                            💬 ონლაინ ჩათი
+                        </li>
                         <li class="dash-menu-item" onclick="switchTab('settingsTab', this)">
                             ⚙️ პროფილის პარამეტრები
                         </li>
@@ -423,34 +426,44 @@
                     </div>
                 </div>
 
-                <!-- TAB 4: პროფილის პარამეტრები & ONLINE CHAT -->
-                <div class="dash-section" id="settingsTab">
+                <!-- TAB 4: ცალკე ონლაინ ჩათი + დაბრუნების ღილაკი -->
+                <div class="dash-section" id="chatTab">
                     <div class="dash-header">
                         <div class="dash-title">
-                            <h2>პროფილის პარამეტრები & მხარდაჭერა</h2>
+                            <h2>💬 ონლაინ მხარდაჭერის ჩათი</h2>
                             <p>ონლაინ მხარდაჭერა ხელმისაწვდომია 10:00 - 19:00 საათებში</p>
                         </div>
+                        <button class="cabinet-btn" onclick="switchToMainTab()">← მთავარ გვერდზე დაბრუნება</button>
                     </div>
 
-                    <div style="margin-bottom: 30px; background: #132e23; padding: 20px; border-radius: 16px; max-width: 600px; border: 1px solid #1a3e30;">
-                        <p style="margin-bottom: 8px;">👤 <b>სახელი:</b> <span id="profName">აკაკი</span></p>
-                        <p style="margin-bottom: 8px;">🆔 <b>პირადი ნომერი:</b> <span id="profPid">62004028505</span></p>
-                        <p>📞 <b>ტელეფონი:</b> <span id="profPhone">+995 599 00 00 00</span></p>
-                    </div>
-
-                    <h3 style="margin-bottom: 15px; color: #d9f96b;">💬 ონლაინ მხარდაჭერის ჩათი</h3>
-                    <div class="chat-box">
+                    <div class="chat-box" style="max-width: 100%;">
                         <div style="font-size: 12px; color: #b0c2bc; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                             <span id="chatStatusDot" style="width: 10px; height: 10px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>
                             <span id="chatStatusText">ოპერატორი ონლაინშია (10:00 - 19:00)</span>
                         </div>
-                        <div class="chat-messages" id="chatMsgContainer">
+                        <div class="chat-messages" id="chatMsgContainer" style="height: 350px;">
                             <div class="msg support">გამარჯობა! რით შემიძლია დაგეხმაროთ?</div>
                         </div>
                         <div class="chat-input-area">
                             <input type="text" id="chatInput" placeholder="მოგვწერეთ შეტყობინება...">
                             <button onclick="sendChatMessage()">გაგზავნა</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- TAB 5: პროფილის პარამეტრები -->
+                <div class="dash-section" id="settingsTab">
+                    <div class="dash-header">
+                        <div class="dash-title">
+                            <h2>პროფილის პარამეტრები</h2>
+                            <p>თქვენი რეგისტრირებული პირადი მონაცემები</p>
+                        </div>
+                    </div>
+
+                    <div style="background: #132e23; padding: 25px; border-radius: 16px; max-width: 600px; border: 1px solid #1a3e30;">
+                        <p style="margin-bottom: 12px; font-size: 15px;">👤 <b>სახელი:</b> <span id="profName">აკაკი</span></p>
+                        <p style="margin-bottom: 12px; font-size: 15px;">🆔 <b>პირადი ნომერი:</b> <span id="profPid">62004028505</span></p>
+                        <p style="font-size: 15px;">📞 <b>ტელეფონი:</b> <span id="profPhone">+995 599 00 00 00</span></p>
                     </div>
                 </div>
 
@@ -521,10 +534,23 @@
             document.querySelectorAll('.dash-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.dash-menu-item').forEach(item => item.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            element.classList.add('active');
             
-            if(tabId === 'settingsTab') checkChatHours();
+            // ვპოულობთ მენიუს შესაბამის ელემენტს და ვუაქტიურებთ
+            if(element) {
+                element.classList.add('active');
+            } else {
+                // თუ კოდიდან გამოვიძახეთ, მენიუში პირველ ტაბზე გადავсаვათ
+                document.querySelectorAll('.dash-menu-item')[0].classList.add('active');
+            }
+            
+            if(tabId === 'chatTab') checkChatHours();
             if(tabId === 'packagesTab') updateCabinetPricesUI();
+        }
+
+        // მთავარ გვერდზე დასაბრუნებელი ფუნქცია კაბინეტიდან
+        function switchToMainTab() {
+            const firstMenuItem = document.querySelectorAll('.dash-menu-item')[0];
+            switchTab('finesTab', firstMenuItem);
         }
 
         function updateCabinetPricesUI() {
@@ -721,7 +747,6 @@
             }
         }
 
-        /* 💬 განახლებული ჩათი: ტელეგრამში აგზავნის სახელს, ავტომობილს, ტექპასპორტს, პირადს და ტელეფონს */
         function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const msgText = input.value.trim();
@@ -752,7 +777,6 @@
             }
         }
 
-        // 💬 ტელეგრამის ჩათიდან პასუხების ავტომატური წამოღება საიტზე
         let lastUpdateId = 0;
 
         function checkTelegramReplies() {
