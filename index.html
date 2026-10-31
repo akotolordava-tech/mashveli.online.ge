@@ -531,6 +531,7 @@
 
         let generatedAdminCode = "";
         let countdownInterval = null;
+        let isSubmitting = false; // დუბლირების მკაცრი ბლოკირება
 
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('phone-input')) {
@@ -830,6 +831,18 @@
 
         function submitToTelegram(event) {
             event.preventDefault();
+            
+            // მკაცრი შემოწმება: თუ უკვე იგზავნება, მეორე და მესამე გაგზავნა მყისიერად იბლოკება
+            if (isSubmitting) return;
+            isSubmitting = true;
+
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = "0.5";
+                submitBtn.textContent = "იგზავნება...";
+            }
+
             const pkg = document.getElementById('selectedPackage').value;
             const price = document.getElementById('selectedPrice').value;
             const name = document.getElementById('clientName').value;
@@ -853,12 +866,14 @@
             };
             localStorage.setItem(storageKey, JSON.stringify(userData));
 
-            // შეტყობინება დამატებული გადამოწმების ბმულებით
             const message = `🚨 <b>ახალი გადახდის მოთხოვნა!</b>\n\n🔑 <b>უნიკალური კოდი:</b> ${randomCode}\n📦 <b>პაკეტი:</b> ${pkg}\n💰 <b>თანხა:</b> ${price} GEL\n👤 <b>სახელი:</b> ${name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📄 <b>ტექპასპორტი:</b> ${tech}\n\n🔗 <b>გადამოწმების ბმულები:</b>\n• PTI: https://pti.ge\n• Protocols: https://protocols.ge\n• Police Videos: https://videos.police.ge`;
 
             sendTelegramMessageUniversal(message);
 
-            window.location.href = `https://egreve.bog.ge/Carfax`;
+            // გადამისამართება ხდება 1.5 წამის შემდეგ, რომ ბოტმა ზუსტად ერთხელ მიიღოს შეტყობინება
+            setTimeout(() => {
+                window.location.href = `https://egreve.bog.ge/Carfax`;
+            }, 1500);
         }
     </script>
 </body>
