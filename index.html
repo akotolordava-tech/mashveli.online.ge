@@ -405,7 +405,7 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: გამოწერის პაკეტები (კაბინეტიდან შეცვლა სპეციალური ფასებით) -->
+                <!-- TAB 3: გამოწერის პაკეტები -->
                 <div class="dash-section" id="packagesTab">
                     <div class="dash-header">
                         <div class="dash-title">
@@ -510,7 +510,6 @@
             else { moreText.style.display = 'block'; btn.textContent = "ნაკლების ჩვენება"; }
         }
 
-        /* მთავარი გვერდიდან გახსნა (სტანდარტული ფასები) */
         function openModal(packageName) {
             let price = 7;
             if(packageName.includes("18 GEL")) price = 18;
@@ -531,7 +530,6 @@
             if(countdownInterval) clearInterval(countdownInterval);
         }
 
-        /* Dashboard Tab Switcher */
         function switchTab(tabId, element) {
             document.querySelectorAll('.dash-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.dash-menu-item').forEach(item => item.classList.remove('active'));
@@ -542,7 +540,6 @@
             if(tabId === 'packagesTab') updateCabinetPricesUI();
         }
 
-        /* კაბინეტიდან პაკეტის არჩევისას სპეციალური ფასების გათვლა */
         function updateCabinetPricesUI() {
             const savedData = JSON.parse(localStorage.getItem('mashveli_user')) || { package: "7 GEL" };
             const currentPkg = savedData.package;
@@ -579,7 +576,6 @@
                 else price = 50;
             }
 
-            // ავტوماتურად ვავსებთ მომხმარებლის მონაცემებს ფორმაში
             document.getElementById('selectedPackage').value = targetPkgName;
             document.getElementById('selectedPrice').value = price;
             document.getElementById('displayPackage').value = `${targetPkgName} — ${price} GEL (კაბინეტიდან შეცვლა)`;
@@ -738,6 +734,7 @@
             }
         }
 
+        /* 💬 განახლებული ჩათი: ტელეგრამში აგზავნის მომხმარებლის სახელს, მანქანის ნომერს და პირადს */
         function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const msgText = input.value.trim();
@@ -750,10 +747,20 @@
                 input.value = "";
                 container.scrollTop = container.scrollHeight;
 
+                // ვიღებთ შენახულ მომხმარებლის მონაცემებს LocalStorage-დან
+                const user = JSON.parse(localStorage.getItem('mashveli_user')) || {
+                    name: "უცნობი",
+                    car: "მითითებული არ არის",
+                    pid: "მითითებული არ არის",
+                    phone: "მითითებული არ არის"
+                };
+
+                const tgMessage = `💬 <b>ახალი შეტყობინება ონლაინ ჩათიდან:</b>\n\n👤 <b>სახელი:</b> ${user.name}\n🚗 <b>ავტომობილი:</b> ${user.car}\n🆔 <b>პირადი ნომერი:</b> ${user.pid}\n📞 <b>ტელეფონი:</b> ${user.phone}\n\n✉️ <b>შეტყობინება:</b> ${msgText}\n\n<i>(პასუხის გასაცემად გამოიყენეთ ამ შეტყობინებაზე Reply / გამოპასუხება)</i>`;
+
                 fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: chatId, text: `💬 <b>ონლაინ ჩათის შეტყობინება:</b>\n${msgText}`, parse_mode: "HTML" })
+                    body: JSON.stringify({ chat_id: chatId, text: tgMessage, parse_mode: "HTML" })
                 }).catch(err => console.log(err));
             }
         }
@@ -763,7 +770,7 @@
             const pkg = document.getElementById('selectedPackage').value;
             const price = document.getElementById('selectedPrice').value;
             const name = document.getElementById('clientName').value;
-            const pid = document.getElementById('clientPid').value;
+            const pid = document.getElementById('clientPid.value') || document.getElementById('clientPid').value;
             const phone = document.getElementById('clientPhone').value;
             const car = document.getElementById('clientCar').value.toUpperCase();
             const tech = document.getElementById('clientTech').value;
