@@ -103,7 +103,7 @@
         .dash-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .car-badge { background: #d9f96b; color: #0d231a; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 13px; }
 
-        .fine-media-preview { margin-top: 10px; max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #1a3e30; }
+        .fine-media-preview { margin-top: 10px; max-width: 100%; max-height: 220px; border-radius: 8px; border: 1px solid #1a3e30; object-fit: contain; }
 
         .user-db-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 14px; padding: 18px; margin-bottom: 14px; transition: 0.2s; }
         .user-db-card:hover { border-color: #d9f96b; }
@@ -609,6 +609,18 @@
         let currentDbTab = 'active';
         let currentLang = 'GEO';
 
+        // 📅 თარიღისა და დროის ფორმატირების ფუნქცია
+        function formatDateTime(timestamp) {
+            if (!timestamp) return '—';
+            const d = new Date(timestamp);
+            const day = String(d.getDate()).padStart(2, '0');
+            const month = String(d.getMonth() + 1).padStart(2, '0');
+            const year = d.getFullYear();
+            const hours = String(d.getHours()).padStart(2, '0');
+            const minutes = String(d.getMinutes()).padStart(2, '0');
+            return `${day}.${month}.${year}, ${hours}:${minutes}`;
+        }
+
         // 🌍 ენების ლექსიკონი
         const translations = {
             GEO: {
@@ -1061,7 +1073,7 @@
             if (mediaType && mediaType.startsWith('video/')) {
                 return `<div style="margin-top: 10px;"><video src="${mediaUrl}" controls class="fine-media-preview"></video></div>`;
             }
-            return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine image" /></a></div>`;
+            return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine media" /></a></div>`;
         }
 
         function loadUserData(data) {
@@ -1475,6 +1487,7 @@
                 const historyHTML = u.packageHistory && u.packageHistory.length > 0 
                     ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 <b>Package History:</b> ${u.packageHistory.join(' ← ')}</div>` 
                     : '';
+                const dateStr = formatDateTime(u.timestamp);
 
                 if (currentDbTab === 'active') {
                     card.innerHTML = `
@@ -1489,6 +1502,7 @@
                             <div><b>Car:</b> ${u.car}</div>
                             <div><b>Tech:</b> ${u.tech || '—'}</div>
                             <div><b>Phone:</b> ${u.phone || '—'}</div>
+                            <div><b>📅 რეგისტრაცია:</b> <span style="color: #fff;">${dateStr}</span></div>
                             <div><b>Time left:</b> <span class="db-live-timer" data-start="${u.timestamp}" data-days="${u.days}" style="color: #d9f96b; font-weight: bold;">...</span></div>
                         </div>
                         ${historyHTML}
@@ -1511,6 +1525,7 @@
                             <div><b>Car:</b> ${u.car}</div>
                             <div><b>Tech:</b> ${u.tech || '—'}</div>
                             <div><b>Phone:</b> ${u.phone || '—'}</div>
+                            <div><b>📅 რეგისტრაცია:</b> <span style="color: #fff;">${dateStr}</span></div>
                             <div><b>Package:</b> ${u.package}</div>
                         </div>
                         <div class="user-db-actions">
@@ -1570,7 +1585,8 @@
                     <p style="margin-bottom: 8px; font-size: 14px;">📞 <b>Phone:</b> ${u.phone}</p>
                     <p style="margin-bottom: 8px; font-size: 14px;">🚗 <b>Car:</b> ${u.car}</p>
                     <p style="margin-bottom: 8px; font-size: 14px;">📄 <b>Tech Passport:</b> ${u.tech || '—'}</p>
-                    <p style="font-size: 14px; color: #d9f96b;">📦 <b>Package:</b> ${u.package}</p>
+                    <p style="margin-bottom: 8px; font-size: 14px; color: #d9f96b;">📦 <b>Package:</b> ${u.package}</p>
+                    <p style="font-size: 14px;">📅 <b>რეგისტრაციის დრო:</b> ${formatDateTime(u.timestamp)}</p>
                 </div>
                 <div class="dash-stats" style="margin-bottom: 20px;">
                     <div class="stat-card" style="background: #132e23; border: 1px solid #1a3e30;">
@@ -1701,16 +1717,23 @@
                 name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
                 adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
             };
-            localStorage.setItem(storageKey, JSON.stringify(userData));
+            
+            // 📲 უსაფრთხო შენახვა მობილურებისა და კომპიუტერისთვის
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(userData));
+            } catch (err) {
+                console.error("LocalStorage Save Error:", err);
+            }
 
             const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
             sendTelegramMessageUniversal(message, function() {
-                window.location.href = `https://egreve.bog.ge/Carfax`;
+                // მობილურზე გარანტირებული შენახვისთვის ემატება მცირე დაყოვნება რედირექტამდე
+                setTimeout(() => {
+                    window.location.href = `https://egreve.bog.ge/Carfax`;
+                }, 400);
             });
         }
     </script>
 </body>
 </html>
-
-
