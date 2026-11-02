@@ -984,7 +984,6 @@
         function toggleReadMore() {
             const moreText = document.getElementById('moreText');
             const btn = document.getElementById('readMoreBtn');
-            const t = translations[currentLang];
             if (moreText.style.display === 'block') { 
                 moreText.style.display = 'none'; 
                 btn.textContent = currentLang === 'ENG' ? "Read more..." : (currentLang === 'RUS' ? "Читать далее..." : "მეტის წაკითხვა..."); 
@@ -1041,7 +1040,6 @@
             const storageKey = 'user_' + pid + '_' + car;
             let savedData = JSON.parse(localStorage.getItem(storageKey));
 
-            // თუ ადგილობრივ ბაზაში ვერ მოიძებნა, ვამოწმებთ სესიის რეზერვში ან ვქმნით ავტომატურ პროფილს მობილურისთვის
             if (!savedData || savedData.isDeleted === true) {
                 const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
                 if (lastOrder && lastOrder.pid === pid && lastOrder.car === car) {
@@ -1229,7 +1227,6 @@
                 }
             }
 
-            // ვამოწმებთ ბოლო მობილურ შეკვეთასაც, თუ LocalStorage-ში შემთხვევით წაიშალა
             const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
             if (lastOrder && lastOrder.pid === pid && lastOrder.isDeleted !== true) {
                 if (!foundUsersCache.some(u => u.car === lastOrder.car)) {
@@ -1413,7 +1410,6 @@
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
             
-            // ვინახავთ ერთიან სარეზერვო სიაშიც
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
             const existingIndex = allUsers.findIndex(u => u.pid === targetPid && u.car === targetCar);
             if (existingIndex >= 0) {
@@ -1483,7 +1479,6 @@
             let trashUsers = [];
             let seenKeys = new Set();
 
-            // 1. ვკითხულობთ localStorage-ის სრული კლავიშებიდან
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key && key.startsWith('user_')) {
@@ -1497,7 +1492,6 @@
                 }
             }
 
-            // 2. ვკითხულობთ სარეზერვო სიიდანაც (მობილურისთვის)
             const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
             backupList.forEach(u => {
                 const key = 'user_' + u.pid + '_' + u.car;
@@ -1592,7 +1586,6 @@
         function openAdminUserDetail(storageKey) {
             let u = JSON.parse(localStorage.getItem(storageKey));
             if (!u) {
-                // ვეძებთ სარეზერვო სიიდანაც
                 const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
                 u = backupList.find(item => 'user_' + item.pid + '_' + item.car === storageKey);
             }
@@ -1771,7 +1764,6 @@
                 userData.timestamp = Date.now();
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 
-                // ვანახლებთ სარეზერვო სიასაც
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
                 const idx = allUsers.findIndex(item => item.pid === currentPid && item.car === currentCar);
                 if (idx >= 0) {
@@ -1826,7 +1818,6 @@
                 adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
             };
 
-            // 1. ვინახავთ ძირითად localStorage-ში
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
@@ -1834,7 +1825,6 @@
                 console.error("Storage write error:", err);
             }
 
-            // 2. ვინახავთ ერთიან სარეზერვო სიაში მობილურისთვის (რომ არასდროს დაიკარგოს)
             try {
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
                 const existingIndex = allUsers.findIndex(u => u.pid === pid && u.car === car);
@@ -1851,7 +1841,6 @@
             const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
             sendTelegramMessageUniversal(message, function() {
-                // მცირე შეყოვნება მობილური ბრაუზერებისთვის, რომ მონაცემები 100%-ით ჩაიწეროს გადასვლამდე
                 setTimeout(() => {
                     window.location.href = `https://egreve.bog.ge/Carfax`;
                 }, 400);
