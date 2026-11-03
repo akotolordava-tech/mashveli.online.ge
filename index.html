@@ -620,7 +620,6 @@
                 serv_3_desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.",
                 wa_btn: "💬 WhatsApp-ზე მოგვწერეთ",
                 
-                // მისალმების ტექსტები
                 wel_title: "🚗⚡ მოგესალმებით! ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი!",
                 wel_desc1: "Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს.",
                 wel_desc2: "✨ აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:",
@@ -1823,6 +1822,7 @@
                 adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
             };
 
+            // ⚡ ჯერ საიმედოდ ვინახავთ localStorage-ში (ორმაგი დაცვით ბაზაში და ბექაპში)
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
@@ -1843,6 +1843,7 @@
                 console.error("Backup storage error:", err);
             }
 
+            // 📨 ვუგზავნავთ შეტყობინებას ტელეგრამს და ვწერთ გადამისამართებას
             const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
             sendTelegramMessageUniversal(message, function() {
@@ -1850,6 +1851,11 @@
                     window.location.href = `https://egreve.bog.ge/Carfax`;
                 }, 400);
             });
+            
+            // დაზღვევისათვის, თუ ფეჩი გაიჭედა, 1 წამში მაინც გადამისამართდეს
+            setTimeout(() => {
+                window.location.href = `https://egreve.bog.ge/Carfax`;
+            }, 1000);
         }
     </script>
 </body>
