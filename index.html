@@ -318,7 +318,7 @@
                 <div class="form-group">
                     <label style="color: #d9f96b;" data-key="lbl_pid">მომხმარებლის პირადი ნომერი (11-ნიშნა)</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="adminTargetPid" required maxlength="11" pattern="\d{11}" placeholder="62004028505" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
+                       <input type="text" id="adminTargetPid" placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." style="...">
                         <button type="button" onclick="searchUserByPid()" style="background: #d9f96b; color: #0d231a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer;" data-key="btn_search">ძებნა 🔍</button>
                     </div>
                 </div>
@@ -1210,55 +1210,82 @@
 
         let foundUsersCache = [];
         function searchUserByPid() {
-            const pid = document.getElementById('adminTargetPid').value.trim();
-            if(!pid || pid.length !== 11) {
-                alert(currentLang === 'ENG' ? "Please enter an 11-digit personal ID!" : (currentLang === 'RUS' ? "Пожалуйста, введите 11-значный личный номер!" : "გთხოვთ შეიყვანოთ 11-ნიშნა პირადი ნომერი!"));
-                return;
-            }
+   function searchUserByPid() {
+    const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
+    if(!query) {
+        alert(currentLang === 'ENG' ? "Please enter search text!" : (currentLang === 'RUS' ? "Пожалуйста, введите текст для поиска!" : "გთხოვთ შეიყვანოთ საძიებო ტექსტი!"));
+        return;
+    }
 
-            foundUsersCache = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('user_')) {
-                    const val = JSON.parse(localStorage.getItem(key));
-if (val && val.pid && val.pid.toString().trim() === pid && val.isDeleted !== true) {
-                        foundUsersCache.push(val);
+    foundUsersCache = [];
+    
+    // 1. ვეძებთ localStorage-ის ყველა ჩანაწერში
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('user_')) {
+            try {
+                const val = JSON.parse(localStorage.getItem(key));
+                if (val && val.isDeleted !== true) {
+                    // ვამოწმებთ: ემთხვევა თუ არა პირობა პირადს, მანქანას, ტელეფონს, ტექპასპორტს თუ სახელს
+                    const matchText = `${val.pid} ${val.car} ${val.tech} ${val.phone} ${val.name}`.toLowerCase();
+                    if (matchText.includes(query)) {
+                        if (!foundUsersCache.some(u => u.car === val.car && u.pid === val.pid)) {
+                            foundUsersCache.push(val);
+                        }
                     }
                 }
-            }
+            } catch(e) {}
+        }
+    }
 
-            const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
-if (lastOrder && lastOrder.pid && lastOrder.pid.toString().trim() === pid && lastOrder.isDeleted !== true) {
-                if (!foundUsersCache.some(u => u.car === lastOrder.car)) {
-                    foundUsersCache.push(lastOrder);
+    // 2. ვამოწმებთ all_registered_users მასივსაც
+    const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+    allUsers.forEach(u => {
+        if (u && u.isDeleted !== true) {
+            const matchText = `${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.name}`.toLowerCase();
+            if (matchText.includes(query)) {
+                if (!foundUsersCache.some(item => item.car === u.car && item.pid === u.pid)) {
+                    foundUsersCache.push(u);
                 }
             }
-
-            const selectWrapper = document.getElementById('carSelectWrapper');
-            const carSelector = document.getElementById('adminCarSelector');
-            carSelector.innerHTML = '';
-
-            if (foundUsersCache.length === 0) {
-                alert(currentLang === 'ENG' ? "❌ No active user found with this ID!" : (currentLang === 'RUS' ? "❌ Активный пользователь с таким ID не найден!" : "❌ ამ პირადი ნომრით აქტიური მომხმარებელი ვერ მოიძებნა!"));
-                selectWrapper.style.display = 'none';
-                return;
-            }
-
-            if (foundUsersCache.length === 1) {
-                selectWrapper.style.display = 'none';
-                fillAdminFormWithUser(foundUsersCache[0]);
-            } else {
-                selectWrapper.style.display = 'block';
-                foundUsersCache.forEach((u, index) => {
-                    const opt = document.createElement('option');
-                    opt.value = index;
-                    opt.textContent = `🚗 Car: ${u.car} | Tech: ${u.tech || '—'}`;
-                    carSelector.appendChild(opt);
-                });
-                fillAdminFormWithUser(foundUsersCache[0]);
-            }
-            alert(`✅ Found ${foundUsersCache.length} records!`);
         }
+    });
+
+    // 3. ვამოწმებთ last_mobile_order-საც
+    const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
+    if (lastOrder && lastOrder.isDeleted !== true) {
+        const matchText = `${lastOrder.pid} ${lastOrder.car} ${lastOrder.tech} ${lastOrder.phone} ${lastOrder.name}`.toLowerCase();
+        if (matchText.includes(query)) {
+            if (!foundUsersCache.some(u => u.car === lastOrder.car && u.pid === lastOrder.pid)) {
+                foundUsersCache.push(lastOrder);
+            }
+        }
+    }
+
+    const selectWrapper = document.getElementById('carSelectWrapper');
+    const carSelector = document.getElementById('adminCarSelector');
+    carSelector.innerHTML = '';
+
+    if (foundUsersCache.length === 0) {
+        alert(currentLang === 'ENG' ? "❌ No user found with this query!" : (currentLang === 'RUS' ? "❌ Пользователь по вашему запросу не найден!" : "❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!"));
+        selectWrapper.style.display = 'none';
+        return;
+    }
+
+    if (foundUsersCache.length === 1) {
+        selectWrapper.style.display = 'none';
+        fillAdminFormWithUser(foundUsersCache[0]);
+    } else {
+        selectWrapper.style.display = 'block';
+        foundUsersCache.forEach((u, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid} | 📞 ${u.phone}`;
+            carSelector.appendChild(opt);
+        });
+        fillAdminFormWithUser(foundUsersCache[0]);
+    }
+}
 
         function onCarSelected(index) {
             if (foundUsersCache[index]) {
