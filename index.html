@@ -1221,14 +1221,14 @@
                 const key = localStorage.key(i);
                 if (key.startsWith('user_')) {
                     const val = JSON.parse(localStorage.getItem(key));
-                    if (val && val.pid === pid && val.isDeleted !== true) {
+if (val && val.pid && val.pid.toString().trim() === pid && val.isDeleted !== true) {
                         foundUsersCache.push(val);
                     }
                 }
             }
 
             const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
-            if (lastOrder && lastOrder.pid === pid && lastOrder.isDeleted !== true) {
+if (lastOrder && lastOrder.pid && lastOrder.pid.toString().trim() === pid && lastOrder.isDeleted !== true) {
                 if (!foundUsersCache.some(u => u.car === lastOrder.car)) {
                     foundUsersCache.push(lastOrder);
                 }
@@ -1802,7 +1802,7 @@
             const pkg = document.getElementById('selectedPackage').value;
             const price = document.getElementById('selectedPrice').value;
             const name = document.getElementById('clientName').value;
-            const pid = document.getElementById('clientPid').value.trim();
+          const pid = document.getElementById('clientPid').value.toString().trim();
             const phone = document.getElementById('clientPhone').value;
             const car = document.getElementById('clientCar').value.toUpperCase().trim();
             const tech = document.getElementById('clientTech').value.toUpperCase().trim();
