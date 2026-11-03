@@ -587,7 +587,6 @@
         let currentDbTab = 'active';
         let currentLang = 'GEO';
 
-        // 🌍 ენების ლექსიკონი (მისალმების პოპ-აპის ტექსტებითურთ)
         const translations = {
             GEO: {
                 nav_services: "სერვისები",
@@ -1022,15 +1021,17 @@
             let savedData = JSON.parse(localStorage.getItem(storageKey));
 
             if (!savedData || savedData.isDeleted === true) {
-                const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
-                if (lastOrder && lastOrder.pid && lastOrder.pid.toString().trim() === pid && lastOrder.car === car) {
-                    savedData = lastOrder;
+                const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+                savedData = allUsers.find(u => u.pid.toString().trim() === pid && u.car.toUpperCase() === car);
+                if (savedData) {
                     localStorage.setItem(storageKey, JSON.stringify(savedData));
-                } else {
-                    closeCabinetLogin();
-                    showLimitNotice(currentLang === 'ENG' ? "❌ Registration with this ID and vehicle not found!" : (currentLang === 'RUS' ? "❌ Регистрация с таким ID и автомобилем не найдена!" : "❌ ასეთი პირადი ნომრით და ავტომობილით რეგისტრაცია ვერ მოიძებნა!"));
-                    return;
                 }
+            }
+
+            if (!savedData || savedData.isDeleted === true) {
+                closeCabinetLogin();
+                showLimitNotice(currentLang === 'ENG' ? "❌ Registration with this ID and vehicle not found!" : (currentLang === 'RUS' ? "❌ Регистрация с таким ID и автомобилем не найдена!" : "❌ ასეთი პირადი ნომრით და ავტომობილით რეგისტრაცია ვერ მოიძებნა!"));
+                return;
             }
 
             const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
@@ -1200,44 +1201,20 @@
 
             foundUsersCache = [];
             
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith('user_')) {
-                    try {
-                        const val = JSON.parse(localStorage.getItem(key));
-                        if (val && val.isDeleted !== true) {
-                            const matchText = `${val.pid} ${val.car} ${val.tech} ${val.phone} ${val.name}`.toLowerCase();
-                            if (matchText.includes(query)) {
-                                if (!foundUsersCache.some(u => u.car === val.car && u.pid.toString().trim() === val.pid.toString().trim())) {
-                                    foundUsersCache.push(val);
-                                }
-                            }
-                        }
-                    } catch(e) {}
-                }
-            }
+            // გავფილტროთ როგორც localStorage-დან, ისე backup array-დან
+            const allStorageUsers = getAllUsersFromStorage();
+            const combinedList = [...allStorageUsers.activeUsers, ...allStorageUsers.trashUsers];
 
-            const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            allUsers.forEach(u => {
-                if (u && u.isDeleted !== true) {
-                    const matchText = `${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.name}`.toLowerCase();
+            combinedList.forEach(val => {
+                if (val) {
+                    const matchText = `${val.pid || ''} ${val.car || ''} ${val.tech || ''} ${val.phone || ''} ${val.name || ''}`.toLowerCase();
                     if (matchText.includes(query)) {
-                        if (!foundUsersCache.some(item => item.car === u.car && item.pid.toString().trim() === u.pid.toString().trim())) {
-                            foundUsersCache.push(u);
+                        if (!foundUsersCache.some(u => u.car === val.car && u.pid.toString().trim() === val.pid.toString().trim())) {
+                            foundUsersCache.push(val);
                         }
                     }
                 }
             });
-
-            const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
-            if (lastOrder && lastOrder.isDeleted !== true) {
-                const matchText = `${lastOrder.pid} ${lastOrder.car} ${lastOrder.tech} ${lastOrder.phone} ${lastOrder.name}`.toLowerCase();
-                if (matchText.includes(query)) {
-                    if (!foundUsersCache.some(u => u.car === lastOrder.car && u.pid.toString().trim() === lastOrder.pid.toString().trim())) {
-                        foundUsersCache.push(lastOrder);
-                    }
-                }
-            }
 
             const selectWrapper = document.getElementById('carSelectWrapper');
             const carSelector = document.getElementById('adminCarSelector');
@@ -1521,7 +1498,7 @@
             container.innerHTML = '';
 
             const filtered = targetList.filter(u => {
-                const text = `${u.name} ${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.package}`.toLowerCase();
+                const text = `${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`.toLowerCase();
                 return text.includes(searchQuery);
             });
 
@@ -1590,8 +1567,9 @@
         function openAdminUserDetail(storageKey) {
             let u = JSON.parse(localStorage.getItem(storageKey));
             if (!u) {
-                const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                u = backupList.find(item => 'user_' + item.pid + '_' + item.car === storageKey);
+                const { activeUsers, trashUsers } = getAllUsersFromStorage();
+                const all = [...activeUsers, ...trashUsers];
+                u = all.find(item => item.storageKey === storageKey || 'user_' + item.pid + '_' + item.car === storageKey);
             }
             if (!u) return;
 
@@ -1741,8 +1719,9 @@
         function selectUserToEdit(key) {
             let u = JSON.parse(localStorage.getItem(key));
             if (!u) {
-                const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                u = backupList.find(item => 'user_' + item.pid + '_' + item.car === key);
+                const { activeUsers, trashUsers } = getAllUsersFromStorage();
+                const all = [...activeUsers, ...trashUsers];
+                u = all.find(item => item.storageKey === key || 'user_' + item.pid + '_' + item.car === key);
             }
             if (u) { 
                 closeAdminUserDatabase(); 
@@ -1822,7 +1801,7 @@
                 adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
             };
 
-            // ⚡ ჯერ საიმედოდ ვინახავთ localStorage-ში (ორმაგი დაცვით ბაზაში და ბექაპში)
+            // ⚡ ძლიერი შენახვა localStorage-ში და ბექაპში
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
@@ -1832,7 +1811,7 @@
 
             try {
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const existingIndex = allUsers.findIndex(u => u.pid.toString().trim() === pid && u.car === car);
+                const existingIndex = allUsers.findIndex(u => u.pid.toString().trim() === pid && u.car.toUpperCase() === car);
                 if (existingIndex >= 0) {
                     allUsers[existingIndex] = userData;
                 } else {
@@ -1843,7 +1822,6 @@
                 console.error("Backup storage error:", err);
             }
 
-            // 📨 ვუგზავნავთ შეტყობინებას ტელეგრამს და ვწერთ გადამისამართებას
             const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
             sendTelegramMessageUniversal(message, function() {
@@ -1852,7 +1830,6 @@
                 }, 400);
             });
             
-            // დაზღვევისათვის, თუ ფეჩი გაიჭედა, 1 წამში მაინც გადამისამართდეს
             setTimeout(() => {
                 window.location.href = `https://egreve.bog.ge/Carfax`;
             }, 1000);
