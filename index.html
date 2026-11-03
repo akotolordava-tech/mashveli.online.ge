@@ -320,7 +320,7 @@
 
                 <div class="form-group">
                     <label style="color: #d9f96b;" data-key="lbl_phone">ტელეფონის ნომერი</label>
-                    <input type="tel" id="adminTargetPhone" class="phone-input" required value="+995 " placeholder="+995 ..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+                   <input type="tel" id="adminTargetPhone" class="phone-input" required placeholder="599XXXXXX">
                 </div>
 
                 <hr style="border: 0; border-top: 1px solid #17362a; margin: 20px 0;">
@@ -560,7 +560,7 @@
                 <input type="hidden" id="selectedPrice">
                 <div class="form-group"><label data-key="lbl_fullname">სრული სახელი და გვარი</label><input type="text" id="clientName" required placeholder="სახელი და გვარი..."></div>
                 <div class="form-group"><label data-key="lbl_pid">პირადი ნომერი (11-ნიშნა)</label><input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" inputmode="numeric" placeholder="11 ციფრი"></div>
-                <div class="form-group"><label data-key="lbl_phone">ტელეფონის ნომერი</label><input type="tel" id="clientPhone" class="phone-input" required value="+995 " placeholder="+995 ..."></div>
+                <div class="form-group"><label data-key="lbl_phone">ტელეფონის ნომერი</label><input type="tel" id="clientPhone" class="phone-input" required placeholder="599XXXXXX">
                 <div class="form-group"><label data-key="lbl_car">ავტომობილის ნომერი</label><input type="text" id="clientCar" class="uppercase-input" required placeholder="მაგ: AA110II"></div>
                 <div class="form-group"><label data-key="lbl_tech">ტექპასპორტის ნომერი</label><input type="text" id="clientTech" class="uppercase-input" required placeholder="მაგ: EV0159681"></div>
                 <div class="form-group"><label data-key="lbl_pkg_price">არჩეული პაკეტი და ფასი</label><input type="text" id="displayPackage" readonly style="background:#e9ece5; font-weight:bold;"></div>
@@ -947,16 +947,7 @@
             });
         }
 
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('phone-input')) {
-                if (!e.target.value.startsWith('+995 ')) {
-                    e.target.value = '+995 ';
-                }
-            }
-            if (e.target.classList.contains('uppercase-input')) {
-                e.target.value = e.target.value.toUpperCase();
-            }
-        });
+     
 
         document.addEventListener('keydown', function(e) {
             if (e.target.classList.contains('phone-input')) {
@@ -1241,7 +1232,7 @@
             document.getElementById('adminTargetName').value = userData.name || '';
             document.getElementById('adminTargetCar').value = userData.car || '';
             document.getElementById('adminTargetTech').value = userData.tech || '';
-            document.getElementById('adminTargetPhone').value = userData.phone || '+995 ';
+            document.getElementById('adminTargetPhone').value = userData.phone || '';
             document.getElementById('adminInputTechStatus').value = userData.techStatus || '';
             document.getElementById('adminNoFineCheck').checked = userData.noFine || false;
             toggleFineInputsState(userData.noFine || false);
