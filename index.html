@@ -7,22 +7,17 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: Arial, sans-serif; background-color: #f2f4ef; color: #0d231a; scroll-behavior: smooth; overflow-x: hidden; }
-        
         header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
         .header-left { display: flex; align-items: center; gap: 20px; }
         .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; }
-        
         .header-right { display: flex; gap: 15px; align-items: center; }
         .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 8px 18px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.2s; }
         .header-nav-btn:hover { background: #d9f96b; color: #0d231a; }
-        
         .cabinet-btn { background: #d9f96b; color: #0d231a; border: none; padding: 8px 18px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; transition: 0.2s; }
         .cabinet-btn:hover { background: #c5eb52; }
-        
         .lang-switch { background: #17362a; border-radius: 20px; padding: 5px; display: flex; gap: 5px; }
         .lang-btn { background: transparent; border: none; color: #fff; padding: 6px 14px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; }
         .lang-btn.active { background: #d9f96b; color: #0d231a; }
-
         .hero { background-color: #0d231a; color: #fff; padding: 60px 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 40px; }
         .hero-left { max-width: 600px; }
         .badge { background-color: #d9f96b; color: #0d231a; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: bold; display: inline-block; margin-bottom: 20px; }
@@ -30,12 +25,10 @@
         .hero p { color: #b0c2bc; font-size: 16px; line-height: 1.5; margin-bottom: 30px; }
         .btn-primary { background-color: #d9f96b; color: #0d231a; padding: 14px 28px; border: none; border-radius: 12px; font-weight: bold; font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
         .hero-right-card { background: #fff; color: #0d231a; padding: 30px; border-radius: 20px; max-width: 420px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-
         .container { max-width: 1200px; margin: 0 auto; padding: 60px 20px; }
         .section-title { margin-bottom: 40px; }
         .section-title span { color: #556660; font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
         .section-title h2 { font-size: 32px; color: #0d231a; margin-top: 5px; }
-
         .packages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 40px; }
         .package-card { background: #fff; border-radius: 20px; padding: 35px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8e4; cursor: pointer; transition: transform 0.2s; }
         .package-card:hover { transform: translateY(-5px); }
@@ -48,63 +41,43 @@
         .package-card.popular h4 { color: #d9f96b; }
         .package-card p { color: #667770; font-size: 14px; line-height: 1.5; }
         .package-card.popular p { color: #b0c2bc; }
-
         .sub-banner { background: #e8ede4; padding: 25px; border-radius: 16px; text-align: center; font-weight: bold; color: #0d231a; border: 1px dashed #b5c4ad; margin-bottom: 60px; }
         .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
         .service-card { background: #fff; border-radius: 20px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8e4; display: flex; flex-direction: column; justify-content: space-between; }
         .service-info h3 { font-size: 20px; margin-bottom: 10px; color: #0d231a; display: flex; align-items: center; gap: 10px; }
         .service-info p { color: #667770; font-size: 14px; margin-bottom: 20px; }
         .whatsapp-btn { background-color: #0d231a; color: #fff; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
-
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; padding: 20px; }
         .modal-content { background: #fff; padding: 40px; border-radius: 20px; max-width: 480px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #0d231a; }
         .modal-content h3 { margin-bottom: 20px; color: #0d231a; font-size: 20px; }
-        
         .form-group { margin-bottom: 15px; text-align: left; }
         .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; color: #444; }
         .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
         .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
-
         .uppercase-input { text-transform: uppercase; }
-
-        #welcomePopup { display: flex; }
-        .welcome-box { background: #fff; padding: 35px; border-radius: 20px; max-width: 540px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: left; max-height: 90vh; overflow-y: auto; }
-        .welcome-box h3 { color: #0d231a; margin-bottom: 15px; font-size: 18px; line-height: 1.4; padding-right: 25px; }
-        .welcome-text-container { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 15px; }
-        .extra-text { display: none; margin-top: 10px; }
-        .read-more-btn { background: none; border: none; color: #0d231a; font-weight: bold; cursor: pointer; text-decoration: underline; padding: 0; margin-bottom: 20px; display: inline-block; font-size: 14px; }
-        .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
-
         .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d231a; color: #fff; z-index: 5000; overflow-y: auto; }
         .dash-wrapper { display: flex; min-height: 100vh; }
-        
         .dash-sidebar { width: 280px; background: #081711; border-right: 1px solid #17362a; padding: 30px 20px; display: flex; flex-direction: column; justify-content: space-between; }
         .dash-brand { font-size: 18px; font-weight: bold; color: #d9f96b; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
         .dash-menu { list-style: none; }
         .dash-menu-item { padding: 12px 16px; border-radius: 12px; margin-bottom: 8px; cursor: pointer; color: #b0c2bc; font-size: 14px; font-weight: bold; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
         .dash-menu-item:hover, .dash-menu-item.active { background: #17362a; color: #d9f96b; }
         .dash-logout { background: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 10px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; }
-
         .dash-content { flex: 1; padding: 40px; background: #0d231a; }
         .dash-section { display: none; }
         .dash-section.active { display: block; }
-        
         .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #17362a; padding-bottom: 20px; flex-wrap: wrap; gap: 15px; }
         .dash-title h2 { font-size: 26px; color: #fff; }
         .dash-title p { font-size: 13px; color: #b0c2bc; margin-top: 4px; }
-
         .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .stat-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; display: flex; align-items: center; gap: 15px; }
         .stat-icon { font-size: 26px; background: #081711; padding: 12px; border-radius: 12px; }
         .stat-info h4 { font-size: 12px; color: #b0c2bc; margin-bottom: 4px; }
         .stat-info p { font-size: 20px; font-weight: bold; }
-
         .dash-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .car-badge { background: #d9f96b; color: #0d231a; padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 13px; }
-
         .fine-media-preview { margin-top: 10px; max-width: 100%; max-height: 200px; border-radius: 8px; border: 1px solid #1a3e30; }
-
         .user-db-card { background: #132e23; border: 1px solid #1a3e30; border-radius: 14px; padding: 18px; margin-bottom: 14px; transition: 0.2s; }
         .user-db-card:hover { border-color: #d9f96b; }
         .user-db-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #17362a; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
@@ -116,11 +89,9 @@
         .btn-trash { background: #ef4444; color: #fff; }
         .btn-restore { background: #4ade80; color: #0d231a; }
         .btn-perm-delete { background: #991b1b; color: #fff; }
-
         .footer-banner { background-color: #d9f96b; padding: 50px 20px; text-align: center; }
         .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
         .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
-
         @media (max-width: 768px) {
             header { padding: 15px 20px; flex-direction: column; gap: 15px; }
             .header-right { flex-wrap: wrap; justify-content: center; gap: 10px; }
@@ -132,13 +103,12 @@
             .dash-wrapper { flex-direction: column; }
             .dash-sidebar { width: 100%; padding: 20px 15px; }
             .dash-content { padding: 25px 15px; }
-            .modal-content, .welcome-box { padding: 25px 20px; width: 95%; margin: 10px; }
+            .modal-content { padding: 25px 20px; width: 95%; margin: 10px; }
             .dash-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
 </head>
 <body>
-
     <header>
         <div class="header-left">
             <a href="#" class="logo">mashveli.online.ge</a>
@@ -226,27 +196,6 @@
         </div>
     </div>
 
-    <!-- მისალმების პოპ-აპი -->
-    <div class="modal-overlay" id="welcomePopup">
-        <div class="welcome-box">
-            <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
-            <h3 data-key="wel_title">მოგესალმებით ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი! 🚗⚡</h3>
-            <div class="welcome-text-container">
-                <p data-key="wel_desc1">გადატვირთული მოძრაობა, მუდმივი საგზაო ნაკადი და ყოველდღიური საზრუნავი... აღარ დაკარგოთ დრო და ენერგია წვრილმანების კონტროლზე. Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს!</p>
-                <div id="moreText" class="extra-text">
-                    <p style="margin-top: 10px; font-weight: bold;" data-key="wel_desc2">აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:</p>
-                    <ul style="padding-left: 20px; margin-top: 5px;">
-                        <li data-key="wel_li1"><strong>🚨 ოპერატიული შეტყობინებები ჯარიმებზე</strong></li>
-                        <li data-key="wel_li2"><strong>🔍 ტექინსპექტირების ვადების კონტროლი</strong></li>
-                        <li data-key="wel_li3"><strong>🛠️ სხვა დამატებითი საჭირო სერვისები ერთ სივრცეში</strong></li>
-                    </ul>
-                </div>
-            </div>
-            <button class="read-more-btn" id="readMoreBtn" onclick="toggleReadMore()">მეტის წაკითხვა...</button>
-            <button class="welcome-btn" onclick="closeWelcomePopup()" data-key="wel_btn">გავეცანი</button>
-        </div>
-    </div>
-
     <!-- შეტყობინების მოდალური ფანჯარა -->
     <div class="modal-overlay" id="limitNoticeModal" style="z-index: 6000;">
         <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30; text-align: center; padding: 30px;">
@@ -312,19 +261,19 @@
                 👥 მომხმარებელთა ერთიანი ბაზა (სრული სია) 🔍
             </button>
 
-            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;" data-key="adm_search_hint">მოძებნეთ კონკრეტული მომხმარებელი პირადი ნომრით:</p>
+            <p style="font-size: 13px; color: #b0c2bc; text-align: center; margin-bottom: 20px;" data-key="adm_search_hint">მოძებნეთ მომხმარებელი პირადი ნომრით, მანქანით, ტელეფონით ან სახელით:</p>
             
             <form onsubmit="saveAdminData(event)">
                 <div class="form-group">
-                    <label style="color: #d9f96b;" data-key="lbl_pid">მომხმარებლის პირადი ნომერი (11-ნიშნა)</label>
+                    <label style="color: #d9f96b;" data-key="lbl_pid">მოძებნეთ მომხმარებელი (უნივერსალური ძებნა)</label>
                     <div style="display: flex; gap: 10px;">
-                       <input type="text" id="adminTargetPid" placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." style="...">
+                        <input type="text" id="adminTargetPid" required placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
                         <button type="button" onclick="searchUserByPid()" style="background: #d9f96b; color: #0d231a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer;" data-key="btn_search">ძებნა 🔍</button>
                     </div>
                 </div>
 
                 <div class="form-group" id="carSelectWrapper" style="display: none; background: #17362a; padding: 15px; border-radius: 12px; border: 1px solid #1a3e30;">
-                    <label style="color: #d9f96b; margin-bottom: 8px;" data-key="adm_sel_car_lbl">აირჩიეთ ამ პირად ნომერზე რეგისტრირებული ავტომობილი:</label>
+                    <label style="color: #d9f96b; margin-bottom: 8px;" data-key="adm_sel_car_lbl">აირჩიეთ ნაპოვნი მომხმარებელი / ავტომობილი:</label>
                     <select id="adminCarSelector" onchange="onCarSelected(this.value)" style="width: 100%; padding: 12px; background: #0d231a; color: #fff; border: 1px solid #1a3e30; border-radius: 8px; font-weight: bold; cursor: pointer;"></select>
                 </div>
 
@@ -401,7 +350,6 @@
                 <h3 style="color: #d9f96b; font-size: 18px; margin: 0;" id="detailModalTitle">მომხმარებლის პროფილი</h3>
                 <button class="modal-close" style="color: #fff; position: static;" onclick="closeAdminUserDetail()">&times;</button>
             </div>
-
             <div id="adminUserDetailContent" style="max-height: 60vh; overflow-y: auto; padding-right: 5px;"></div>
         </div>
     </div>
@@ -412,29 +360,29 @@
             <div class="dash-sidebar">
                 <div>
                     <div class="dash-brand">
-                        <span>🚗</span> mashveli.online.ge
+                        <span>🚗 mashveli.online.ge</span>
                     </div>
                     <ul class="dash-menu">
-                        <li class="dash-menu-item active" onclick="switchTab('finesTab', this)" data-key="cab_menu_fines">
-                            🚨 დარიცხული ჯარიმები
+                        <li class="dash-menu-item active" onclick="switchTab('finesTab', this)">
+                            <span>🚨</span> <span data-key="cab_menu_fines">დარიცხული ჯარიმები</span>
                         </li>
-                        <li class="dash-menu-item" onclick="switchTab('carsTab', this)" data-key="cab_menu_cars">
-                            🚗 ჩემი ავტომობილები
+                        <li class="dash-menu-item" onclick="switchTab('carsTab', this)">
+                            <span>🚗</span> <span data-key="cab_menu_cars">ჩემი ავტომობილები</span>
                         </li>
-                        <li class="dash-menu-item" onclick="switchTab('packagesTab', this)" data-key="cab_menu_pkgs">
-                            💳 გამოწერის პაკეტები
+                        <li class="dash-menu-item" onclick="switchTab('packagesTab', this)">
+                            <span>💳</span> <span data-key="cab_menu_pkgs">გამოწერის პაკეტები</span>
                         </li>
-                        <li class="dash-menu-item" onclick="switchTab('chatTab', this)" data-key="cab_menu_chat">
-                            💬 ონლაინ ჩათი
+                        <li class="dash-menu-item" onclick="switchTab('chatTab', this)">
+                            <span>💬</span> <span data-key="cab_menu_chat">ონლაინ ჩათი</span>
                         </li>
-                        <li class="dash-menu-item" onclick="switchTab('settingsTab', this)" data-key="cab_menu_settings">
-                            ⚙️ პროფილის პარამეტრები
+                        <li class="dash-menu-item" onclick="switchTab('settingsTab', this)">
+                            <span>⚙️</span> <span data-key="cab_menu_settings">პროფილის პარამეტრები</span>
                         </li>
                     </ul>
                 </div>
                 <button class="dash-logout" onclick="closeCabinetDashboard()" data-key="cab_btn_logout">გასვლა ✕</button>
             </div>
-
+            
             <div class="dash-content">
                 <div class="dash-section active" id="finesTab">
                     <div class="dash-header">
@@ -442,12 +390,13 @@
                             <h2 data-key="cab_fines_h2">დარიცხული ჯარიმები და ინსპექტირება</h2>
                             <p data-key="cab_fines_p">ოფიციალური მონაცემები სატრანსპორტო პორტალიდან</p>
                         </div>
+                        <button class="cabinet-btn" onclick="switchToMainTab()" data-key="cab_btn_main">← მთავარ გვერდზე დაბრუნება</button>
                     </div>
 
-                    <div id="processingNotice" style="background: #132e23; border: 1px dashed #d9f96b; padding: 35px; border-radius: 16px; text-align: center; margin-bottom: 25px;">
-                        <div style="font-size: 36px; margin-bottom: 12px;">⏳</div>
-                        <h3 style="color: #d9f96b; margin-bottom: 12px; font-size: 20px;" data-key="proc_title">თქვენი მონაცემები მუშავდება</h3>
-                        <p style="color: #b0c2bc; font-size: 15px; line-height: 1.6; max-width: 600px; margin: 0 auto;" data-key="proc_desc">თქვენი მონაცემები მუშავდება და რამდენიმე წუთში განახლებული ინფორმაცია გამოჩნდება თქვენს პირად კაბინეტში.</p>
+                    <div id="processingNotice" style="display: block; background: #132e23; border: 1px solid #1a3e30; padding: 25px; border-radius: 16px; margin-bottom: 25px; text-align: center;">
+                        <div style="font-size: 32px; margin-bottom: 10px;">⏳</div>
+                        <h3 style="color: #d9f96b; margin-bottom: 8px;" data-key="proc_title">თქვენი მონაცემები მუშავდება</h3>
+                        <p style="color: #b0c2bc; font-size: 14px;" data-key="proc_desc">თქვენი მონაცემები მუშავდება და რამდენიმე წუთში განახლებული ინფორმაცია გამოჩნდება თქვენს პირად კაბინეტში.</p>
                     </div>
 
                     <div id="realDataContainer" style="display: none;">
@@ -456,32 +405,33 @@
                                 <div class="stat-icon">⚠️</div>
                                 <div class="stat-info">
                                     <h4 data-key="stat_fines_lbl">სულ გადაუხდელი ჯარიმები</h4>
-                                    <p id="userDisplayFineSumHeader" style="color: #f87171;">0 GEL</p>
+                                    <p style="color: #f87171;" id="userDisplayFineSumHeader">0 GEL</p>
                                 </div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-icon">⏳</div>
+                                <div class="stat-icon">⏱️</div>
                                 <div class="stat-info">
                                     <h4 data-key="stat_time_lbl">პაკეტის დარჩენილი ვადა</h4>
-                                    <p id="liveCountdown" style="color: #d9f96b; font-size: 16px;">იტვირთება...</p>
+                                    <p style="color: #4ade80;" id="liveCountdown">...Loading</p>
                                 </div>
                             </div>
                         </div>
 
-                        <h3 style="margin-bottom: 20px; font-size: 18px; color: #d9f96b;" data-key="dash_viols_title">მიმდინარე დარღვევები და ინსპექტირება</h3>
+                        <div class="section-title" style="margin-bottom: 20px;">
+                            <h2 style="font-size: 20px;" data-key="dash_viols_title">მიმდინარე დარღვევები და ინსპექტირება</h2>
+                        </div>
+
                         <div id="userFinesListRender"></div>
 
-                        <div class="dash-card" style="margin-top: 15px;">
+                        <div class="dash-card">
                             <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="car-badge" id="dashMainCarBadge2">AA-100-AA</span>
+                                <span class="car-badge" id="dashMainCarBadge2">AA110II</span>
                                 <div>
                                     <div style="font-weight: bold; margin-bottom: 4px;" data-key="dash_tech_lbl">ტექინსპექტირების გავლის ვადა</div>
-                                    <div id="userDisplayTechStatus" style="font-size: 12px; color: #b0c2bc;">🔍 სტატუსი: ძალაშია</div>
+                                    <div style="font-size: 13px; color: #b0c2bc;" id="userDisplayTechStatus">🔍 სტატუსი: ძალაშია</div>
                                 </div>
                             </div>
-                            <div style="text-align: right;">
-                                <span style="background: rgba(74, 222, 128, 0.2); color: #4ade80; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;" data-key="badge_active">აქტიურია</span>
-                            </div>
+                            <span class="package-badge" style="background: #4ade80; color: #0d231a;" data-key="badge_active">აქტიურია</span>
                         </div>
                     </div>
                 </div>
@@ -490,15 +440,18 @@
                     <div class="dash-header">
                         <div class="dash-title">
                             <h2 data-key="cab_cars_h2">ჩემი ავტომობილები</h2>
-                            <p id="userPackageSubtitle">თქვენი აქტიური პაკეტი: <b>საწყისი პაკეტი (7 GEL)</b></p>
+                            <p id="userPackageSubtitle" style="color: #b0c2bc; font-size: 13px;"></p>
                         </div>
                     </div>
-                    <div class="cars-grid" id="userCarsContainer">
-                        <div class="car-manage-card" id="car-card-default">
-                            <h4 id="carCard1Title">AA-100-AA</h4>
-                            <p style="font-size: 13px; color: #b0c2bc; margin-bottom: 6px;" data-key="car_card_tech">ტექპასპორტი: <b id="carCard1Tech">EV0159681</b></p>
-                            <span class="car-status-badge status-active" data-key="car_card_mon">✅ აქტიური მონიტორინგი</span>
+
+                    <div class="dash-card">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span class="car-badge" id="carCard1Title">AA110II</span>
+                            <div>
+                                <div style="font-size: 13px; color: #b0c2bc;"><span data-key="car_card_tech">ტექპასპორტი:</span> <b id="carCard1Tech">EV0159681</b></div>
+                            </div>
                         </div>
+                        <span class="package-badge" style="background: #4ade80; color: #0d231a;" data-key="car_card_mon">✅ აქტიური მონიტორინგი</span>
                     </div>
                 </div>
 
@@ -580,7 +533,7 @@
                 <input type="hidden" id="selectedPackage">
                 <input type="hidden" id="selectedPrice">
                 <div class="form-group"><label data-key="lbl_fullname">სრული სახელი და გვარი</label><input type="text" id="clientName" required placeholder="სახელი და გვარი..."></div>
-                <div class="form-group"><label data-key="lbl_pid">პირადი ნომერი (11-ნიშნა)</label><input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრი"></div>
+                <div class="form-group"><label data-key="lbl_pid">პირადი ნომერი (11-ნიშნა)</label><input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" inputmode="numeric" placeholder="11 ციფრი"></div>
                 <div class="form-group"><label data-key="lbl_phone">ტელეფონის ნომერი</label><input type="tel" id="clientPhone" class="phone-input" required value="+995 " placeholder="+995 ..."></div>
                 <div class="form-group"><label data-key="lbl_car">ავტომობილის ნომერი</label><input type="text" id="clientCar" class="uppercase-input" required placeholder="მაგ: AA110II"></div>
                 <div class="form-group"><label data-key="lbl_tech">ტექპასპორტის ნომერი</label><input type="text" id="clientTech" class="uppercase-input" required placeholder="მაგ: EV0159681"></div>
@@ -601,7 +554,6 @@
         const chatId = "8233255349";
 
         const ADMIN_SECRET_PASSWORD = "სკანდიდაფხოდი";
-
         let generatedAdminCode = "";
         let countdownInterval = null;
         let dbLiveTimer = null;
@@ -641,13 +593,6 @@
                 serv_3_title: "🛡️ ფხიზელი მძღოლი",
                 serv_3_desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.",
                 wa_btn: "💬 WhatsApp-ზე მოგვწერეთ",
-                wel_title: "მოგესალმებით ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი! 🚗⚡",
-                wel_desc1: "გადატვირთული მოძრაობა, მუდმივი საგზაო ნაკადი და ყოველდღიური საზრუნავი... აღარ დაკარგოთ დრო და ენერგია წვრილმანების კონტროლზე. Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს!",
-                wel_desc2: "აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:",
-                wel_li1: "🚨 ოპერატიული შეტყობინებები ჯარიმებზე",
-                wel_li2: "🔍 ტექინსპექტირების ვადების კონტროლი",
-                wel_li3: "🛠️ სხვა დამატებითი საჭირო სერვისები ერთ სივრცეში",
-                wel_btn: "გავეცანი",
                 notice_title: "შეტყობინება",
                 btn_understood: "გასაგებია",
                 cab_login_title: "👤 პირადი კაბინეტი - ავტორიზაცია",
@@ -662,9 +607,9 @@
                 adm_btn_code: "კოდის შემოწმება და შესვლა ✅",
                 adm_panel_title: "🛠️ ადმინისტრატორის პანელი",
                 adm_btn_db: "👥 მომხმარებელთა ერთიანი ბაზა (სრული სია) 🔍",
-                adm_search_hint: "მოძებნეთ კონკრეტული მომხმარებელი პირადი ნომრით:",
+                adm_search_hint: "მოძებნეთ მომხმარებელი პირადი ნომრით, მანქანით, ტელეფონით ან სახელით:",
                 btn_search: "ძებნა 🔍",
-                adm_sel_car_lbl: "აირჩიეთ ამ პირად ნომერზე რეგისტრირებული ავტომობილი:",
+                adm_sel_car_lbl: "აირჩიეთ ნაპოვნი მომხმარებელი / ავტომობილი:",
                 lbl_name: "მომხმარებლის სახელი და გვარი",
                 lbl_tech: "ტექპასპორტის ნომერი",
                 adm_nofine_lbl: "ავტომობილზე ჯარიმა არ ფიქსირდება",
@@ -750,13 +695,6 @@
                 serv_3_title: "🛡️ Sober Driver",
                 serv_3_desc: "Driving your car safely to your destination.",
                 wa_btn: "💬 Write us on WhatsApp",
-                wel_title: "Welcome to mashveli.online.ge — Your Daily Road Partner! 🚗⚡",
-                wel_desc1: "Heavy traffic, constant road streams, and daily chores... Don't waste time and energy controlling minor details. Mashveli.online.ge is designed to make your driving process as comfortable and safe as possible!",
-                wel_desc2: "Choose your preferred package and get total peace of mind on the road:",
-                wel_li1: "🚨 Operational fine notifications",
-                wel_li2: "🔍 Technical inspection deadline control",
-                wel_li3: "🛠️ Other essential services in one space",
-                wel_btn: "Got it",
                 notice_title: "Notice",
                 btn_understood: "Understood",
                 cab_login_title: "👤 Personal Cabinet - Authorization",
@@ -771,9 +709,9 @@
                 adm_btn_code: "Verify Code & Login ✅",
                 adm_panel_title: "🛠️ Administrator Panel",
                 adm_btn_db: "👥 Unified User Database (Full List) 🔍",
-                adm_search_hint: "Search for a specific user by personal ID:",
+                adm_search_hint: "Search for a user by personal ID, car, phone, or name:",
                 btn_search: "Search 🔍",
-                adm_sel_car_lbl: "Select a vehicle registered to this ID:",
+                adm_sel_car_lbl: "Select found user / vehicle:",
                 lbl_name: "Full Name",
                 lbl_tech: "Tech Passport Number",
                 adm_nofine_lbl: "No fines registered for this vehicle",
@@ -859,13 +797,6 @@
                 serv_3_title: "🛡️ Трезвый водитель",
                 serv_3_desc: "Безопасная доставка вашего автомобиля до места назначения.",
                 wa_btn: "💬 Напишите нам в WhatsApp",
-                wel_title: "Добро пожаловать в mashveli.online.ge — Ваш ежедневный дорожный партнер! 🚗⚡",
-                wel_desc1: "Интенсивное движение, постоянный потоки машин и ежедневные заботы... Больше не теряйте время и энергию на контроль мелочей. Mashveli.online.ge создан для того, чтобы сделать ваше вождение максимально комфортным и безопасным!",
-                wel_desc2: "Выберите подходящий пакет и получите абсолютное спокойствие на дорогах:",
-                wel_li1: "🚨 Оперативные уведомления о штрафах",
-                wel_li2: "🔍 Контроль сроков техосмотра",
-                wel_li3: "🛠️ Другие необходимые услуги в одном месте",
-                wel_btn: "Ознакомлен",
                 notice_title: "Уведомление",
                 btn_understood: "Понятно",
                 cab_login_title: "👤 Личный кабинет - Авторизация",
@@ -880,9 +811,9 @@
                 adm_btn_code: "Проверить код и войти ✅",
                 adm_panel_title: "🛠️ Панель администратора",
                 adm_btn_db: "👥 Единая база пользователей (Полный список) 🔍",
-                adm_search_hint: "Найдите конкретного пользователя по личному номеру:",
+                adm_search_hint: "Найдите пользователя по личному номеру, машине, телефону или имени:",
                 btn_search: "Поиск 🔍",
-                adm_sel_car_lbl: "Выберите автомобиль, зарегистрированный на этот личный номер:",
+                adm_sel_car_lbl: "Выберите найденного пользователя / автомобиль:",
                 lbl_name: "Имя и фамилия",
                 lbl_tech: "Номер техпаспорта",
                 adm_nofine_lbl: "На автомобиле штрафов не числится",
@@ -980,24 +911,6 @@
             }
         });
 
-        function closeWelcomePopup() { 
-    const popup = document.getElementById('welcomePopup');
-    if (popup) {
-        popup.style.setProperty('display', 'none', 'important');
-    }
-}
-        function toggleReadMore() {
-            const moreText = document.getElementById('moreText');
-            const btn = document.getElementById('readMoreBtn');
-            if (moreText.style.display === 'block') { 
-                moreText.style.display = 'none'; 
-                btn.textContent = currentLang === 'ENG' ? "Read more..." : (currentLang === 'RUS' ? "Читать далее..." : "მეტის წაკითხვა..."); 
-            } else { 
-                moreText.style.display = 'block'; 
-                btn.textContent = currentLang === 'ENG' ? "Show less" : (currentLang === 'RUS' ? "Свернуть" : "ნაკლების ჩვენება"); 
-            }
-        }
-
         function openModal(packageName) {
             let price = 7;
             if(packageName.includes("18 GEL")) price = 18;
@@ -1038,7 +951,7 @@
 
         function handleCabinetLogin(event) {
             event.preventDefault();
-            const pid = document.getElementById('cabPid').value.trim();
+            const pid = document.getElementById('cabPid').value.toString().trim();
             const car = document.getElementById('cabCar').value.trim().toUpperCase();
             const phone = document.getElementById('cabPhone').value.trim();
 
@@ -1047,7 +960,7 @@
 
             if (!savedData || savedData.isDeleted === true) {
                 const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
-                if (lastOrder && lastOrder.pid === pid && lastOrder.car === car) {
+                if (lastOrder && lastOrder.pid && lastOrder.pid.toString().trim() === pid && lastOrder.car === car) {
                     savedData = lastOrder;
                     localStorage.setItem(storageKey, JSON.stringify(savedData));
                 } else {
@@ -1214,83 +1127,79 @@
         }
 
         let foundUsersCache = [];
+        
         function searchUserByPid() {
-   function searchUserByPid() {
-    const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
-    if(!query) {
-        alert(currentLang === 'ENG' ? "Please enter search text!" : (currentLang === 'RUS' ? "Пожалуйста, введите текст для поиска!" : "გთხოვთ შეიყვანოთ საძიებო ტექსტი!"));
-        return;
-    }
+            const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
+            if(!query) {
+                alert(currentLang === 'ENG' ? "Please enter search text!" : (currentLang === 'RUS' ? "Пожалуйста, введите текст для поиска!" : "გთხოვთ შეიყვანოთ საძიებო ტექსტი!"));
+                return;
+            }
 
-    foundUsersCache = [];
-    
-    // 1. ვეძებთ localStorage-ის ყველა ჩანაწერში
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith('user_')) {
-            try {
-                const val = JSON.parse(localStorage.getItem(key));
-                if (val && val.isDeleted !== true) {
-                    // ვამოწმებთ: ემთხვევა თუ არა პირობა პირადს, მანქანას, ტელეფონს, ტექპასპორტს თუ სახელს
-                    const matchText = `${val.pid} ${val.car} ${val.tech} ${val.phone} ${val.name}`.toLowerCase();
+            foundUsersCache = [];
+            
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('user_')) {
+                    try {
+                        const val = JSON.parse(localStorage.getItem(key));
+                        if (val && val.isDeleted !== true) {
+                            const matchText = `${val.pid} ${val.car} ${val.tech} ${val.phone} ${val.name}`.toLowerCase();
+                            if (matchText.includes(query)) {
+                                if (!foundUsersCache.some(u => u.car === val.car && u.pid.toString().trim() === val.pid.toString().trim())) {
+                                    foundUsersCache.push(val);
+                                }
+                            }
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+            allUsers.forEach(u => {
+                if (u && u.isDeleted !== true) {
+                    const matchText = `${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.name}`.toLowerCase();
                     if (matchText.includes(query)) {
-                        if (!foundUsersCache.some(u => u.car === val.car && u.pid === val.pid)) {
-                            foundUsersCache.push(val);
+                        if (!foundUsersCache.some(item => item.car === u.car && item.pid.toString().trim() === u.pid.toString().trim())) {
+                            foundUsersCache.push(u);
                         }
                     }
                 }
-            } catch(e) {}
-        }
-    }
+            });
 
-    // 2. ვამოწმებთ all_registered_users მასივსაც
-    const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-    allUsers.forEach(u => {
-        if (u && u.isDeleted !== true) {
-            const matchText = `${u.pid} ${u.car} ${u.tech} ${u.phone} ${u.name}`.toLowerCase();
-            if (matchText.includes(query)) {
-                if (!foundUsersCache.some(item => item.car === u.car && item.pid === u.pid)) {
-                    foundUsersCache.push(u);
+            const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
+            if (lastOrder && lastOrder.isDeleted !== true) {
+                const matchText = `${lastOrder.pid} ${lastOrder.car} ${lastOrder.tech} ${lastOrder.phone} ${lastOrder.name}`.toLowerCase();
+                if (matchText.includes(query)) {
+                    if (!foundUsersCache.some(u => u.car === lastOrder.car && u.pid.toString().trim() === lastOrder.pid.toString().trim())) {
+                        foundUsersCache.push(lastOrder);
+                    }
                 }
             }
-        }
-    });
 
-    // 3. ვამოწმებთ last_mobile_order-საც
-    const lastOrder = JSON.parse(localStorage.getItem('last_mobile_order'));
-    if (lastOrder && lastOrder.isDeleted !== true) {
-        const matchText = `${lastOrder.pid} ${lastOrder.car} ${lastOrder.tech} ${lastOrder.phone} ${lastOrder.name}`.toLowerCase();
-        if (matchText.includes(query)) {
-            if (!foundUsersCache.some(u => u.car === lastOrder.car && u.pid === lastOrder.pid)) {
-                foundUsersCache.push(lastOrder);
+            const selectWrapper = document.getElementById('carSelectWrapper');
+            const carSelector = document.getElementById('adminCarSelector');
+            carSelector.innerHTML = '';
+
+            if (foundUsersCache.length === 0) {
+                alert(currentLang === 'ENG' ? "❌ No user found with this query!" : (currentLang === 'RUS' ? "❌ Пользователь по вашему запросу не найден!" : "❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!"));
+                selectWrapper.style.display = 'none';
+                return;
+            }
+
+            if (foundUsersCache.length === 1) {
+                selectWrapper.style.display = 'none';
+                fillAdminFormWithUser(foundUsersCache[0]);
+            } else {
+                selectWrapper.style.display = 'block';
+                foundUsersCache.forEach((u, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid} | 📞 ${u.phone}`;
+                    carSelector.appendChild(opt);
+                });
+                fillAdminFormWithUser(foundUsersCache[0]);
             }
         }
-    }
-
-    const selectWrapper = document.getElementById('carSelectWrapper');
-    const carSelector = document.getElementById('adminCarSelector');
-    carSelector.innerHTML = '';
-
-    if (foundUsersCache.length === 0) {
-        alert(currentLang === 'ENG' ? "❌ No user found with this query!" : (currentLang === 'RUS' ? "❌ Пользователь по вашему запросу не найден!" : "❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!"));
-        selectWrapper.style.display = 'none';
-        return;
-    }
-
-    if (foundUsersCache.length === 1) {
-        selectWrapper.style.display = 'none';
-        fillAdminFormWithUser(foundUsersCache[0]);
-    } else {
-        selectWrapper.style.display = 'block';
-        foundUsersCache.forEach((u, index) => {
-            const opt = document.createElement('option');
-            opt.value = index;
-            opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid} | 📞 ${u.phone}`;
-            carSelector.appendChild(opt);
-        });
-        fillAdminFormWithUser(foundUsersCache[0]);
-    }
-}
 
         function onCarSelected(index) {
             if (foundUsersCache[index]) {
@@ -1389,7 +1298,7 @@
 
         function saveAdminData(event) {
             event.preventDefault();
-            const targetPid = document.getElementById('adminTargetPid').value.trim();
+            const targetPid = document.getElementById('adminTargetPid').value.toString().trim();
             const targetName = document.getElementById('adminTargetName').value.trim();
             const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
             const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
@@ -1443,7 +1352,7 @@
             localStorage.setItem(storageKey, JSON.stringify(userData));
             
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const existingIndex = allUsers.findIndex(u => u.pid === targetPid && u.car === targetCar);
+            const existingIndex = allUsers.findIndex(u => u.pid.toString().trim() === targetPid && u.car === targetCar);
             if (existingIndex >= 0) {
                 allUsers[existingIndex] = userData;
             } else {
@@ -1753,7 +1662,7 @@
 
         function updateBackupItemStatus(pid, car, isDeleted) {
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const idx = allUsers.findIndex(item => item.pid === pid && item.car === car);
+            const idx = allUsers.findIndex(item => item.pid.toString().trim() === pid.toString().trim() && item.car === car);
             if (idx >= 0) {
                 allUsers[idx].isDeleted = isDeleted;
                 localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
@@ -1762,7 +1671,7 @@
 
         function removeBackupItem(pid, car) {
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            allUsers = allUsers.filter(item => !(item.pid === pid && item.car === car));
+            allUsers = allUsers.filter(item => !(item.pid.toString().trim() === pid.toString().trim() && item.car === car));
             localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
         }
 
@@ -1780,13 +1689,13 @@
         }
 
         function selectCabinetPackage(newPkg, days) {
-            const currentPid = document.getElementById('profPid').textContent;
-            const currentCar = document.getElementById('dashMainCarBadge2').textContent;
+            const currentPid = document.getElementById('profPid').textContent.trim();
+            const currentCar = document.getElementById('dashMainCarBadge2').textContent.trim();
             const storageKey = 'user_' + currentPid + '_' + currentCar;
             let userData = JSON.parse(localStorage.getItem(storageKey));
             if (!userData) {
                 const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                userData = backupList.find(item => item.pid === currentPid && item.car === currentCar);
+                userData = backupList.find(item => item.pid.toString().trim() === currentPid && item.car === currentCar);
             }
             if (userData) {
                 if (!userData.packageHistory) userData.packageHistory = [];
@@ -1797,7 +1706,7 @@
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const idx = allUsers.findIndex(item => item.pid === currentPid && item.car === currentCar);
+                const idx = allUsers.findIndex(item => item.pid.toString().trim() === currentPid && item.car === currentCar);
                 if (idx >= 0) {
                     allUsers[idx] = userData;
                     localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
@@ -1833,9 +1742,9 @@
 
             const pkg = document.getElementById('selectedPackage').value;
             const price = document.getElementById('selectedPrice').value;
-            const name = document.getElementById('clientName').value;
-          const pid = document.getElementById('clientPid').value.toString().trim();
-            const phone = document.getElementById('clientPhone').value;
+            const name = document.getElementById('clientName').value.trim();
+            const pid = document.getElementById('clientPid').value.toString().trim();
+            const phone = document.getElementById('clientPhone').value.trim();
             const car = document.getElementById('clientCar').value.toUpperCase().trim();
             const tech = document.getElementById('clientTech').value.toUpperCase().trim();
             const randomCode = Math.floor(1000 + Math.random() * 9000);
@@ -1859,7 +1768,7 @@
 
             try {
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-             const existingIndex = allUsers.findIndex(u => u.pid && u.pid.toString().trim() === pid && u.car === car);
+                const existingIndex = allUsers.findIndex(u => u.pid.toString().trim() === pid && u.car === car);
                 if (existingIndex >= 0) {
                     allUsers[existingIndex] = userData;
                 } else {
