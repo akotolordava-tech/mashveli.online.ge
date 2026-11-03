@@ -980,7 +980,12 @@
             }
         });
 
-        function closeWelcomePopup() { document.getElementById('welcomePopup').style.display = 'none'; }
+        function closeWelcomePopup() { 
+    const popup = document.getElementById('welcomePopup');
+    if (popup) {
+        popup.style.setProperty('display', 'none', 'important');
+    }
+}
         function toggleReadMore() {
             const moreText = document.getElementById('moreText');
             const btn = document.getElementById('readMoreBtn');
