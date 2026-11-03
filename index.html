@@ -1200,66 +1200,52 @@
         let foundUsersCache = [];
         
         // 🚀 უნივერსალური ძებნის გაუმჯობესებული ლოგიკა (Fuzzy Search)
-        function searchUserByPid() {
-            const rawQuery = document.getElementById('adminTargetPid').value;
-            const normQuery = normalizeStr(rawQuery);
+function searchUserByPid() {
+    const query = document.getElementById('adminTargetPid').value.trim();
+    if (!query) {
+        alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!");
+        return;
+    }
 
-            if (!normQuery) {
-                alert(currentLang === 'ENG' ? "Please enter search text!" : (currentLang === 'RUS' ? "Пожалуйста, введите текст для поиска!" : "გთხოვთ შეიყვანოთ საძიებო ტექსტი!"));
-                return;
-            }
+    foundUsersCache = [];
+    const { activeUsers, trashUsers } = getAllUsersFromStorage();
+    const combinedList = [...activeUsers, ...trashUsers];
 
-            foundUsersCache = [];
-            const { activeUsers, trashUsers } = getAllUsersFromStorage();
-            const combinedList = [...activeUsers, ...trashUsers];
-
-            combinedList.forEach(val => {
-                if (val) {
-                    const normPid = normalizeStr(val.pid);
-                    const normCar = normalizeStr(val.car);
-                    const normTech = normalizeStr(val.tech);
-                    const normPhone = normalizeStr(val.phone);
-                    const normName = normalizeStr(val.name);
-
-                    // ვამოწმებთ შეიცავს თუ არა რომელიმე ველს საძიებო ფრაგმენტს
-                    if (normPid.includes(normQuery) || 
-                        normCar.includes(normQuery) || 
-                        normTech.includes(normQuery) || 
-                        normPhone.includes(normQuery) || 
-                        normName.includes(normQuery)) {
-                        
-                        const key = normalizeStr(val.pid) + '_' + normalizeStr(val.car);
-                        if (!foundUsersCache.some(u => (normalizeStr(u.pid) + '_' + normalizeStr(u.car)) === key)) {
-                            foundUsersCache.push(val);
-                        }
-                    }
+    combinedList.forEach(val => {
+        if (val) {
+            if (val.pid.includes(query) || val.car.includes(query) || val.phone.includes(query) || (val.name && val.name.includes(query))) {
+                const key = val.pid + '_' + val.car;
+                if (!foundUsersCache.some(u => (u.pid + '_' + u.car) === key)) {
+                    foundUsersCache.push(val);
                 }
-            });
-
-            const selectWrapper = document.getElementById('carSelectWrapper');
-            const carSelector = document.getElementById('adminCarSelector');
-            carSelector.innerHTML = '';
-
-            if (foundUsersCache.length === 0) {
-                alert(currentLang === 'ENG' ? "❌ No user found with this query!" : (currentLang === 'RUS' ? "❌ Пользователь по вашему запросу не найден!" : "❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!"));
-                selectWrapper.style.display = 'none';
-                return;
-            }
-
-            if (foundUsersCache.length === 1) {
-                selectWrapper.style.display = 'none';
-                fillAdminFormWithUser(foundUsersCache[0]);
-            } else {
-                selectWrapper.style.display = 'block';
-                foundUsersCache.forEach((u, index) => {
-                    const opt = document.createElement('option');
-                    opt.value = index;
-                    opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid} | 📞 ${u.phone}`;
-                    carSelector.appendChild(opt);
-                });
-                fillAdminFormWithUser(foundUsersCache[0]);
             }
         }
+    });
+
+    const selectWrapper = document.getElementById('carSelectWrapper');
+    const carSelector = document.getElementById('adminCarSelector');
+    carSelector.innerHTML = '';
+
+    if (foundUsersCache.length === 0) {
+        alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
+        selectWrapper.style.display = 'none';
+        return;
+    }
+
+    if (foundUsersCache.length === 1) {
+        selectWrapper.style.display = 'none';
+        fillAdminFormWithUser(foundUsersCache[0]);
+    } else {
+        selectWrapper.style.display = 'block';
+        foundUsersCache.forEach((u, index) => {
+            const opt = document.createElement('option');
+            opt.value = index;
+            opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid}`;
+            carSelector.appendChild(opt);
+        });
+        fillAdminFormWithUser(foundUsersCache[0]);
+    }
+}
 
         function onCarSelected(index) {
             if (foundUsersCache[index]) {
