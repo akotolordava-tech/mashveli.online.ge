@@ -1827,7 +1827,7 @@ if (lastOrder && lastOrder.pid && lastOrder.pid.toString().trim() === pid && las
 
             try {
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const existingIndex = allUsers.findIndex(u => u.pid === pid && u.car === car);
+             const existingIndex = allUsers.findIndex(u => u.pid && u.pid.toString().trim() === pid && u.car === car);
                 if (existingIndex >= 0) {
                     allUsers[existingIndex] = userData;
                 } else {
