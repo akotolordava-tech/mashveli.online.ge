@@ -56,6 +56,13 @@
         .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
         .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .uppercase-input { text-transform: uppercase; }
+        
+        #welcomePopup { display: flex; }
+        .welcome-box { background: #fff; padding: 35px; border-radius: 20px; max-width: 540px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: left; max-height: 90vh; overflow-y: auto; }
+        .welcome-box h3 { color: #0d231a; margin-bottom: 15px; font-size: 18px; line-height: 1.4; padding-right: 25px; }
+        .welcome-text-container { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+        .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
+
         .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d231a; color: #fff; z-index: 5000; overflow-y: auto; }
         .dash-wrapper { display: flex; min-height: 100vh; }
         .dash-sidebar { width: 280px; background: #081711; border-right: 1px solid #17362a; padding: 30px 20px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -103,7 +110,7 @@
             .dash-wrapper { flex-direction: column; }
             .dash-sidebar { width: 100%; padding: 20px 15px; }
             .dash-content { padding: 25px 15px; }
-            .modal-content { padding: 25px 20px; width: 95%; margin: 10px; }
+            .modal-content, .welcome-box { padding: 25px 20px; width: 95%; margin: 10px; }
             .dash-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
@@ -193,6 +200,25 @@
                 </div>
                 <a href="https://wa.me/995568965674" target="_blank" class="whatsapp-btn" data-key="wa_btn">💬 WhatsApp-ზე მოგვწერეთ</a>
             </div>
+        </div>
+    </div>
+
+    <!-- 🚗 მისალმების პოპ-აპი (X ღილაკით და "გავეცანი" ღილაკით) -->
+    <div class="modal-overlay" id="welcomePopup">
+        <div class="welcome-box">
+            <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
+            <h3 data-key="wel_title">🚗⚡ მოგესალმებით! ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი!</h3>
+            <div class="welcome-text-container">
+                <p data-key="wel_desc1" style="margin-bottom: 12px;">Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს.</p>
+                <p data-key="wel_desc2" style="font-weight: bold; margin-bottom: 8px;">✨ აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:</p>
+                <ul style="padding-left: 20px; line-height: 1.8;">
+                    <li data-key="wel_li1">🚨 ოპერატიული შეტყობინებები — მიიღეთ ჯარიმების შესახებ ინფორმაცია მყისიერად</li>
+                    <li data-key="wel_li2">🔍 ტექინსპექტირების კონტროლი — მუდამ საქმის კურსში იყავით ვადებთან დაკავშირებით</li>
+                    <li data-key="wel_li3">🛠️ ყველაფერი ერთ სივრცეში — ისარგებლეთ დამატებითი საჭირო სერვისებით მარტივად</li>
+                </ul>
+                <p data-key="wel_desc3" style="margin-top: 12px; font-weight: bold;">👉 ენდეთ Mashveli-ს და იმგზავრეთ მშვიდად!</p>
+            </div>
+            <button class="welcome-btn" onclick="closeWelcomePopup()" data-key="wel_btn">გავეცანი</button>
         </div>
     </div>
 
@@ -561,7 +587,7 @@
         let currentDbTab = 'active';
         let currentLang = 'GEO';
 
-        // 🌍 ენების ლექსიკონი
+        // 🌍 ენების ლექსიკონი (მისალმების პოპ-აპის ტექსტებითურთ)
         const translations = {
             GEO: {
                 nav_services: "სერვისები",
@@ -593,6 +619,17 @@
                 serv_3_title: "🛡️ ფხიზელი მძღოლი",
                 serv_3_desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.",
                 wa_btn: "💬 WhatsApp-ზე მოგვწერეთ",
+                
+                // მისალმების ტექსტები
+                wel_title: "🚗⚡ მოგესალმებით! ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი!",
+                wel_desc1: "Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს.",
+                wel_desc2: "✨ აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:",
+                wel_li1: "🚨 ოპერატიული შეტყობინებები — მიიღეთ ჯარიმების შესახებ ინფორმაცია მყისიერად",
+                wel_li2: "🔍 ტექინსპექტირების კონტროლი — მუდამ საქმის კურსში იყავით ვადებთან დაკავშირებით",
+                wel_li3: "🛠️ ყველაფერი ერთ სივრცეში — ისარგებლეთ დამატებითი საჭირო სერვისებით მარტივად",
+                wel_desc3: "👉 ენდეთ Mashveli-ს და იმგზავრეთ მშვიდად!",
+                wel_btn: "გავეცანი",
+
                 notice_title: "შეტყობინება",
                 btn_understood: "გასაგებია",
                 cab_login_title: "👤 პირადი კაბინეტი - ავტორიზაცია",
@@ -695,6 +732,16 @@
                 serv_3_title: "🛡️ Sober Driver",
                 serv_3_desc: "Driving your car safely to your destination.",
                 wa_btn: "💬 Write us on WhatsApp",
+
+                wel_title: "🚗⚡ Welcome! We are mashveli.online.ge — Your Daily Road Partner!",
+                wel_desc1: "Mashveli.online.ge was created to make your driving process as comfortable and safe as possible.",
+                wel_desc2: "✨ Choose your desired package and get total peace of mind on the roads:",
+                wel_li1: "🚨 Operational notifications — Receive information about fines instantly",
+                wel_li2: "🔍 Technical inspection control — Always stay up to date with deadlines",
+                wel_li3: "🛠️ Everything in one space — Easily use additional required services",
+                wel_desc3: "👉 Trust Mashveli and travel in peace!",
+                wel_btn: "Got it",
+
                 notice_title: "Notice",
                 btn_understood: "Understood",
                 cab_login_title: "👤 Personal Cabinet - Authorization",
@@ -797,6 +844,16 @@
                 serv_3_title: "🛡️ Трезвый водитель",
                 serv_3_desc: "Безопасная доставка вашего автомобиля до места назначения.",
                 wa_btn: "💬 Напишите нам в WhatsApp",
+
+                wel_title: "🚗⚡ Добро пожаловать! Мы — mashveli.online.ge, ваш ежедневный дорожный партнер!",
+                wel_desc1: "Mashveli.online.ge создан для того, чтобы сделать ваше вождение максимально комфортным и безопасным.",
+                wel_desc2: "✨ Выберите подходящий пакет и получите абсолютное спокойствие на дорогах:",
+                wel_li1: "🚨 Оперативные уведомления — получайте информацию о штрафах мгновенно",
+                wel_li2: "🔍 Контроль техосмотра — будьте всегда в курсе сроков",
+                wel_li3: "🛠️ Все в одном месте — пользуйтесь необходимыми дополнительными услугами легко",
+                wel_desc3: "👉 Доверяйте Mashveli и путешествуйте спокойно!",
+                wel_btn: "Ознакомлен",
+
                 notice_title: "Уведомление",
                 btn_understood: "Понятно",
                 cab_login_title: "👤 Личный кабинет - Авторизация",
@@ -910,6 +967,13 @@
                 }
             }
         });
+
+        function closeWelcomePopup() { 
+            const popup = document.getElementById('welcomePopup');
+            if (popup) {
+                popup.style.setProperty('display', 'none', 'important');
+            }
+        }
 
         function openModal(packageName) {
             let price = 7;
