@@ -241,7 +241,7 @@
             <form onsubmit="handleCabinetLogin(event)">
                 <div class="form-group">
                     <label data-key="lbl_pid">პირადი ნომერი (11-ნიშნა)</label>
-                    <input type="text" id="cabPid" required maxlength="11" pattern="\d{11}" placeholder="11 ციფრიანი პირადი ნომერი">
+                    <input type="text" id="cabPid" required maxlength="11" placeholder="11 ციფრიანი პირადი ნომერი">
                 </div>
                 <div class="form-group">
                     <label data-key="lbl_car">ავტომობილის სახელმწიფო ნომერი</label>
@@ -293,7 +293,7 @@
                 <div class="form-group">
                     <label style="color: #d9f96b;" data-key="lbl_pid">მოძებნეთ მომხმარებელი (უნივერსალური ძებნა)</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="adminTargetPid" required placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
+                        <input type="text" id="adminTargetPid" required placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
                         <button type="button" onclick="searchUserByPid()" style="background: #d9f96b; color: #0d231a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer;" data-key="btn_search">ძებნა 🔍</button>
                     </div>
                 </div>
@@ -361,7 +361,7 @@
             </div>
 
             <div style="margin-bottom: 20px;">
-                <input type="text" id="dbSearchInput" oninput="renderUserDatabaseList()" placeholder="🔍 ძებნა: სახელი, პირადი, მანქანის ნომერი, ტექპასპორტი, ტელეფონი..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="width: 100%; padding: 12px; background: #17362a; color: #fff; border: 1px solid #1a3e30; border-radius: 10px;" data-key-placeholder="db_search_ph">
+                <input type="text" id="dbSearchInput" oninput="renderUserDatabaseList()" placeholder="🔍 ძებნა: სახელი, პირადი, მანქანის ნომერი, ტექპასპორტი, ტელეფონი..." style="width: 100%; padding: 12px; background: #17362a; color: #fff; border: 1px solid #1a3e30; border-radius: 10px;" data-key-placeholder="db_search_ph">
             </div>
 
             <div id="dbUserCardsContainer" style="max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
@@ -586,12 +586,6 @@
         let isSubmitting = false;
         let currentDbTab = 'active';
         let currentLang = 'GEO';
-
-        // 🛠️ დამხმარე ფუნქცია ტექსტის ნორმალიზებისთვის (აშორებს სფეისებს, ტირეებს, გადაჰყავს დაბალ რეგისტრში)
-        function normalizeStr(str) {
-            if (!str) return '';
-            return str.toString().toLowerCase().replace(/[\s\-\_\.\,\/]+/g, '').trim();
-        }
 
         const translations = {
             GEO: {
@@ -1019,21 +1013,12 @@
 
         function handleCabinetLogin(event) {
             event.preventDefault();
-            const rawPid = document.getElementById('cabPid').value;
-            const rawCar = document.getElementById('cabCar').value;
+            const pid = document.getElementById('cabPid').value.trim();
+            const car = document.getElementById('cabCar').value.trim().toUpperCase();
             const phone = document.getElementById('cabPhone').value.trim();
 
-            const pidNorm = normalizeStr(rawPid);
-            const carNorm = normalizeStr(rawCar);
-
-            const { activeUsers, trashUsers } = getAllUsersFromStorage();
-            const allUsers = [...activeUsers, ...trashUsers];
-
-            const savedData = allUsers.find(u => {
-                const uPidNorm = normalizeStr(u.pid);
-                const uCarNorm = normalizeStr(u.car);
-                return uPidNorm === pidNorm && uCarNorm === carNorm && u.isDeleted !== true;
-            });
+            const allUsers = getAllUsersUnified();
+            const savedData = allUsers.find(u => u.pid.toString().trim() === pid && u.car.toUpperCase().trim() === car && u.isDeleted !== true);
 
             if (!savedData) {
                 closeCabinetLogin();
@@ -1041,7 +1026,7 @@
                 return;
             }
 
-            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${savedData.pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${savedData.car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
+            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
             sendTelegramMessageUniversal(loginMessage);
 
             loadUserData(savedData);
@@ -1199,53 +1184,52 @@
 
         let foundUsersCache = [];
         
-        // 🚀 უნივერსალური ძებნის გაუმჯობესებული ლოგიკა (Fuzzy Search)
-function searchUserByPid() {
-    const query = document.getElementById('adminTargetPid').value.trim();
-    if (!query) {
-        alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!");
-        return;
-    }
+        // 🚀 აბსოლუტურად გამარტივებული და უშეცდომო ძებნა
+        function searchUserByPid() {
+            const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
+            if (!query) {
+                alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!");
+                return;
+            }
 
-    foundUsersCache = [];
-    const { activeUsers, trashUsers } = getAllUsersFromStorage();
-    const combinedList = [...activeUsers, ...trashUsers];
+            foundUsersCache = [];
+            const allUsers = getAllUsersUnified();
 
-    combinedList.forEach(val => {
-        if (val) {
-            if (val.pid.includes(query) || val.car.includes(query) || val.phone.includes(query) || (val.name && val.name.includes(query))) {
-                const key = val.pid + '_' + val.car;
-                if (!foundUsersCache.some(u => (u.pid + '_' + u.car) === key)) {
-                    foundUsersCache.push(val);
+            allUsers.forEach(val => {
+                if (val) {
+                    const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
+                    if (fullText.includes(query)) {
+                        if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car)) {
+                            foundUsersCache.push(val);
+                        }
+                    }
                 }
+            });
+
+            const selectWrapper = document.getElementById('carSelectWrapper');
+            const carSelector = document.getElementById('adminCarSelector');
+            carSelector.innerHTML = '';
+
+            if (foundUsersCache.length === 0) {
+                alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
+                selectWrapper.style.display = 'none';
+                return;
+            }
+
+            if (foundUsersCache.length === 1) {
+                selectWrapper.style.display = 'none';
+                fillAdminFormWithUser(foundUsersCache[0]);
+            } else {
+                selectWrapper.style.display = 'block';
+                foundUsersCache.forEach((u, index) => {
+                    const opt = document.createElement('option');
+                    opt.value = index;
+                    opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid}`;
+                    carSelector.appendChild(opt);
+                });
+                fillAdminFormWithUser(foundUsersCache[0]);
             }
         }
-    });
-
-    const selectWrapper = document.getElementById('carSelectWrapper');
-    const carSelector = document.getElementById('adminCarSelector');
-    carSelector.innerHTML = '';
-
-    if (foundUsersCache.length === 0) {
-        alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
-        selectWrapper.style.display = 'none';
-        return;
-    }
-
-    if (foundUsersCache.length === 1) {
-        selectWrapper.style.display = 'none';
-        fillAdminFormWithUser(foundUsersCache[0]);
-    } else {
-        selectWrapper.style.display = 'block';
-        foundUsersCache.forEach((u, index) => {
-            const opt = document.createElement('option');
-            opt.value = index;
-            opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid}`;
-            carSelector.appendChild(opt);
-        });
-        fillAdminFormWithUser(foundUsersCache[0]);
-    }
-}
 
         function onCarSelected(index) {
             if (foundUsersCache[index]) {
@@ -1396,15 +1380,7 @@ function searchUserByPid() {
             userData.techStatus = techStatus;
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
-            
-            let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const existingIndex = allUsers.findIndex(u => normalizeStr(u.pid) === normalizeStr(targetPid) && normalizeStr(u.car) === normalizeStr(targetCar));
-            if (existingIndex >= 0) {
-                allUsers[existingIndex] = userData;
-            } else {
-                allUsers.push(userData);
-            }
-            localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
+            saveUserToUnifiedList(userData);
 
             alert("✅ Data successfully updated!");
             closeAdminModal();
@@ -1461,50 +1437,60 @@ function searchUserByPid() {
             return `${day}.${month}.${year}, ${hours}:${minutes}`;
         }
 
-        function getAllUsersFromStorage() {
-            let activeUsers = [];
-            let trashUsers = [];
-            let seenKeys = new Set();
+        // 🔗 ერთიანი და საიმედო მეთოდი ყველა მომხმარებლის ასაღებად (localStorage + array)
+        function getAllUsersUnified() {
+            let usersMap = new Map();
 
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith('user_')) {
-                    const u = JSON.parse(localStorage.getItem(key));
-                    if (u) {
-                        u.storageKey = key;
-                        seenKeys.add(key);
-                        if (u.isDeleted === true) trashUsers.push(u);
-                        else activeUsers.push(u);
-                    }
-                }
-            }
-
-            const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            backupList.forEach(u => {
-                const key = 'user_' + u.pid + '_' + u.car;
-                if (!seenKeys.has(key)) {
-                    u.storageKey = key;
-                    seenKeys.add(key);
-                    if (u.isDeleted === true) trashUsers.push(u);
-                    else activeUsers.push(u);
+            // 1. ვკითხულობთ მთავარ array-ს
+            const list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+            list.forEach(u => {
+                if (u && u.pid && u.car) {
+                    usersMap.set(u.pid + '_' + u.car, u);
                 }
             });
 
-            return { activeUsers, trashUsers };
+            // 2. ვკითხულობთ ინდივიდუალური user_ კლავიშებიდანაც
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('user_')) {
+                    try {
+                        const u = JSON.parse(localStorage.getItem(key));
+                        if (u && u.pid && u.car) {
+                            usersMap.set(u.pid + '_' + u.car, u);
+                        }
+                    } catch(e) {}
+                }
+            }
+
+            return Array.from(usersMap.values());
+        }
+
+        function saveUserToUnifiedList(userData) {
+            let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+            const idx = list.findIndex(u => u.pid.toString().trim() === userData.pid.toString().trim() && u.car.toUpperCase() === userData.car.toUpperCase());
+            if (idx >= 0) {
+                list[idx] = userData;
+            } else {
+                list.push(userData);
+            }
+            localStorage.setItem('all_registered_users', JSON.stringify(list));
         }
 
         function renderUserDatabaseList() {
-            const { activeUsers, trashUsers } = getAllUsersFromStorage();
+            const allUsers = getAllUsersUnified();
+            const activeUsers = allUsers.filter(u => u.isDeleted !== true);
+            const trashUsers = allUsers.filter(u => u.isDeleted === true);
+
             document.getElementById('activeUsersCount').textContent = activeUsers.length;
             document.getElementById('trashUsersCount').textContent = trashUsers.length;
 
-            const searchQuery = normalizeStr(document.getElementById('dbSearchInput').value);
+            const searchQuery = document.getElementById('dbSearchInput').value.toLowerCase().trim();
             const targetList = currentDbTab === 'active' ? activeUsers : trashUsers;
             const container = document.getElementById('dbUserCardsContainer');
             container.innerHTML = '';
 
             const filtered = targetList.filter(u => {
-                const text = normalizeStr(`${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`);
+                const text = `${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`.toLowerCase();
                 return text.includes(searchQuery);
             });
 
@@ -1516,6 +1502,7 @@ function searchUserByPid() {
             filtered.forEach(u => {
                 const card = document.createElement('div');
                 card.className = 'user-db-card';
+                const uniqueKey = u.pid + '_' + u.car;
                 const historyHTML = u.packageHistory && u.packageHistory.length > 0 
                     ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 <b>Package History:</b> ${u.packageHistory.join(' ← ')}</div>` 
                     : '';
@@ -1538,9 +1525,9 @@ function searchUserByPid() {
                         </div>
                         ${historyHTML}
                         <div class="user-db-actions">
-                            <button class="user-db-btn btn-view" onclick="openAdminUserDetail('${u.storageKey}')">👀 View Details</button>
-                            <button class="user-db-btn" onclick="selectUserToEdit('${u.storageKey}')" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b;">✏️ Edit</button>
-                            <button class="user-db-btn btn-trash" onclick="moveUserToTrash('${u.storageKey}')">🗑️ Trash</button>
+                            <button class="user-db-btn btn-view" onclick="openAdminUserDetail('${uniqueKey}')">👀 View Details</button>
+                            <button class="user-db-btn" onclick="selectUserToEdit('${uniqueKey}')" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b;">✏️ Edit</button>
+                            <button class="user-db-btn btn-trash" onclick="moveUserToTrash('${uniqueKey}')">🗑️ Trash</button>
                         </div>
                     `;
                 } else {
@@ -1560,8 +1547,8 @@ function searchUserByPid() {
                             <div><b>📅 რეგისტრაცია:</b> ${formatDateTime(u.timestamp)}</div>
                         </div>
                         <div class="user-db-actions">
-                            <button class="user-db-btn btn-restore" onclick="restoreUserFromTrash('${u.storageKey}')">🔄 Restore</button>
-                            <button class="user-db-btn btn-perm-delete" onclick="permanentlyDeleteUser('${u.storageKey}')">❌ Delete Forever</button>
+                            <button class="user-db-btn btn-restore" onclick="restoreUserFromTrash('${uniqueKey}')">🔄 Restore</button>
+                            <button class="user-db-btn btn-perm-delete" onclick="permanentlyDeleteUser('${uniqueKey}')">❌ Delete Forever</button>
                         </div>
                     `;
                 }
@@ -1570,13 +1557,9 @@ function searchUserByPid() {
             updateAllDbCountdowns();
         }
 
-        function openAdminUserDetail(storageKey) {
-            let u = JSON.parse(localStorage.getItem(storageKey));
-            if (!u) {
-                const { activeUsers, trashUsers } = getAllUsersFromStorage();
-                const all = [...activeUsers, ...trashUsers];
-                u = all.find(item => item.storageKey === storageKey || 'user_' + item.pid + '_' + item.car === storageKey);
-            }
+        function openAdminUserDetail(uniqueKey) {
+            const allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
             if (!u) return;
 
             document.getElementById('detailModalTitle').textContent = `User: ${u.name || '—'} (${u.car})`;
@@ -1676,89 +1659,67 @@ function searchUserByPid() {
             });
         }
 
-        function moveUserToTrash(key) {
-            let u = JSON.parse(localStorage.getItem(key));
-            if (u) { 
-                u.isDeleted = true; 
-                localStorage.setItem(key, JSON.stringify(u)); 
-                updateBackupItemStatus(u.pid, u.car, true);
-                renderUserDatabaseList(); 
+        function moveUserToTrash(uniqueKey) {
+            let allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+            if (u) {
+                u.isDeleted = true;
+                saveUserToUnifiedList(u);
+                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
+                renderUserDatabaseList();
             }
         }
 
-        function restoreUserFromTrash(key) {
-            let u = JSON.parse(localStorage.getItem(key));
-            if (u) { 
-                u.isDeleted = false; 
-                localStorage.setItem(key, JSON.stringify(u)); 
-                updateBackupItemStatus(u.pid, u.car, false);
-                renderUserDatabaseList(); 
+        function restoreUserFromTrash(uniqueKey) {
+            let allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+            if (u) {
+                u.isDeleted = false;
+                saveUserToUnifiedList(u);
+                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
+                renderUserDatabaseList();
             }
         }
 
-        function permanentlyDeleteUser(key) {
-            if (confirm("Permanently delete user?")) { 
-                let u = JSON.parse(localStorage.getItem(key));
+        function permanentlyDeleteUser(uniqueKey) {
+            if (confirm("Permanently delete user?")) {
+                let allUsers = getAllUsersUnified();
+                const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
                 if (u) {
-                    removeBackupItem(u.pid, u.car);
+                    localStorage.removeItem('user_' + u.pid + '_' + u.car);
                 }
-                localStorage.removeItem(key); 
-                renderUserDatabaseList(); 
+                let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+                list = list.filter(item => (item.pid + '_' + item.car) !== uniqueKey);
+                localStorage.setItem('all_registered_users', JSON.stringify(list));
+                renderUserDatabaseList();
             }
         }
 
-        function updateBackupItemStatus(pid, car, isDeleted) {
-            let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const idx = allUsers.findIndex(item => normalizeStr(item.pid) === normalizeStr(pid) && normalizeStr(item.car) === normalizeStr(car));
-            if (idx >= 0) {
-                allUsers[idx].isDeleted = isDeleted;
-                localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
-            }
-        }
-
-        function removeBackupItem(pid, car) {
-            let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            allUsers = allUsers.filter(item => !(normalizeStr(item.pid) === normalizeStr(pid) && normalizeStr(item.car) === normalizeStr(car)));
-            localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
-        }
-
-        function selectUserToEdit(key) {
-            let u = JSON.parse(localStorage.getItem(key));
-            if (!u) {
-                const { activeUsers, trashUsers } = getAllUsersFromStorage();
-                const all = [...activeUsers, ...trashUsers];
-                u = all.find(item => item.storageKey === key || ('user_' + item.pid + '_' + item.car) === key);
-            }
-            if (u) { 
-                closeAdminUserDatabase(); 
-                document.getElementById('adminTargetPid').value = u.pid; 
-                searchUserByPid(); 
+        function selectUserToEdit(uniqueKey) {
+            const allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+            if (u) {
+                closeAdminUserDatabase();
+                document.getElementById('adminTargetPid').value = u.pid;
+                searchUserByPid();
             }
         }
 
         function selectCabinetPackage(newPkg, days) {
             const currentPid = document.getElementById('profPid').textContent.trim();
             const currentCar = document.getElementById('dashMainCarBadge2').textContent.trim();
-            const storageKey = 'user_' + currentPid + '_' + currentCar;
-            let userData = JSON.parse(localStorage.getItem(storageKey));
-            if (!userData) {
-                const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                userData = backupList.find(item => normalizeStr(item.pid) === normalizeStr(currentPid) && normalizeStr(item.car) === normalizeStr(currentCar));
-            }
+            const allUsers = getAllUsersUnified();
+            let userData = allUsers.find(item => item.pid.toString().trim() === currentPid && item.car.toUpperCase() === currentCar);
+
             if (userData) {
                 if (!userData.packageHistory) userData.packageHistory = [];
                 userData.packageHistory.unshift(userData.package);
                 userData.package = newPkg;
                 userData.days = days;
                 userData.timestamp = Date.now();
-                localStorage.setItem(storageKey, JSON.stringify(userData));
-                
-                let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const idx = allUsers.findIndex(item => normalizeStr(item.pid) === normalizeStr(currentPid) && normalizeStr(item.car) === normalizeStr(currentCar));
-                if (idx >= 0) {
-                    allUsers[idx] = userData;
-                    localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
-                }
+
+                localStorage.setItem('user_' + userData.pid + '_' + userData.car, JSON.stringify(userData));
+                saveUserToUnifiedList(userData);
 
                 alert(`✅ Package successfully changed to ${newPkg}`);
                 loadUserData(userData);
@@ -1807,25 +1768,13 @@ function searchUserByPid() {
                 adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
             };
 
-            // ⚡ ძლიერი შენახვა localStorage-ში და ბექაპში
+            // ⚡ ძლიერი სინქრონიზაცია ბაზასა და ბექაპში
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
+                saveUserToUnifiedList(userData);
             } catch (err) {
                 console.error("Storage write error:", err);
-            }
-
-            try {
-                let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const existingIndex = allUsers.findIndex(u => normalizeStr(u.pid) === normalizeStr(pid) && normalizeStr(u.car) === normalizeStr(car));
-                if (existingIndex >= 0) {
-                    allUsers[existingIndex] = userData;
-                } else {
-                    allUsers.push(userData);
-                }
-                localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
-            } catch (err) {
-                console.error("Backup storage error:", err);
             }
 
             const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
