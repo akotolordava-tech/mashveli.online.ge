@@ -203,7 +203,7 @@
         </div>
     </div>
 
-    <!-- 🚗 მისალმების პოპ-აპი (X ღილაკით და "გავეცანი" ღილაკით) -->
+    <!-- 🚗 მისალმების პოპ-აპი -->
     <div class="modal-overlay" id="welcomePopup">
         <div class="welcome-box">
             <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
@@ -293,7 +293,7 @@
                 <div class="form-group">
                     <label style="color: #d9f96b;" data-key="lbl_pid">მოძებნეთ მომხმარებელი (უნივერსალური ძებნა)</label>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="adminTargetPid" required placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
+                        <input type="text" id="adminTargetPid" required placeholder="პირადი, მანქანა, ტელეფონი, სახელი..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="background: #17362a; color: #fff; border: 1px solid #1a3e30; flex: 1;">
                         <button type="button" onclick="searchUserByPid()" style="background: #d9f96b; color: #0d231a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer;" data-key="btn_search">ძებნა 🔍</button>
                     </div>
                 </div>
@@ -361,7 +361,7 @@
             </div>
 
             <div style="margin-bottom: 20px;">
-                <input type="text" id="dbSearchInput" oninput="renderUserDatabaseList()" placeholder="🔍 ძებნა: სახელი, პირადი, მანქანის ნომერი, ტექპასპორტი, ტელეფონი..." style="width: 100%; padding: 12px; background: #17362a; color: #fff; border: 1px solid #1a3e30; border-radius: 10px;" data-key-placeholder="db_search_ph">
+                <input type="text" id="dbSearchInput" oninput="renderUserDatabaseList()" placeholder="🔍 ძებნა: სახელი, პირადი, მანქანის ნომერი, ტექპასპორტი, ტელეფონი..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="width: 100%; padding: 12px; background: #17362a; color: #fff; border: 1px solid #1a3e30; border-radius: 10px;" data-key-placeholder="db_search_ph">
             </div>
 
             <div id="dbUserCardsContainer" style="max-height: 55vh; overflow-y: auto; padding-right: 5px;"></div>
@@ -586,6 +586,12 @@
         let isSubmitting = false;
         let currentDbTab = 'active';
         let currentLang = 'GEO';
+
+        // 🛠️ დამხმარე ფუნქცია ტექსტის ნორმალიზებისთვის (აშორებს სფეისებს, ტირეებს, გადაჰყავს დაბალ რეგისტრში)
+        function normalizeStr(str) {
+            if (!str) return '';
+            return str.toString().toLowerCase().replace(/[\s\-\_\.\,\/]+/g, '').trim();
+        }
 
         const translations = {
             GEO: {
@@ -1013,28 +1019,29 @@
 
         function handleCabinetLogin(event) {
             event.preventDefault();
-            const pid = document.getElementById('cabPid').value.toString().trim();
-            const car = document.getElementById('cabCar').value.trim().toUpperCase();
+            const rawPid = document.getElementById('cabPid').value;
+            const rawCar = document.getElementById('cabCar').value;
             const phone = document.getElementById('cabPhone').value.trim();
 
-            const storageKey = 'user_' + pid + '_' + car;
-            let savedData = JSON.parse(localStorage.getItem(storageKey));
+            const pidNorm = normalizeStr(rawPid);
+            const carNorm = normalizeStr(rawCar);
 
-            if (!savedData || savedData.isDeleted === true) {
-                const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                savedData = allUsers.find(u => u.pid.toString().trim() === pid && u.car.toUpperCase() === car);
-                if (savedData) {
-                    localStorage.setItem(storageKey, JSON.stringify(savedData));
-                }
-            }
+            const { activeUsers, trashUsers } = getAllUsersFromStorage();
+            const allUsers = [...activeUsers, ...trashUsers];
 
-            if (!savedData || savedData.isDeleted === true) {
+            const savedData = allUsers.find(u => {
+                const uPidNorm = normalizeStr(u.pid);
+                const uCarNorm = normalizeStr(u.car);
+                return uPidNorm === pidNorm && uCarNorm === carNorm && u.isDeleted !== true;
+            });
+
+            if (!savedData) {
                 closeCabinetLogin();
                 showLimitNotice(currentLang === 'ENG' ? "❌ Registration with this ID and vehicle not found!" : (currentLang === 'RUS' ? "❌ Регистрация с таким ID и автомобилем не найдена!" : "❌ ასეთი პირადი ნომრით და ავტომობილით რეგისტრაცია ვერ მოიძებნა!"));
                 return;
             }
 
-            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
+            const loginMessage = `👤 <b>მომხმარებელი შევიდა პირად კაბინეტში!</b>\n\n👤 <b>სახელი:</b> ${savedData.name}\n🆔 <b>პირადი:</b> ${savedData.pid}\n📞 <b>ტელეფონი:</b> ${phone}\n🚗 <b>მანქანა:</b> ${savedData.car}\n📦 <b>პაკეტი:</b> ${savedData.package}`;
             sendTelegramMessageUniversal(loginMessage);
 
             loadUserData(savedData);
@@ -1192,24 +1199,37 @@
 
         let foundUsersCache = [];
         
+        // 🚀 უნივერსალური ძებნის გაუმჯობესებული ლოგიკა (Fuzzy Search)
         function searchUserByPid() {
-            const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
-            if(!query) {
+            const rawQuery = document.getElementById('adminTargetPid').value;
+            const normQuery = normalizeStr(rawQuery);
+
+            if (!normQuery) {
                 alert(currentLang === 'ENG' ? "Please enter search text!" : (currentLang === 'RUS' ? "Пожалуйста, введите текст для поиска!" : "გთხოვთ შეიყვანოთ საძიებო ტექსტი!"));
                 return;
             }
 
             foundUsersCache = [];
-            
-            // გავფილტროთ როგორც localStorage-დან, ისე backup array-დან
-            const allStorageUsers = getAllUsersFromStorage();
-            const combinedList = [...allStorageUsers.activeUsers, ...allStorageUsers.trashUsers];
+            const { activeUsers, trashUsers } = getAllUsersFromStorage();
+            const combinedList = [...activeUsers, ...trashUsers];
 
             combinedList.forEach(val => {
                 if (val) {
-                    const matchText = `${val.pid || ''} ${val.car || ''} ${val.tech || ''} ${val.phone || ''} ${val.name || ''}`.toLowerCase();
-                    if (matchText.includes(query)) {
-                        if (!foundUsersCache.some(u => u.car === val.car && u.pid.toString().trim() === val.pid.toString().trim())) {
+                    const normPid = normalizeStr(val.pid);
+                    const normCar = normalizeStr(val.car);
+                    const normTech = normalizeStr(val.tech);
+                    const normPhone = normalizeStr(val.phone);
+                    const normName = normalizeStr(val.name);
+
+                    // ვამოწმებთ შეიცავს თუ არა რომელიმე ველს საძიებო ფრაგმენტს
+                    if (normPid.includes(normQuery) || 
+                        normCar.includes(normQuery) || 
+                        normTech.includes(normQuery) || 
+                        normPhone.includes(normQuery) || 
+                        normName.includes(normQuery)) {
+                        
+                        const key = normalizeStr(val.pid) + '_' + normalizeStr(val.car);
+                        if (!foundUsersCache.some(u => (normalizeStr(u.pid) + '_' + normalizeStr(u.car)) === key)) {
                             foundUsersCache.push(val);
                         }
                     }
@@ -1392,7 +1412,7 @@
             localStorage.setItem(storageKey, JSON.stringify(userData));
             
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const existingIndex = allUsers.findIndex(u => u.pid.toString().trim() === targetPid && u.car === targetCar);
+            const existingIndex = allUsers.findIndex(u => normalizeStr(u.pid) === normalizeStr(targetPid) && normalizeStr(u.car) === normalizeStr(targetCar));
             if (existingIndex >= 0) {
                 allUsers[existingIndex] = userData;
             } else {
@@ -1492,13 +1512,13 @@
             document.getElementById('activeUsersCount').textContent = activeUsers.length;
             document.getElementById('trashUsersCount').textContent = trashUsers.length;
 
-            const searchQuery = document.getElementById('dbSearchInput').value.toLowerCase().trim();
+            const searchQuery = normalizeStr(document.getElementById('dbSearchInput').value);
             const targetList = currentDbTab === 'active' ? activeUsers : trashUsers;
             const container = document.getElementById('dbUserCardsContainer');
             container.innerHTML = '';
 
             const filtered = targetList.filter(u => {
-                const text = `${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`.toLowerCase();
+                const text = normalizeStr(`${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`);
                 return text.includes(searchQuery);
             });
 
@@ -1703,7 +1723,7 @@
 
         function updateBackupItemStatus(pid, car, isDeleted) {
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const idx = allUsers.findIndex(item => item.pid.toString().trim() === pid.toString().trim() && item.car === car);
+            const idx = allUsers.findIndex(item => normalizeStr(item.pid) === normalizeStr(pid) && normalizeStr(item.car) === normalizeStr(car));
             if (idx >= 0) {
                 allUsers[idx].isDeleted = isDeleted;
                 localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
@@ -1712,7 +1732,7 @@
 
         function removeBackupItem(pid, car) {
             let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            allUsers = allUsers.filter(item => !(item.pid.toString().trim() === pid.toString().trim() && item.car === car));
+            allUsers = allUsers.filter(item => !(normalizeStr(item.pid) === normalizeStr(pid) && normalizeStr(item.car) === normalizeStr(car)));
             localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
         }
 
@@ -1721,7 +1741,7 @@
             if (!u) {
                 const { activeUsers, trashUsers } = getAllUsersFromStorage();
                 const all = [...activeUsers, ...trashUsers];
-                u = all.find(item => item.storageKey === key || 'user_' + item.pid + '_' + item.car === key);
+                u = all.find(item => item.storageKey === key || ('user_' + item.pid + '_' + item.car) === key);
             }
             if (u) { 
                 closeAdminUserDatabase(); 
@@ -1737,7 +1757,7 @@
             let userData = JSON.parse(localStorage.getItem(storageKey));
             if (!userData) {
                 const backupList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                userData = backupList.find(item => item.pid.toString().trim() === currentPid && item.car === currentCar);
+                userData = backupList.find(item => normalizeStr(item.pid) === normalizeStr(currentPid) && normalizeStr(item.car) === normalizeStr(currentCar));
             }
             if (userData) {
                 if (!userData.packageHistory) userData.packageHistory = [];
@@ -1748,7 +1768,7 @@
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const idx = allUsers.findIndex(item => item.pid.toString().trim() === currentPid && item.car === currentCar);
+                const idx = allUsers.findIndex(item => normalizeStr(item.pid) === normalizeStr(currentPid) && normalizeStr(item.car) === normalizeStr(currentCar));
                 if (idx >= 0) {
                     allUsers[idx] = userData;
                     localStorage.setItem('all_registered_users', JSON.stringify(allUsers));
@@ -1811,7 +1831,7 @@
 
             try {
                 let allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                const existingIndex = allUsers.findIndex(u => u.pid.toString().trim() === pid && u.car.toUpperCase() === car);
+                const existingIndex = allUsers.findIndex(u => normalizeStr(u.pid) === normalizeStr(pid) && normalizeStr(u.car) === normalizeStr(car));
                 if (existingIndex >= 0) {
                     allUsers[existingIndex] = userData;
                 } else {
