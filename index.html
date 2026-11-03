@@ -1790,5 +1790,39 @@
             }, 1000);
         }
     </script>
+    <!-- 1. თქვენი ფორმის ველები, რომლებსაც უნდა დაუმატოთ class="no-space" -->
+<form>
+    <input type="text" class="no-space" name="phone" placeholder="ტელეფონის ნომერი">
+    <input type="text" class="no-space" name="personal_id" placeholder="პირადი ნომერი">
+    <input type="text" class="no-space" name="car_number" placeholder="ავტომობილის ნომერი">
+    <input type="text" class="no-space" name="tech_passport" placeholder="ტექპასპორტის ნომერი">
+</form>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('.no-space');
+
+    inputs.forEach(input => {
+        // ბლოკავს კლავიატურიდან Space-ის დაჭერას (კომპიუტერი და მობილური)
+        input.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.code === 'Space') {
+                e.preventDefault();
+            }
+        });
+
+        // შლის ნებისმიერ უხილავ სფეისს (მობილურიდან ჩასმისას ან კოპირებისას)
+        input.addEventListener('input', function(e) {
+            let cursorPosition = this.selectionStart;
+            let cleanValue = this.value.replace(/\s/g, '');
+            
+            if (this.value !== cleanValue) {
+                this.value = cleanValue;
+                this.setSelectionRange(cursorPosition - 1, cursorPosition - 1);
+            }
+        });
+    });
+});
+</script>
 </body>
 </html>
