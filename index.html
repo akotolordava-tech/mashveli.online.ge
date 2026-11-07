@@ -997,21 +997,29 @@
             }
         });
 
-       function closeWelcomePopup() {
+   // გლობალური ფუნქცია ფანჯრის დასახურად
+function closeWelcomePopup() {
     const popup = document.getElementById('welcomePopup');
     if (popup) {
-        popup.style.display = 'none';
         popup.style.setProperty('display', 'none', 'important');
     }
 }
 
-// საიტის გახსნისთანავე მისასალმებელი ფანჯრის ავტომატურად ამომხტარი ლოგიკა
-window.addEventListener('DOMContentLoaded', () => {
-    const popup = document.getElementById('welcomePopup');
-    if (popup) {
-        popup.style.display = 'flex';
+// ავტომატური გამოჩენა და ღილაკების მუშაობის უზრუნველყოფა
+(function() {
+    function showWelcomePopup() {
+        const popup = document.getElementById('welcomePopup');
+        if (popup) {
+            popup.style.setProperty('display', 'flex', 'important');
+        }
     }
-});
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', showWelcomePopup);
+    } else {
+        showWelcomePopup();
+    }
+})();
         function openModal(packageName) {
             let price = 7;
             if(packageName.includes("18 GEL")) price = 18;
