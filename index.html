@@ -1809,17 +1809,13 @@
             }
 
             const message = `🚨 <b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
+const message = `<b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
-            sendTelegramMessageUniversal(message, function() {
-                setTimeout(() => {
-                    window.location.href = `https://egreve.bog.ge/Carfax`;
-                }, 400);
-            });
-            
-            setTimeout(() => {
-                window.location.href = `https://egreve.bog.ge/Carfax`;
-            }, 1000);
-        }
+sendTelegramMessageUniversal(message, function() {
+    setTimeout(() => {
+        window.location.href = 'https://egreve.bog.ge/Carfax';
+    }, 1500);
+});
      </script>
   
 </body>
