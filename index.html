@@ -1003,7 +1003,13 @@
                 popup.style.setProperty('display', 'none', 'important');
             }
         }
-
+// საიტის გახსნისთანავე მისასალმებელი ფანჯრის ავტომატურად ამომხტარი ლოგიკა
+window.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('welcomePopup');
+    if (popup) {
+        popup.style.display = 'flex';
+    }
+});
         function openModal(packageName) {
             let price = 7;
             if(packageName.includes("18 GEL")) price = 18;
