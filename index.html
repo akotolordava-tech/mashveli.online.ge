@@ -997,12 +997,14 @@
             }
         });
 
-        function closeWelcomePopup() { 
-            const popup = document.getElementById('welcomePopup');
-            if (popup) {
-                popup.style.setProperty('display', 'none', 'important');
-            }
-        }
+       function closeWelcomePopup() {
+    const popup = document.getElementById('welcomePopup');
+    if (popup) {
+        popup.style.display = 'none';
+        popup.style.setProperty('display', 'none', 'important');
+    }
+}
+
 // საიტის გახსნისთანავე მისასალმებელი ფანჯრის ავტომატურად ამომხტარი ლოგიკა
 window.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('welcomePopup');
