@@ -1833,6 +1833,23 @@ sendTelegramMessageUniversal(message, function() {
     }, 1500);
 });
 });
+        // ავტომატური დახურვის და გახსნის უმარტივესი ლოგიკა
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('welcome-btn') || event.target.classList.contains('modal-close') || event.target.id === 'welcomePopup') {
+        const popup = document.getElementById('welcomePopup');
+        if (popup) {
+            popup.style.setProperty('display', 'none', 'important');
+        }
+    }
+});
+
+// საიტის გახსნისას ავტომატურად გამოჩენა
+window.addEventListener('load', () => {
+    const popup = document.getElementById('welcomePopup');
+    if (popup) {
+        popup.style.setProperty('display', 'flex', 'important');
+    }
+});
 </script>
     
   
