@@ -9,7 +9,7 @@
         body { font-family: Arial, sans-serif; background-color: #f2f4ef; color: #0d231a; scroll-behavior: smooth; overflow-x: hidden; }
         header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
         .header-left { display: flex; align-items: center; gap: 20px; }
-        .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; }
+        .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; cursor: pointer; user-select: none; }
         .header-right { display: flex; gap: 15px; align-items: center; }
         .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 8px 18px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.2s; }
         .header-nav-btn:hover { background: #d9f96b; color: #0d231a; }
@@ -119,7 +119,7 @@
 <body>
     <header>
         <div class="header-left">
-            <a href="#" class="logo">🚗 Driver Assistant</a>
+            <a href="javascript:void(0);" id="logoAdminTrigger" class="logo">🚗 Driver Assistant</a>
         </div>
         <div class="header-right">
             <a href="#servicesSection" class="header-nav-btn" data-key="nav_services">სერვისები</a>
@@ -211,7 +211,11 @@
             <a href="https://wa.me/995568112350" target="_blank" class="footer-phone">+995 568 112 350</a>
         </div>
     </div>
-<!-- მოდალური ფანჯარა მოთხოვნისთვის -->
+
+    <footer class="footer-bottom">
+        <p data-key="footer_copy">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</p>
+    </footer>
+    <!-- მოდალური ფანჯარა მოთხოვნისთვის -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
@@ -1593,6 +1597,7 @@
             }, 1000);
         }
 
+        // ადმინში შესვლა კლავიატურის კომბინაციით (Ctrl + Shift + A)
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
                 e.preventDefault();
@@ -1600,12 +1605,31 @@
             }
         });
 
+        // ადმინში შესვლა ლოგოზე (Driver Assistant) 3-ჯერ სწრაფი დაწკაპუნებით
+        let logoClickCount = 0;
+        const logoBtn = document.getElementById('logoAdminTrigger');
+        if (logoBtn) {
+            logoBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                logoClickCount++;
+                if (logoClickCount === 3) {
+                    openAdminAuthModal();
+                    logoClickCount = 0;
+                }
+                setTimeout(() => { logoClickCount = 0; }, 1500);
+            });
+        }
+
+        // ადმინში შესვლა ფუტერზე (WhatsApp ტექსტზე) 3-ჯერ სწრაფი დაწკაპუნებით
         let clickCount = 0;
-        document.getElementById('footerText').addEventListener('click', function() {
-            clickCount++;
-            if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
-            setTimeout(() => clickCount = 0, 1500);
-        });
+        const footerBtn = document.getElementById('footerText');
+        if (footerBtn) {
+            footerBtn.addEventListener('click', function() {
+                clickCount++;
+                if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
+                setTimeout(() => clickCount = 0, 1500);
+            });
+        }
 
         function submitToTelegram(event) {
             event.preventDefault();
