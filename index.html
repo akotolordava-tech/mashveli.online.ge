@@ -69,7 +69,7 @@
         .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .uppercase-input { text-transform: uppercase; }
         
-        #welcomePopup { display: flex; }
+      
         .welcome-box { background: #fff; padding: 35px; border-radius: 20px; max-width: 540px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: left; max-height: 90vh; overflow-y: auto; }
         .welcome-box h3 { color: #0d231a; margin-bottom: 15px; font-size: 18px; line-height: 1.4; padding-right: 25px; }
         .welcome-text-container { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
@@ -245,25 +245,7 @@
         </div>
     </div>
 
-    <!-- 🚗 მისალმების პოპ-აპი -->
-    <div class="modal-overlay" id="welcomePopup">
-        <div class="welcome-box">
-            <button class="modal-close" onclick="closeWelcomePopup()">&times;</button>
-            <h3 data-key="wel_title">🚗⚡ მოგესალმებით! ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი!</h3>
-            <div class="welcome-text-container">
-                <p data-key="wel_desc1" style="margin-bottom: 12px;">Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს.</p>
-                <p data-key="wel_desc2" style="font-weight: bold; margin-bottom: 8px;">✨ აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:</p>
-                <ul style="padding-left: 20px; line-height: 1.8;">
-                    <li data-key="wel_li1">🚨 ოპერატიული შეტყობინებები — მიიღეთ ჯარიმების შესახებ ინფორმაცია მყისიერად</li>
-                    <li data-key="wel_li2">🔍 ტექინსპექტირების კონტროლი — მუდამ საქმის კურსში იყავით ვადებთან დაკავშირებით</li>
-                    <li data-key="wel_li3">🛠️ ყველაფერი ერთ სივრცეში — ისარგებლეთ დამატებითი საჭირო სერვისებით მარტივად</li>
-                </ul>
-                <p data-key="wel_desc3" style="margin-top: 12px; font-weight: bold;">👉 ენდეთ Mashveli-ს და იმგზავრეთ მშვიდად!</p>
-            </div>
-            <button class="welcome-btn" onclick="closeWelcomePopup()" data-key="wel_btn">გავეცანი</button>
-        </div>
-    </div>
-
+  
     <!-- შეტყობინების მოდალური ფანჯარა -->
     <div class="modal-overlay" id="limitNoticeModal" style="z-index: 6000;">
         <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30; text-align: center; padding: 30px;">
@@ -997,29 +979,6 @@
             }
         });
 
-   // გლობალური ფუნქცია ფანჯრის დასახურად
-function closeWelcomePopup() {
-    const popup = document.getElementById('welcomePopup');
-    if (popup) {
-        popup.style.setProperty('display', 'none', 'important');
-    }
-}
-
-// ავტომატური გამოჩენა და ღილაკების მუშაობის უზრუნველყოფა
-(function() {
-    function showWelcomePopup() {
-        const popup = document.getElementById('welcomePopup');
-        if (popup) {
-            popup.style.setProperty('display', 'flex', 'important');
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', showWelcomePopup);
-    } else {
-        showWelcomePopup();
-    }
-})();
         function openModal(packageName) {
             let price = 7;
             if(packageName.includes("18 GEL")) price = 18;
