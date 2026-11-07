@@ -1669,10 +1669,10 @@
             clickCount++;
             if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
             setTimeout(() => clickCount = 0, 1500);
-         function submitToTelegram(event) {
+        function submitToTelegram(event) {
     event.preventDefault();
-    if (issubmitting) return;
-    issubmitting = true;
+    if (isSubmitting) return;
+    isSubmitting = true;
 
     const submitBtn = event.target.querySelector('button[type="submit"]');
     if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = "0.5"; submitBtn.textContent = "Sending..."; }
@@ -1702,10 +1702,21 @@
       code: randomCode,
       timestamp: new Date().toISOString(),
       adminApproved: false,
-      nofine: false
+      nofine: false,
+      fines: [],
+      techStatus: "🔍 Status: Valid",
+      isDeleted: false,
+      packageHistory: []
     };
 
-    localStorage.setItem(storageKey, JSON.stringify(userData));
+    try {
+        localStorage.setItem(storageKey, JSON.stringify(userData));
+        localStorage.setItem('last_mobile_order', JSON.stringify(userData));
+        saveUserToUnifiedList(userData);
+    } catch (err) {
+        console.error("Storage write error:", err);
+    }
+
     loadUserData(userData);
     startLiveCountdown(userData.timestamp, userData.days);
 
@@ -1727,7 +1738,7 @@
       alert('შეცდომა გაგზავნისას!');
     })
     .finally(() => {
-      issubmitting = false;
+      isSubmitting = false;
       if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = "1"; submitBtn.textContent = "..."; }
     });
 
@@ -1751,7 +1762,6 @@
       body: JSON.stringify(googleData)
     }).catch(error => console.error('Sheet Error:', error));
 }
-
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
