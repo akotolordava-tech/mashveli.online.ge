@@ -47,20 +47,8 @@
         .service-info h3 { font-size: 20px; margin-bottom: 10px; color: #0d231a; display: flex; align-items: center; gap: 10px; }
         .service-info p { color: #667770; font-size: 14px; margin-bottom: 20px; }
         .whatsapp-btn { background-color: #0d231a; color: #fff; padding: 12px 20px; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; }
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; padding: 10px; }
-.modal-content {
-    background: #fff;
-    padding: 25px 15px;
-    border-radius: 20px;
-    width: 100%;
-    max-width: 540px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    position: relative;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-    max-height: 90vh;
-    overflow-y: auto;
-}
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; padding: 10px; }
+        .modal-content { background: #fff; padding: 25px 15px; border-radius: 20px; width: 100%; max-width: 540px; margin: 0 auto; box-sizing: border-box; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 15px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #0d231a; }
         .modal-content h3 { margin-bottom: 20px; color: #0d231a; font-size: 20px; }
         .form-group { margin-bottom: 15px; text-align: left; }
@@ -68,12 +56,6 @@
         .form-group input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px; font-size: 14px; }
         .form-submit-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 10px; }
         .uppercase-input { text-transform: uppercase; }
-        
-      
-        .welcome-box { background: #fff; padding: 35px; border-radius: 20px; max-width: 540px; width: 100%; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: left; max-height: 90vh; overflow-y: auto; }
-        .welcome-box h3 { color: #0d231a; margin-bottom: 15px; font-size: 18px; line-height: 1.4; padding-right: 25px; }
-        .welcome-text-container { color: #444; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-        .welcome-btn { background: #d9f96b; color: #0d231a; width: 100%; padding: 14px; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; text-align: center; }
 
         .dashboard-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d231a; color: #fff; z-index: 5000; overflow-y: auto; }
         .dash-wrapper { display: flex; min-height: 100vh; }
@@ -108,40 +90,22 @@
         .btn-trash { background: #ef4444; color: #fff; }
         .btn-restore { background: #4ade80; color: #0d231a; }
         .btn-perm-delete { background: #991b1b; color: #fff; }
-.footer-banner { 
-    background-color: #d9f96b; 
-    padding: 30px 20px; 
-    text-align: center; 
-    margin: 40px auto; 
-    max-width: 600px; 
-    border-radius: 12px; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
+        
+        .chat-box { background: #132e23; border: 1px solid #1a3e30; border-radius: 16px; padding: 20px; }
+        .chat-messages { overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding-right: 5px; }
+        .msg { padding: 10px 14px; border-radius: 12px; max-width: 80%; font-size: 14px; }
+        .msg.support { background: #17362a; color: #fff; align-self: flex-start; }
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; padding: 12px; background: #0d231a; border: 1px solid #1a3e30; color: #fff; border-radius: 10px; font-size: 14px; }
+        .chat-input-area button { background: #d9f96b; color: #0d231a; border: none; padding: 0 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
 
-.footer-phone { 
-    background-color: #0d231a; 
-    color: #d9f96b; 
-    padding: 14px 30px; 
-    border-radius: 30px; 
-    font-size: 20px; 
-    font-weight: bold; 
-    text-decoration: none; 
-    display: inline-block; 
-}
+        .footer-banner { background-color: #d9f96b; padding: 30px 20px; text-align: center; margin: 40px auto; max-width: 600px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
+        .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
 
-.footer-bottom { 
-    background-color: #11221b; 
-    color: #889990; 
-    text-align: center; 
-    padding: 20px; 
-    font-size: 13px; 
-}
         @media (max-width: 768px) {
-     .modal-overlay { padding: 15px !important; box-sizing: border-box !important; }
-.modal-content { max-width: 100% !important; width: 100% !important; margin: 0 auto !important; }
+            .modal-overlay { padding: 15px !important; box-sizing: border-box !important; }
+            .modal-content { max-width: 100% !important; width: 100% !important; margin: 0 auto !important; }
             header { padding: 15px 20px; flex-direction: column; gap: 15px; }
             .header-right { flex-wrap: wrap; justify-content: center; gap: 10px; }
             .hero { padding: 40px 20px; text-align: center; }
@@ -152,7 +116,6 @@
             .dash-wrapper { flex-direction: column; }
             .dash-sidebar { width: 100%; padding: 20px 15px; }
             .dash-content { padding: 25px 15px; }
-         
             .dash-header { flex-direction: column; align-items: flex-start; }
         }
     </style>
@@ -245,7 +208,6 @@
         </div>
     </div>
 
-  
     <!-- შეტყობინების მოდალური ფანჯარა -->
     <div class="modal-overlay" id="limitNoticeModal" style="z-index: 6000;">
         <div class="modal-content" style="background: #132e23; color: #fff; border: 1px solid #1a3e30; text-align: center; padding: 30px;">
@@ -542,7 +504,7 @@
                         </div>
                         <button class="cabinet-btn" onclick="switchToMainTab()" data-key="cab_btn_main">← მთავარ გვერდზე დაბრუნება</button>
                     </div>
-                    <div class="chat-box" style="max-width: 100%;">
+                    <div class="chat-box">
                         <div style="font-size: 12px; color: #b0c2bc; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
                             <span id="chatStatusDot" style="width: 10px; height: 10px; border-radius: 50%; background: #4ade80; display: inline-block;"></span>
                             <span id="chatStatusText" data-key="chat_status">ოპერატორი ონლაინშია (10:00 - 19:00)</span>
@@ -584,7 +546,7 @@
                 <input type="hidden" id="selectedPrice">
                 <div class="form-group"><label data-key="lbl_fullname">სრული სახელი და გვარი</label><input type="text" id="clientName" required placeholder="სახელი და გვარი..."></div>
                 <div class="form-group"><label data-key="lbl_pid">პირადი ნომერი (11-ნიშნა)</label><input type="text" id="clientPid" required maxlength="11" pattern="\d{11}" inputmode="numeric" placeholder="11 ციფრი"></div>
-                <div class="form-group"><label data-key="lbl_phone">ტელეფონის ნომერი</label><input type="tel" id="clientPhone" class="phone-input" required placeholder="599XXXXXX">
+                <div class="form-group"><label data-key="lbl_phone">ტელეფონის ნომერი</label><input type="tel" id="clientPhone" class="phone-input" required placeholder="599XXXXXX"></div>
                 <div class="form-group"><label data-key="lbl_car">ავტომობილის ნომერი</label><input type="text" id="clientCar" class="uppercase-input" required placeholder="მაგ: AA110II"></div>
                 <div class="form-group"><label data-key="lbl_tech">ტექპასპორტის ნომერი</label><input type="text" id="clientTech" class="uppercase-input" required placeholder="მაგ: EV0159681"></div>
                 <div class="form-group"><label data-key="lbl_pkg_price">არჩეული პაკეტი და ფასი</label><input type="text" id="displayPackage" readonly style="background:#e9ece5; font-weight:bold;"></div>
@@ -593,11 +555,7 @@
         </div>
     </div>
 
-
-   
-
     <script>
-        
         const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
         const chatId = "8233255349";
 
@@ -641,15 +599,6 @@
                 serv_3_desc: "თქვენი ავტომობილი უსაფრთხოდ მიგყავს დანიშნულების ადგილზე.",
                 wa_btn: "💬 WhatsApp-ზე მოგვწერეთ",
                 
-                wel_title: "🚗⚡ მოგესალმებით! ჩვენ ვართ mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი!",
-                wel_desc1: "Mashveli.online.ge შეიქმნა იმისთვის, რომ თქვენი მართვის პროცესი მაქსიმალურად კომფორტული და უსაფრთხო გახადოს.",
-                wel_desc2: "✨ აირჩიეთ თქვენთვის სასურველი პაკეტი და მიიღეთ სრული სიმშვიდე გზებზე:",
-                wel_li1: "🚨 ოპერატიული შეტყობინებები — მიიღეთ ჯარიმების შესახებ ინფორმაცია მყისიერად",
-                wel_li2: "🔍 ტექინსპექტირების კონტროლი — მუდამ საქმის კურსში იყავით ვადებთან დაკავშირებით",
-                wel_li3: "🛠️ ყველაფერი ერთ სივრცეში — ისარგებლეთ დამატებითი საჭირო სერვისებით მარტივად",
-                wel_desc3: "👉 ენდეთ Mashveli-ს და იმგზავრეთ მშვიდად!",
-                wel_btn: "გავეცანი",
-
                 notice_title: "შეტყობინება",
                 btn_understood: "გასაგებია",
                 cab_login_title: "👤 პირადი კაბინეტი - ავტორიზაცია",
@@ -752,15 +701,6 @@
                 serv_3_title: "🛡️ Sober Driver",
                 serv_3_desc: "Driving your car safely to your destination.",
                 wa_btn: "💬 Write us on WhatsApp",
-
-                wel_title: "🚗⚡ Welcome! We are mashveli.online.ge — Your Daily Road Partner!",
-                wel_desc1: "Mashveli.online.ge was created to make your driving process as comfortable and safe as possible.",
-                wel_desc2: "✨ Choose your desired package and get total peace of mind on the roads:",
-                wel_li1: "🚨 Operational notifications — Receive information about fines instantly",
-                wel_li2: "🔍 Technical inspection control — Always stay up to date with deadlines",
-                wel_li3: "🛠️ Everything in one space — Easily use additional required services",
-                wel_desc3: "👉 Trust Mashveli and travel in peace!",
-                wel_btn: "Got it",
 
                 notice_title: "Notice",
                 btn_understood: "Understood",
@@ -865,15 +805,6 @@
                 serv_3_desc: "Безопасная доставка вашего автомобиля до места назначения.",
                 wa_btn: "💬 Напишите нам в WhatsApp",
 
-                wel_title: "🚗⚡ Добро пожаловать! Мы — mashveli.online.ge, ваш ежедневный дорожный партнер!",
-                wel_desc1: "Mashveli.online.ge создан для того, чтобы сделать ваше вождение максимально комфортным и безопасным.",
-                wel_desc2: "✨ Выберите подходящий пакет и получите абсолютное спокойствие на дорогах:",
-                wel_li1: "🚨 Оперативные уведомления — получайте информацию о штрафах мгновенно",
-                wel_li2: "🔍 Контроль техосмотра — будьте всегда в курсе сроков",
-                wel_li3: "🛠️ Все в одном месте — пользуйтесь необходимыми дополнительными услугами легко",
-                wel_desc3: "👉 Доверяйте Mashveli и путешествуйте спокойно!",
-                wel_btn: "Ознакомлен",
-
                 notice_title: "Уведомление",
                 btn_understood: "Понятно",
                 cab_login_title: "👤 Личный кабинет - Авторизация",
@@ -968,8 +899,6 @@
                 }
             });
         }
-
-     
 
         document.addEventListener('keydown', function(e) {
             if (e.target.classList.contains('phone-input')) {
@@ -1190,7 +1119,6 @@
 
         let foundUsersCache = [];
         
-        // 🚀 აბსოლუტურად გამარტივებული და უშეცდომო ძებნა
         function searchUserByPid() {
             const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
             if (!query) {
@@ -1443,11 +1371,8 @@
             return `${day}.${month}.${year}, ${hours}:${minutes}`;
         }
 
-        // 🔗 ერთიანი და საიმედო მეთოდი ყველა მომხმარებლის ასაღებად (localStorage + array)
         function getAllUsersUnified() {
             let usersMap = new Map();
-
-            // 1. ვკითხულობთ მთავარ array-ს
             const list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
             list.forEach(u => {
                 if (u && u.pid && u.car) {
@@ -1455,7 +1380,6 @@
                 }
             });
 
-            // 2. ვკითხულობთ ინდივიდუალური user_ კლავიშებიდანაც
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key && key.startsWith('user_')) {
@@ -1774,7 +1698,6 @@
                 adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
             };
 
-            // ⚡ ძლიერი სინქრონიზაცია ბაზასა და ბექაპში
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
@@ -1783,34 +1706,14 @@
                 console.error("Storage write error:", err);
             }
 
-          
-const message = `<b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
+            const message = `<b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
-sendTelegramMessageUniversal(message, function() {
-    setTimeout(() => {
-        window.location.href = 'https://egreve.bog.ge/Carfax';
-    }, 1500);
-});
-});
-        // ავტომატური დახურვის და გახსნის უმარტივესი ლოგიკა
-document.addEventListener('click', function(event) {
-    if (event.target.classList.contains('welcome-btn') || event.target.classList.contains('modal-close') || event.target.id === 'welcomePopup') {
-        const popup = document.getElementById('welcomePopup');
-        if (popup) {
-            popup.style.setProperty('display', 'none', 'important');
+            sendTelegramMessageUniversal(message, function() {
+                setTimeout(() => {
+                    window.location.href = 'https://egreve.bog.ge/Carfax';
+                }, 1500);
+            });
         }
-    }
-});
-
-// საიტის გახსნისას ავტომატურად გამოჩენა
-window.addEventListener('load', () => {
-    const popup = document.getElementById('welcomePopup');
-    if (popup) {
-        popup.style.setProperty('display', 'flex', 'important');
-    }
-});
-</script>
-    
-  
+    </script>
 </body>
 </html>
