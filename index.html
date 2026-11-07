@@ -1670,100 +1670,104 @@
             if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
             setTimeout(() => clickCount = 0, 1500);
         });
+function submitToTelegram(event) {
+    event.preventDefault();
+    if (isSubmitting) return;
+    isSubmitting = true;
 
-        function submitToTelegram(event) {
-            event.preventDefault();
-            if (isSubmitting) return;
-            isSubmitting = true;
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = "0.5"; submitBtn.textContent = "Sending..."; }
 
-            const submitBtn = event.target.querySelector('button[type="submit"]');
-            if (submitBtn) { submitBtn.disabled = true; submitBtn.style.opacity = "0.5"; submitBtn.textContent = "Sending..."; }
+    const pkg = document.getElementById('selectedPackage').value;
+    const price = document.getElementById('selectedPrice').value;
+    const name = document.getElementById('clientName').value.trim();
+    const pid = document.getElementById('clientPid').value.toString().trim();
+    const phone = document.getElementById('clientPhone').value.trim();
+    const car = document.getElementById('clientCar').value.toUpperCase().trim();
+    const tech = document.getElementById('clientTech').value.toUpperCase().trim();
+    const randomCode = Math.floor(1000 + Math.random() * 9000);
 
-            const pkg = document.getElementById('selectedPackage').value;
-            const price = document.getElementById('selectedPrice').value;
-            const name = document.getElementById('clientName').value.trim();
-            const pid = document.getElementById('clientPid').value.toString().trim();
-            const phone = document.getElementById('clientPhone').value.trim();
-            const car = document.getElementById('clientCar').value.toUpperCase().trim();
-            const tech = document.getElementById('clientTech').value.toUpperCase().trim();
-            const randomCode = Math.floor(1000 + Math.random() * 9000);
+    let daysCount = 30;
+    if (pkg.includes("18 GEL")) daysCount = 90;
+    if (pkg.includes("60 GEL")) daysCount = 365;
 
-            let daysCount = 30;
-            if (pkg.includes("18 GEL")) daysCount = 90;
-            if (pkg.includes("60 GEL")) daysCount = 365;
+    const storageKey = 'user_' + pid + '_' + car;
+    
+    // ვამოწმებთ იქნებ უკვე არსებობს, რომ ძველი მონაცემები/ჯარიმები არ წაიშალოს
+    let existingUser = JSON.parse(localStorage.getItem(storageKey));
 
-            const storageKey = 'user_' + pid + '_' + car;
-            const userData = {
-                name: name,
-                pid: pid,
-                phone: phone,
-                car: car,
-                tech: tech,
-                package: pkg,
-                days: daysCount,
-                code: randomCode,
-                timestamp: new Date().toISOString(),
-                adminApproved: false,
-                nofine: false,
-                fines: [],
-                techStatus: "🔍 Status: Valid",
-                isDeleted: false,
-                packageHistory: []
-            };
+    const userData = {
+        name: name,
+        pid: pid,
+        phone: phone,
+        car: car,
+        tech: tech,
+        package: pkg,
+        days: daysCount,
+        code: randomCode,
+        timestamp: existingUser ? existingUser.timestamp : Date.now(),
+        adminApproved: existingUser ? existingUser.adminApproved : true, // მობილურიდან შემოსულიც რომ ეგრევე ჩანდეს
+        noFine: existingUser ? existingUser.noFine : true,
+        fines: existingUser ? existingUser.fines : [],
+        techStatus: existingUser ? existingUser.techStatus : "🔍 სტატუსი: ძალაშია",
+        isDeleted: false,
+        packageHistory: existingUser && existingUser.packageHistory ? existingUser.packageHistory : []
+    };
 
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(userData));
-                localStorage.setItem('last_mobile_order', JSON.stringify(userData));
-                saveUserToUnifiedList(userData);
-            } catch (err) {
-                console.error("Storage write error:", err);
-            }
+    try {
+        localStorage.setItem(storageKey, JSON.stringify(userData));
+        localStorage.setItem('last_mobile_order', JSON.stringify(userData));
+        saveUserToUnifiedList(userData);
+    } catch (err) {
+        console.error("Storage write error:", err);
+    }
 
-            loadUserData(userData);
-            startLiveCountdown(userData.timestamp, userData.days);
+    loadUserData(userData);
+    startLiveCountdown(userData.timestamp, userData.days);
 
-            const message = `🚨 <b>ახალი მოთხოვნა!</b>\n\n👤 <b>სახელი:</b> ${name}\n🆔 <b>PID:</b> ${pid}\n🚗 <b>მანქანა:</b> ${car}\n🛠 <b>ტექნიკოსი:</b> ${tech}\n📞 <b>ტელეფონი:</b> ${phone}\n📦 <b>პაკეტი:</b> ${pkg}\n🔑 <b>კოდი:</b> ${randomCode}`;
+    const message = `🚨 <b>ახალი მოთხოვნა!</b>\n\n👤 <b>სახელი:</b> ${name}\n🆔 <b>PID:</b> ${pid}\n🚗 <b>მანქანა:</b> ${car}\n🛠 <b>ტექნიკოსი:</b> ${tech}\n📞 <b>ტელეფონი:</b> ${phone}\n📦 <b>პაკეტი:</b> ${pkg}\n🔑 <b>კოდი:</b> ${randomCode}`;
 
-            // 1. ტელეგრამის გაგზავნა
-            fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('შეკვეთა წარმატებით გაიგზავნა!');
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('შეცდომა გაგზავნისას!');
-            })
-            .finally(() => {
-                isSubmitting = false;
-                if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = "1"; submitBtn.textContent = "..."; }
-            });
+    // 1. ტელეგრამის გაგზავნა
+    fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: 'HTML' })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert('შეკვეთა წარმატებით გაიგზავნა!');
+        location.reload();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('შეცდომა გაგზავნისას!');
+    })
+    .finally(() => {
+        isSubmitting = false;
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.style.opacity = "1"; submitBtn.textContent = "..."; }
+    });
 
-            // 2. Google Sheets-ში გაგზავნა
-            const googleData = {
-                pid: pid,
-                name: name,
-                car: car,
-                tech: tech,
-                phone: phone,
-                package: pkg,
-                days: daysCount
-            };
+    // 2. Google Sheets-ში გაგზავნა
+    const googleData = {
+        pid: pid,
+        name: name,
+        car: car,
+        tech: tech,
+        phone: phone,
+        package: pkg,
+        days: daysCount
+    };
 
-            fetch('https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec', {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(googleData)
-            }).catch(error => console.error('Sheet Error:', error));
-        }
+    fetch('https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(googleData)
+    }).catch(error => console.error('Sheet Error:', error));
+}
+      
     </script>
 </body>
 </html>
