@@ -9,7 +9,7 @@
         body { font-family: Arial, sans-serif; background-color: #f2f4ef; color: #0d231a; scroll-behavior: smooth; overflow-x: hidden; }
         header { background-color: #0d231a; padding: 20px 40px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
         .header-left { display: flex; align-items: center; gap: 20px; }
-        .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; cursor: pointer; user-select: none; }
+        .logo { color: #fff; font-size: 22px; font-weight: bold; text-decoration: none; }
         .header-right { display: flex; gap: 15px; align-items: center; }
         .header-nav-btn { background: transparent; border: 1px solid #d9f96b; color: #d9f96b; padding: 8px 18px; border-radius: 15px; cursor: pointer; font-weight: bold; font-size: 14px; text-decoration: none; display: inline-block; transition: 0.2s; }
         .header-nav-btn:hover { background: #d9f96b; color: #0d231a; }
@@ -119,61 +119,7 @@
 <body>
     <header>
         <div class="header-left">
-            <a href="javascript:void(0);" id="logoAdminTrigger" class="logo">🚗 Driver Assistant</a>
-        </div>
-        <div class="header-right">
-            <a href="#servicesSection" class="header-nav-btn" data-key="nav_services">სერვისები</a>
-            <button class="cabinet-btn" onclick="openCabinetLogin()" data-key="nav_cabinet">👤 პირადი კაბინეტი</button>
-            <div class="lang-switch">
-                <button class="lang-btn active" onclick="setLanguage('GEO')">GEO</button>
-                <button class="lang-btn" onclick="setLanguage('ENG')">ENG</button>
-                <button class="lang-btn" onclick="setLanguage('RUS')">RUS</button>
-            </div>
-        </div>
-    </header>
-
-    <section class="hero">
-        <div class="hero-left">
-            <div class="badge" data-key="hero_badge">მანქანის ყოველდღიური მხარდაჭერა</div>
-            <h1 data-key="hero_title">მძღოლის ასისტენტი — მშვიდი გზა აქედან იწყება</h1>
-            <p data-key="hero_desc">მარტივი მხარდაჭერა მძღოლებისთვის: შეავსეთ მოთხოვნა, აირჩიეთ სასურველი პაკეტი და განაგრძეთ გზა დაცულ საკომუნიკაციო არხში.</p>
-            <a href="#packagesSection" class="btn-primary" data-key="hero_btn">↓ მოთხოვნის დაწყება</a>
-        </div>
-        <div class="hero-right-card">
-            <h3 style="font-size: 20px; margin-bottom: 12px; color: #0d231a;" data-key="hero_card_title">🛡️ ერთი სივრცე მძღოლისთვის — მარტივი. სწრაფი. უსაფრთხო.</h3>
-            <p style="font-size: 14px; color: #667770; line-height: 1.5;" data-key="hero_card_desc">ჩვენ ვაგროვებთ მხოლოდ იმ ძირითად ინფორმაციას, რომელიც აუცილებელია თქვენთან დასაკავშირებლად.</p>
-        </div>
-    </section>
-
-    <div class="container" id="packagesSection">
-        <div class="section-title">
-            <span data-key="sec_pkg_span">სერვისის პაკეტები</span>
-            <h2 data-key="sec_pkg_h2">აირჩიეთ თქვენთვის შესაფერისი მხარდაჭერა</h2>
-        </div>
-        <div class="packages-grid">
-            <div class="package-card" onclick="openModal('საწყისი პაკეტი (7 GEL)')">
-                <span class="package-badge" data-key="pkg_1_badge">საწყისი</span>
-                <span style="font-size: 12px; font-weight: bold; color: #556660; float: right;" data-key="pkg_1_days">30 დღე</span>
-                <h3>7 GEL</h3>
-                <h4 style="margin-top: 5px;">საწყისი პაკეტი</h4>
-                <p data-key="pkg_1_desc">მოქნილი არჩევანი მოკლევადიანი მხარდაჭერისთვის.</p>
-            </div>
-            <div class="package-card popular" onclick="openModal('პოპულარული პაკეტი (18 GEL)')">
-                <span class="package-badge" data-key="pkg_2_badge">პოპულარული</span>
-                <span style="font-size: 12px; font-weight: bold; color: #d9f96b; float: right;" data-key="pkg_2_days">90 დღე</span>
-                <h3>18 GEL</h3>
-                <h4 style="margin-top: 5px;" data-key="pkg_2_badge">პოპულარული პაკეტი</h4>
-                <p data-key="pkg_2_desc">დაბალანსებული პაკეტი მუდმივი დახმარებისთვის.</p>
-            </div>
-            <div class="package-card" onclick="openModal('წლიური პაკეტი (60 GEL)')">
-                <span class="package-badge" data-key="pkg_3_badge">საუკეთესო ფასი</span>
-                <span style="font-size: 12px; font-weight: bold; color: #556660; float: right;" data-key="pkg_3_days">365 დღე</span>
-                <h3>60 GEL</h3>
-                <h4 style="margin-top: 5px;">წლიური
-                    <body>
-    <header>
-        <div class="header-left">
-            <a href="javascript:void(0);" id="logoAdminTrigger" class="logo">🚗 Driver Assistant</a>
+            <a href="#" class="logo">🚗 Driver Assistant</a>
         </div>
         <div class="header-right">
             <a href="#servicesSection" class="header-nav-btn" data-key="nav_services">სერვისები</a>
@@ -265,11 +211,7 @@
             <a href="https://wa.me/995568112350" target="_blank" class="footer-phone">+995 568 112 350</a>
         </div>
     </div>
-
-    <footer class="footer-bottom">
-        <p data-key="footer_copy">mashveli.online.ge — თქვენი გზის ყოველდღიური პარტნიორი</p>
-    </footer>
-    <!-- მოდალური ფანჯარა მოთხოვნისთვის -->
+<!-- მოდალური ფანჯარა მოთხოვნისთვის -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
@@ -1658,29 +1600,12 @@
             }
         });
 
-        let logoClickCount = 0;
-        const logoBtn = document.getElementById('logoAdminTrigger');
-        if (logoBtn) {
-            logoBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                logoClickCount++;
-                if (logoClickCount === 3) {
-                    openAdminAuthModal();
-                    logoClickCount = 0;
-                }
-                setTimeout(() => { logoClickCount = 0; }, 1500);
-            });
-        }
-
         let clickCount = 0;
-        const footerBtn = document.getElementById('footerText');
-        if (footerBtn) {
-            footerBtn.addEventListener('click', function() {
-                clickCount++;
-                if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
-                setTimeout(() => clickCount = 0, 1500);
-            });
-        }
+        document.getElementById('footerText').addEventListener('click', function() {
+            clickCount++;
+            if (clickCount === 3) { openAdminAuthModal(); clickCount = 0; }
+            setTimeout(() => clickCount = 0, 1500);
+        });
 
         function submitToTelegram(event) {
             event.preventDefault();
@@ -1734,12 +1659,14 @@
 
             const message = `<b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
+            // 1. Telegram-ში გაგზავნა და გადახდის გვერდზე გადამისამართება
             sendTelegramMessageUniversal(message, function() {
                 setTimeout(() => {
                     window.location.href = 'https://egreve.bog.ge/Carfax';
                 }, 1500);
             });
 
+            // 2. Google Sheets-ში გაგზავნა
             const googleData = {
                 pid: pid,
                 name: name,
