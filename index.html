@@ -1376,7 +1376,7 @@
             const list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
             list.forEach(u => {
                 if (u && u.pid && u.car) {
-                    usersMap.set(u.pid + '_' + u.car, u);
+                    usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
                 }
             });
 
@@ -1386,7 +1386,7 @@
                     try {
                         const u = JSON.parse(localStorage.getItem(key));
                         if (u && u.pid && u.car) {
-                            usersMap.set(u.pid + '_' + u.car, u);
+                            usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
                         }
                     } catch(e) {}
                 }
@@ -1694,8 +1694,21 @@
 
             const storageKey = 'user_' + pid + '_' + car;
             const userData = { 
-                name, pid, phone, car, tech, package: pkg, days: daysCount, code: randomCode, timestamp: Date.now(),
-                adminApproved: false, noFine: false, fines: [], techStatus: "🔍 Status: Valid", isDeleted: false, packageHistory: []
+                name: name, 
+                pid: pid, 
+                phone: phone, 
+                car: car, 
+                tech: tech, 
+                package: pkg, 
+                days: daysCount, 
+                code: randomCode, 
+                timestamp: Date.now(),
+                adminApproved: false, 
+                noFine: false, 
+                fines: [], 
+                techStatus: "🔍 Status: Valid", 
+                isDeleted: false, 
+                packageHistory: []
             };
 
             try {
