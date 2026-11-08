@@ -1652,23 +1652,22 @@ async function getAllUsersUnified() {
                 packageHistory: existingUser && existingUser.packageHistory ? existingUser.packageHistory : []
             };
 
-            try {
-                localStorage.setItem(storageKey, JSON.stringify(userData));
-                localStorage.setItem('last_mobile_order', JSON.stringify(userData));
-              
-            } catch (err) {
-                console.error("Storage write error:", err);
-            }
+           try {
+        localStorage.setItem(storageKey, JSON.stringify(userData));
+        localStorage.setItem('last_mobile_order', JSON.stringify(userData));
+    } catch (err) {
+        console.error("Storage write error:", err);
+    }
 
-            const message = `<b>New Order!</b>\n\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
+    const message = `<b>New Order!</b>\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
-            // 1. Telegram-ში გაგზავნა და გადახდის გვერდზე გადამისამართება
-            sendTelegramMessageUniversal(message, function() {
-                setTimeout(() => {
-                    window.location.href = 'https://egreve.bog.ge/Carfax';
-                }, 1500);
-            });
-const googleData = {
+    sendTelegramMessageUniversal(message, function() {
+        setTimeout(() => {
+            window.location.href = 'https://egreve.bog.ge/Carfax';
+        }, 1500);
+    });
+
+    const googleData = {
         pid: pid,
         name: name,
         car: car,
@@ -1677,13 +1676,13 @@ const googleData = {
         package: pkg,
         days: daysCount
     };
-            
-  fetch('https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(googleData)
-}).catch(error => console.error('Sheet Error:', error));
-            </script>
+fetch('https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(googleData)
+    });
+</script>
 </body>
 </html>
+ 
