@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Panel</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="password"] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #218838; }
+        #adminSection { display: none; margin-top: 20px; }
+        .search-box { margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #007bff; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .error { color: red; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- ავტორიზაციის ფორმა -->
+    <div id="loginSection">
+        <h2>ადმინპანელში შესვლა</h2>
+        <div class="form-group">
+            <label>პაროლი:</label>
+            <input type="password" id="adminPass" placeholder="შეიყვანეთ პაროლი">
+        </div>
+        <button onclick="requestTelegramCode()">კოდის მიღება ტელეგრამზე</button>
+
+        <div id="codeGroup" class="form-group" style="display:none; margin-top: 15px;">
+            <label>ტელეგრამზე მოსული კოდი:</label>
+            <input type="text" id="tgCode" placeholder="შეიყვანეთ 4-ნიშნა კოდი">
+            <button onclick="verifyAndLogin()" style="background: #007bff;">შესვლა</button>
+        </div>
+        <div id="loginError" class="error"></div>
+    </div>
+
+    <!-- ადმინპანელი (მონაცემთა ბაზა) -->
+    <div id="adminSection">
+        <h2>მომხმარებლების ბაზა</h2>
+        <input type="text" id="searchInput" class="search-box" onkeyup="filterTable()" placeholder="მოძებნეთ სახელით, PID-ით ან ტელეფონით...">
+        <button onclick="loadData()" style="width: auto; padding: 8px 15px; background: #17a2b8;">ბაზის განახლება</button>
+        
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>PID</th>
+                    <th>სახელი</th>
+                    <th>მანქანა</th>
+                    <th>ტექნიკოსი</th>
+                    <th>ტელეფონი</th>
+                    <th>პაკეტი</th>
+                    <th>დღეები</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- მონაცემები ჩაიტვირთება აქ -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXnr_BZk9GA3i291mXFdQjmFGOhiFny7C4tMUaz_CzXfMXDYl2IGj1h_L7abfsdkqn/exec';
+    let generatedCode = null;
+
+    // 1. კოდის გაგზავნა ტელეგრამში
+    function requestTelegramCode() {
+        const pass = document.getElementById('adminPass').value;
+        if (!pass) {
+            document.getElementById('loginError').innerText = 'გთხოვთ შეიყვანოთ პაროლი!';
+            return;
+        }
+
+        // გენერირდება 4-ნიშნა შემთხვევითი კოდი
+        generatedCode = Math.floor(1000 + Math.random() * 9000);
+        
+        const loginData = {
+            action: 'admin_login_request',
+            code: generatedCode,
+            pass: pass
+        };
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(loginData)
+        }).then(() => {
+            document.getElementById('codeGroup').style.display = 'block';
+            document.getElementById('loginError').innerText = '';
+            alert('ავტორიზაციის კოდი გაიგზავნა ტელეგრამში!');
+        }).catch(err => {
+            document.getElementById('loginError').innerText = 'შეცდომა კოდის გაგზავნისას!';
+        });
+    }
+
+    // 2. კოდის შემოწმება და შესვლა
+    function verifyAndLogin() {
+        const userCode = document.getElementById('tgCode').value;
+        if (userCode == generatedCode) {
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'block';
+            loadData();
+        } else {
+            document.getElementById('loginError').innerText = 'არასწორი კოდი!';
+        }
+    }
+
+    // 3. ბაზიდან მონაცემების წამოღება (Sheets-დან)
+    function loadData() {
+        fetch(SCRIPT_URL + '?action=getData')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('tableBody');
+                tbody.innerHTML = '';
+                data.forEach(row => {
+                    let tr = `<tr>
+                        <td>${row.pid || ''}</td>
+                        <td>${row.name || ''}</td>
+                        <td>${row.car || ''}</td>
+                        <td>${row.tech || ''}</td>
+                        <td>${row.phone || ''}</td>
+                        <td>${row.package || ''}</td>
+                        <td>${row.days || ''}</td>
+                    </tr>`;
+                    tbody.innerHTML += tr;
+                });
+            })
+            .catch(err => console.error('Data Load Error:', err));
+    }
+
+    // 4. სერჩის ფუნქცია
+    function filterTable() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let rows = document.querySelectorAll('#tableBody tr');
+        rows.forEach(row => {
+            let text = row.innerText.toLowerCase();
+            row.style.display = text.includes(input) ? '' : 'none';
+        });
+    }
+</script>
+
+</body>
+</html>
