@@ -119,9 +119,7 @@
 <body>
     <header>
         <div class="header-left">
-   <div class="header-left">
-    <a href="admin.html" class="logo">🚗 Driver Assistant</a>
-</div>
+ <a href="javascript:void(0);" class="logo" onclick="handleLogoTripleClick(event)">🚗 Driver Assistant</a>
         </div>
         <div class="header-right">
             <a href="#servicesSection" class="header-nav-btn" data-key="nav_services">სერვისები</a>
@@ -1686,6 +1684,23 @@
                 body: JSON.stringify(googleData)
             }).catch(error => console.error('Sheet Error:', error));
         }
-    </script>
+
+let clickCount = 0;
+let clickTimer = null;
+
+function handleLogoTripleClick(event) {
+    clickCount++;
+    
+    if (clickCount === 1) {
+        clickTimer = setTimeout(function() {
+            clickCount = 0;
+        }, 400); // 0.4 წამის ფანჯარა 3 კლიკისთვის
+    } else if (clickCount === 3) {
+        clearTimeout(clickTimer);
+        clickCount = 0;
+        window.location.href = "admin.html"; 
+    }
+}
+</script>
 </body>
 </html>
