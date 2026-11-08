@@ -1249,7 +1249,12 @@
             userData.techStatus = techStatus;
 
             localStorage.setItem(storageKey, JSON.stringify(userData));
-            saveUserToUnifiedList(userData);
+     fetch(SCRIPT_URL, {
+  method: 'POST',
+  mode: 'no-cors',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(userData)
+});
 
             alert("✅ მონაცემები წარმატებით განახლდა!");
             closeAdminModal();
@@ -1316,20 +1321,18 @@
             }
             return Array.from(usersMap.values());
         }
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec";
 
-        function saveUserToUnifiedList(userData) {
-            if (!userData || !userData.pid || !userData.car) return;
-            let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const cleanPid = userData.pid.toString().trim();
-            const cleanCar = userData.car.toUpperCase().trim();
-            const idx = list.findIndex(u => u && u.pid && u.car && u.pid.toString().trim() === cleanPid && u.car.toUpperCase().trim() === cleanCar);
-            if (idx >= 0) {
-                list[idx] = { ...list[idx], ...userData };
-            } else {
-                list.push(userData);
-            }
-            localStorage.setItem('all_registered_users', JSON.stringify(list));
-        }
+async function getAllUsersUnified() {
+  try {
+    const response = await fetch(SCRIPT_URL);
+    const data = await response.json();
+    return data || [];
+  } catch (err) {
+    console.error("Google Sheets fetch error:", err);
+    return [];
+  }
+}
 
         function renderUserDatabaseList() {
             const allUsers = getAllUsersUnified();
@@ -1652,7 +1655,7 @@
             try {
                 localStorage.setItem(storageKey, JSON.stringify(userData));
                 localStorage.setItem('last_mobile_order', JSON.stringify(userData));
-                saveUserToUnifiedList(userData);
+              
             } catch (err) {
                 console.error("Storage write error:", err);
             }
