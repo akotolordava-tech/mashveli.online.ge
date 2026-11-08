@@ -1040,42 +1040,89 @@
 
         let foundUsersCache = [];
         
-       function searchUserByPid() {
-            const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
-            if (!query) { alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); return; }
+      function searchUserByPid() {
+  const query = document.getElementById('adminTargetPid').value.trim();
+  if (!query) {
+    alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!");
+    return;
+  }
 
-            foundUsersCache = [];
-            
-            // ვამოწმებთ ერთიან ბაზას (localStorage-ში შენახულ სრულ სიას, რომელიც ტელეფონიდანაც ივსება)
-            let unifiedList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            
-            // ასევე ვამატებთ მიმდინარე ბრაუზერში არსებულ ინდივიდუალურ user_ ჩანაწერებსაც
-            const allUsers = getAllUsersUnified();
+  foundUsersCache = [];
 
-            // ვკრიბავთ ყველას ერთ სიაში დუბლიკატების გარეშე
-            let combinedMap = new Map();
-            unifiedList.forEach(u => {
-                if (u && u.pid && u.car) {
-                    combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
-                }
-            });
-            allUsers.forEach(u => {
-                if (u && u.pid && u.car) {
-                    combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
-                }
-            });
+  // 1. ჯერ ვძებნით სერვერიდან (fetch)
+  fetch(SCRIPT_URL + "?q=" + encodeURIComponent(query))
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        foundUsersCache = data;
+        processFoundUsers();
+      } else {
+        // 2. თუ სერვერმა ვერ იპოვა, ვძებნით localStorage-ში
+        let unifiedList = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+        const allUsers = typeof getAllUsersUnified === 'function' ? getAllUsersUnified() : [];
+        
+        let combinedMap = new Map();
+        unifiedList.forEach(u => {
+          if (u && u.pid && u.car) {
+            combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
+          }
+        });
+        allUsers.forEach(u => {
+          if (u && u.pid && u.car) {
+            combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
+          }
+        });
 
-            const searchPool = Array.from(combinedMap.values());
+        const searchPool = Array.from(combinedMap.values());
+        searchPool.forEach(val => {
+          if (val) {
+            const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
+            if (fullText.includes(query.toLowerCase())) {
+              if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car)) {
+                foundUsersCache.push(val);
+              }
+            }
+          }
+        });
 
-            searchPool.forEach(val => {
-                if (val) {
-                    const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
-                    if (fullText.includes(query)) {
-                        if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car)) {
-                            foundUsersCache.push(val);
-                        }
-                    }
-                }
+        processFoundUsers();
+      }
+    })
+    .catch(err => {
+      console.error("ძებნის შეცდომა:", err);
+      alert("მოხდა შეცდომა სერვერთან კავშირისას.");
+    });
+}
+
+function processFoundUsers() {
+  const selectwrapper = document.getElementById('carSelectwrapper');
+  const carSelector = document.getElementById('adminCarSelector');
+  carSelector.innerHTML = '';
+
+  if (foundUsersCache.length === 0) {
+    alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
+    selectwrapper.style.display = 'none';
+    return;
+  }
+
+  if (foundUsersCache.length === 1) {
+    selectwrapper.style.display = 'none';
+    if (typeof fillAdminFormWithUser === 'function') {
+      fillAdminFormWithUser(foundUsersCache[0]);
+    }
+  } else {
+    selectwrapper.style.display = 'block';
+    foundUsersCache.forEach((u, index) => {
+      const opt = document.createElement('option');
+      opt.value = index;
+      opt.textContent = `${u.name || ''} | 🚗 ${u.car || ''} | 🆔 ${u.pid || ''}`;
+      carSelector.appendChild(opt);
+    });
+    if (typeof fillAdminFormWithUser === 'function') {
+      fillAdminFormWithUser(foundUsersCache[0]);
+    }
+  }
+}
             });
 
             const selectWrapper = document.getElementById('carSelectWrapper');
