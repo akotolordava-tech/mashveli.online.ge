@@ -99,21 +99,6 @@
         .footer-banner { background-color: #d9f96b; padding: 30px 20px; text-align: center; margin: 40px auto; max-width: 600px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .footer-phone { background-color: #0d231a; color: #d9f96b; padding: 14px 30px; border-radius: 30px; font-size: 20px; font-weight: bold; text-decoration: none; display: inline-block; }
         .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
-        @media (max-width: 768px) {
-            .modal-overlay { padding: 15px !important; box-sizing: border-box !important; }
-            .modal-content { max-width: 100% !important; width: 100% !important; margin: 0 auto !important; }
-            header { padding: 15px 20px; flex-direction: column; gap: 15px; }
-            .header-right { flex-wrap: wrap; justify-content: center; gap: 10px; }
-            .hero { padding: 40px 20px; text-align: center; }
-            .hero-left { max-width: 100%; }
-            .hero h1 { font-size: 28px; }
-            .container { padding: 30px 15px; }
-            .packages-grid, .services-grid { grid-template-columns: 1fr; }
-            .dash-wrapper { flex-direction: column; }
-            .dash-sidebar { width: 100%; padding: 20px 15px; }
-            .dash-content { padding: 25px 15px; }
-            .dash-header { flex-direction: column; align-items: flex-start; }
-        }
     </style>
 </head>
 <body>
@@ -207,15 +192,16 @@
         </div>
 
         <div class="footer-banner">
-            <h3 id="footerText" style="margin-bottom: 12px; color: #0d231a; cursor: pointer; user-select: none;" data-key="footer_banner_h3">დაგვიკავშირდით WhatsApp-ზე</h3>
+            <h3 style="margin-bottom: 12px; color: #0d231a; cursor: pointer; user-select: none;" data-key="footer_banner_h3">დაგვიკავშირდით WhatsApp-ზე</h3>
             <a href="https://wa.me/995568112350" target="_blank" class="footer-phone">+995 568 112 350</a>
         </div>
     </div>
-<!-- მოდალური ფანჯარა მოთხოვნისთვის -->
+
+    <!-- მოდალური ფანჯარა მოთხოვნისთვის -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
-            <h3 id="modalTitle">მოთხოვნის შევსება</h3>
+            <h3 id="modalTitle" data-key="modal_order_title">მოთხოვნის შევსება</h3>
             <form onsubmit="submitToTelegram(event)">
                 <div class="form-group">
                     <label data-key="lbl_fullname">სრული სახელი და გვარი</label>
@@ -387,15 +373,6 @@
         </div>
     </div>
 
-    <!-- შეზღუდვის/შეტყობინების მოდალი -->
-    <div class="modal-overlay" id="limitNoticeModal">
-        <div class="modal-content" style="text-align: center; max-width: 400px;">
-            <div style="font-size: 40px; margin-bottom: 10px;">⚠️</div>
-            <h3 id="limitNoticeText" style="margin-bottom: 20px; font-size: 18px;">შეტყობინება</h3>
-            <button onclick="closeLimitNoticeModal()" class="form-submit-btn" data-key="btn_understood">გასაგებია</button>
-        </div>
-    </div>
-
     <!-- პირადი კაბინეტის დაშბორდი -->
     <div class="dashboard-container" id="cabinetDashboard">
         <div class="dash-wrapper">
@@ -550,6 +527,7 @@
         const botToken = "7449557342:AAFA7wWlBef7nZ0B9aVq8B9ZqW8Vq8B9ZqW"; 
         const chatId = "-1002231234567"; 
         const ADMIN_SECRET_PASSWORD = "მანქანა";
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec';
 
         let currentLang = 'GEO';
         let generatedAdminCode = "";
@@ -915,7 +893,6 @@
             event.preventDefault();
             const pid = document.getElementById('cabPid').value.trim();
             const car = document.getElementById('cabCar').value.trim().toUpperCase();
-            const phone = document.getElementById('cabPhone').value.trim();
 
             const allUsers = getAllUsersUnified();
             const savedData = allUsers.find(u => u.pid.toString().trim() === pid && u.car.toUpperCase().trim() === car && u.isDeleted !== true);
@@ -1247,25 +1224,39 @@
             userData.noFine = noFineChecked;
             userData.fines = finesArray;
             userData.techStatus = techStatus;
-localStorage.setItem(storageKey, JSON.stringify(userData));
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-    }).then(() => {
-        alert("✅ მონაცემები წარმატებით განახლდა!");
-        closeAdminModal();
-    }).catch(err => console.error("Error:", err));
-}
 
-function openAdminUserDatabase() {
-    closeAdminModal();
-    document.getElementById('adminDbModal').style.display = 'flex';
-    currentDbTab = 'active';
-    updateDbTabStyles();
-}
-        
+            localStorage.setItem(storageKey, JSON.stringify(userData));
+            saveUserToUnifiedList(userData);
+
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData)
+            }).then(() => {
+                alert("✅ მონაცემები წარმატებით განახლდა!");
+                closeAdminModal();
+            }).catch(err => console.error("Error:", err));
+        }
+
+        function saveUserToUnifiedList(userObj) {
+            let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+            const index = list.findIndex(item => item.pid.toString().trim() === userObj.pid.toString().trim() && item.car.toUpperCase() === userObj.car.toUpperCase());
+            if (index >= 0) {
+                list[index] = userObj;
+            } else {
+                list.push(userObj);
+            }
+            localStorage.setItem('all_registered_users', JSON.stringify(list));
+        }
+
+        function openAdminUserDatabase() {
+            closeAdminModal();
+            document.getElementById('adminDbModal').style.display = 'flex';
+            currentDbTab = 'active';
+            updateDbTabStyles();
+            renderUserDatabaseList();
+        }
 
         function closeAdminUserDatabase() {
             document.getElementById('adminDbModal').style.display = 'none';
@@ -1318,18 +1309,6 @@ function openAdminUserDatabase() {
             }
             return Array.from(usersMap.values());
         }
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxXnr_BZk9GA3i291mXFdQjmFGOhiFny7C4tMUaz_CzXfMXDYl2IGj1h_L7abfsdkqn/exec";
-
-async function getAllUsersUnified() {
-  try {
-    const response = await fetch(SCRIPT_URL);
-    const data = await response.json();
-    return data || [];
-  } catch (err) {
-    console.error("Google Sheets fetch error:", err);
-    return [];
-  }
-}
 
         function renderUserDatabaseList() {
             const allUsers = getAllUsersUnified();
@@ -1412,6 +1391,71 @@ async function getAllUsersUnified() {
             updateAllDbCountdowns();
         }
 
+        function updateAllDbCountdowns() {
+            const timerElements = document.querySelectorAll('.db-live-timer');
+            const now = Date.now();
+            timerElements.forEach(el => {
+                const startTime = parseInt(el.getAttribute('data-start'));
+                const totalDays = parseInt(el.getAttribute('data-days'));
+                if (!startTime || !totalDays) return;
+                const expiryTime = startTime + (totalDays * 24 * 60 * 60 * 1000);
+                const distance = expiryTime - now;
+                if (distance < 0) {
+                    el.textContent = "ვადა გასულია";
+                    el.style.color = "#ef4444";
+                    return;
+                }
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                el.textContent = `${days}დღე ${hours}სთ ${minutes}წთ`;
+            });
+        }
+
+        function moveUserToTrash(uniqueKey) {
+            let allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+            if (u) {
+                u.isDeleted = true;
+                saveUserToUnifiedList(u);
+                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
+                renderUserDatabaseList();
+            }
+        }
+
+        function restoreUserFromTrash(uniqueKey) {
+            let allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+            if (u) {
+                u.isDeleted = false;
+                saveUserToUnifiedList(u);
+                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
+                renderUserDatabaseList();
+            }
+        }
+
+        function permanentlyDeleteUser(uniqueKey) {
+            if (confirm("სამუდამოდ წაშალოთ მომხმარებელი?")) {
+                let allUsers = getAllUsersUnified();
+                const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+                if (u) localStorage.removeItem('user_' + u.pid + '_' + u.car);
+                let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+                list = list.filter(item => (item.pid + '_' + item.car) !== uniqueKey);
+                localStorage.setItem('all_registered_users', JSON.stringify(list));
+                renderUserDatabaseList();
+            }
+        }
+
+        function selectUserToEdit(uniqueKey) {
+            const allUsers = getAllUsersUnified();
+            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
+            if (u) {
+                closeAdminUserDatabase();
+                document.getElementById('adminTargetPid').value = u.pid;
+                searchUserByPid();
+            }
+        }
+
         function openAdminUserDetail(uniqueKey) {
             const allUsers = getAllUsersUnified();
             const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
@@ -1491,71 +1535,6 @@ async function getAllUsersUnified() {
         function closeAdminUserDetail() {
             document.getElementById('adminUserDetailModal').style.display = 'none';
             document.getElementById('adminDbModal').style.display = 'flex';
-        }
-
-        function updateAllDbCountdowns() {
-            const timerElements = document.querySelectorAll('.db-live-timer');
-            const now = Date.now();
-            timerElements.forEach(el => {
-                const startTime = parseInt(el.getAttribute('data-start'));
-                const totalDays = parseInt(el.getAttribute('data-days'));
-                if (!startTime || !totalDays) return;
-                const expiryTime = startTime + (totalDays * 24 * 60 * 60 * 1000);
-                const distance = expiryTime - now;
-                if (distance < 0) {
-                    el.textContent = "ვადა გასულია";
-                    el.style.color = "#ef4444";
-                    return;
-                }
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                el.textContent = `${days}დღე ${hours}სთ ${minutes}წთ`;
-            });
-        }
-
-        function moveUserToTrash(uniqueKey) {
-            let allUsers = getAllUsersUnified();
-            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
-            if (u) {
-                u.isDeleted = true;
-                saveUserToUnifiedList(u);
-                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
-                renderUserDatabaseList();
-            }
-        }
-
-        function restoreUserFromTrash(uniqueKey) {
-            let allUsers = getAllUsersUnified();
-            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
-            if (u) {
-                u.isDeleted = false;
-                saveUserToUnifiedList(u);
-                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
-                renderUserDatabaseList();
-            }
-        }
-
-        function permanentlyDeleteUser(uniqueKey) {
-            if (confirm("სამუდამოდ წაშალოთ მომხმარებელი?")) {
-                let allUsers = getAllUsersUnified();
-                const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
-                if (u) localStorage.removeItem('user_' + u.pid + '_' + u.car);
-                let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-                list = list.filter(item => (item.pid + '_' + item.car) !== uniqueKey);
-                localStorage.setItem('all_registered_users', JSON.stringify(list));
-                renderUserDatabaseList();
-            }
-        }
-
-        function selectUserToEdit(uniqueKey) {
-            const allUsers = getAllUsersUnified();
-            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
-            if (u) {
-                closeAdminUserDatabase();
-                document.getElementById('adminTargetPid').value = u.pid;
-                searchUserByPid();
-            }
         }
 
         function selectCabinetPackage(newPkg, days) {
@@ -1649,37 +1628,39 @@ async function getAllUsersUnified() {
                 packageHistory: existingUser && existingUser.packageHistory ? existingUser.packageHistory : []
             };
 
-           try {
-        localStorage.setItem(storageKey, JSON.stringify(userData));
-        localStorage.setItem('last_mobile_order', JSON.stringify(userData));
-    } catch (err) {
-        console.error("Storage write error:", err);
-    }
+            try {
+                localStorage.setItem(storageKey, JSON.stringify(userData));
+                saveUserToUnifiedList(userData);
+                localStorage.setItem('last_mobile_order', JSON.stringify(userData));
+            } catch (err) {
+                console.error("Storage write error:", err);
+            }
 
-    const message = `<b>New Order!</b>\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
+            const message = `<b>New Order!</b>\nCode: ${randomCode}\nPackage: ${pkg}\nPrice: ${price} GEL\nName: ${name}\nID: ${pid}\nPhone: ${phone}\nCar: ${car}\nTech: ${tech}`;
 
-    sendTelegramMessageUniversal(message, function() {
-        setTimeout(() => {
-            window.location.href = 'https://egreve.bog.ge/Carfax';
-        }, 1500);
-    });
+            sendTelegramMessageUniversal(message, function() {
+                setTimeout(() => {
+                    window.location.href = 'https://egreve.bog.ge/Carfax';
+                }, 1500);
+            });
 
-const googleData = {
-        pid: pid,
-        name: name,
-        car: car,
-        tech: tech,
-        phone: phone,
-        package: pkg,
-        days: daysCount
-    };
+            const googleData = {
+                pid: pid,
+                name: name,
+                car: car,
+                tech: tech,
+                phone: phone,
+                package: pkg,
+                days: daysCount
+            };
 
-    fetch('https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec', {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(googleData)
-    }).catch(err => console.log(err));
-</script>
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(googleData)
+            }).catch(err => console.log(err));
+        }
+    </script>
 </body>
 </html>
