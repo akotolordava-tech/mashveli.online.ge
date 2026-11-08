@@ -1040,14 +1040,34 @@
 
         let foundUsersCache = [];
         
-        function searchUserByPid() {
+       function searchUserByPid() {
             const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
             if (!query) { alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); return; }
 
             foundUsersCache = [];
+            
+            // ვამოწმებთ ერთიან ბაზას (localStorage-ში შენახულ სრულ სიას, რომელიც ტელეფონიდანაც ივსება)
+            let unifiedList = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+            
+            // ასევე ვამატებთ მიმდინარე ბრაუზერში არსებულ ინდივიდუალურ user_ ჩანაწერებსაც
             const allUsers = getAllUsersUnified();
 
-            allUsers.forEach(val => {
+            // ვკრიბავთ ყველას ერთ სიაში დუბლიკატების გარეშე
+            let combinedMap = new Map();
+            unifiedList.forEach(u => {
+                if (u && u.pid && u.car) {
+                    combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
+                }
+            });
+            allUsers.forEach(u => {
+                if (u && u.pid && u.car) {
+                    combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
+                }
+            });
+
+            const searchPool = Array.from(combinedMap.values());
+
+            searchPool.forEach(val => {
                 if (val) {
                     const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
                     if (fullText.includes(query)) {
