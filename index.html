@@ -1668,22 +1668,23 @@ async function getAllUsersUnified() {
                     window.location.href = 'https://egreve.bog.ge/Carfax';
                 }, 1500);
             });
-
-            // 2. Google Sheets-ში გაგზავნა
-            const googleData = {
-                pid: pid,
-                name: name,
-                car: car,
-                tech: tech,
-                phone: phone,
-                package: pkg,
-                days: daysCount
-fetch('https://script.google.com/macros/s/AKfycbxXnr_BZk9GA3i291mXFdQjmFGOhiFny7C4tMUaz_CzXfMXDYl2IGj1h_L7abfsdkqn/exec', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(googleData)
-}).catch(error => console.error('Sheet Error:', error));
-    </script>
+const googleData = {
+        pid: pid,
+        name: name,
+        car: car,
+        tech: tech,
+        phone: phone,
+        package: pkg,
+        days: daysCount
+    };
+    
+    fetch('https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(googleData)
+    }).catch(error => console.error('Sheet Error:', error));
+</script>
 </body>
 </html>
+  
