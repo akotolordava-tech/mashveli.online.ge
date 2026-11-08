@@ -14,18 +14,18 @@
         button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 10px; }
         button:hover { background: #218838; }
         #adminSection { display: none; margin-top: 20px; }
-        .search-box { margin-bottom: 15px; }
+        .search-box { margin-bottom: 15px; width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background: #007bff; color: white; }
         tr:nth-child(even) { background: #f9f9f9; }
         .error { color: red; text-align: center; margin-top: 10px; }
+        .success { color: green; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- ავტორიზაციის ფორმა -->
     <div id="loginSection">
         <h2>ადმინპანელში შესვლა</h2>
         <div class="form-group">
@@ -39,10 +39,9 @@
             <input type="text" id="tgCode" placeholder="შეიყვანეთ 4-ნიშნა კოდი">
             <button onclick="verifyAndLogin()" style="background: #007bff;">შესვლა</button>
         </div>
-        <div id="loginError" class="error"></div>
+        <div id="loginStatus" class="error"></div>
     </div>
 
-    <!-- ადმინპანელი (მონაცემთა ბაზა) -->
     <div id="adminSection">
         <h2>მომხმარებლების ბაზა</h2>
         <input type="text" id="searchInput" class="search-box" onkeyup="filterTable()" placeholder="მოძებნეთ სახელით, PID-ით ან ტელეფონით...">
@@ -61,7 +60,6 @@
                 </tr>
             </thead>
             <tbody id="tableBody">
-                <!-- მონაცემები ჩაიტვირთება აქ -->
             </tbody>
         </table>
     </div>
@@ -71,56 +69,63 @@
     const SCRIPT_URL = 'https://script.google.com/macros/library/d/1dCa6STmNvj29CJoqCzCg78g-RGAxxXL2w2dDdDmlI6cwXm1rliVOOXxS/11';
     let generatedCode = null;
 
-    // 1. კოდის გაგზავნა ტელეგრამში
     function requestTelegramCode() {
         const pass = document.getElementById('adminPass').value;
+        const statusDiv = document.getElementById('loginStatus');
+        
         if (!pass) {
-            document.getElementById('loginError').innerText = 'გთხოვთ შეიყვანოთ პაროლი!';
+            statusDiv.className = 'error';
+            statusDiv.innerText = 'გთხოვთ შეიყვანოთ პაროლი!';
             return;
         }
 
-        // გენერირდება 4-ნიშნა შემთხვევითი კოდი
         generatedCode = Math.floor(1000 + Math.random() * 9000);
-        
-        const loginData = {
-            action: 'admin_login_request',
-            code: generatedCode,
-            pass: pass
-        };
+        statusDiv.className = 'success';
+        statusDiv.innerText = 'მოთხოვნა იგზავნება...';
 
         fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(loginData)
+            body: JSON.stringify({
+                action: 'admin_login_request',
+                code: generatedCode,
+                pass: pass
+            })
         }).then(() => {
             document.getElementById('codeGroup').style.display = 'block';
-            document.getElementById('loginError').innerText = '';
-            alert('ავტორიზაციის კოდი გაიგზავნა ტელეგრამში!');
+            statusDiv.className = 'success';
+            statusDiv.innerText = 'კოდი გაიგზავნა ტელეგრამში! შეამოწმეთ ბოტი.';
         }).catch(err => {
-            document.getElementById('loginError').innerText = 'შეცდომა კოდის გაგზავნისას!';
+            statusDiv.className = 'error';
+            statusDiv.innerText = 'შეცდომა კოდის გაგზავნისას!';
         });
     }
 
-    // 2. კოდის შემოწმება და შესვლა
     function verifyAndLogin() {
         const userCode = document.getElementById('tgCode').value;
+        const statusDiv = document.getElementById('loginStatus');
+
         if (userCode == generatedCode) {
             document.getElementById('loginSection').style.display = 'none';
             document.getElementById('adminSection').style.display = 'block';
             loadData();
         } else {
-            document.getElementById('loginError').innerText = 'არასწორი კოდი!';
+            statusDiv.className = 'error';
+            statusDiv.innerText = 'არასწორი კოდი!';
         }
     }
 
-    // 3. ბაზიდან მონაცემების წამოღება (Sheets-დან)
     function loadData() {
-        fetch(SCRIPT_URL + '?action=getData')
+        fetch(SCRIPT_URL)
             .then(res => res.json())
             .then(data => {
                 const tbody = document.getElementById('tableBody');
                 tbody.innerHTML = '';
+                if(data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">მონაცემები არ არის</td></tr>';
+                    return;
+                }
                 data.forEach(row => {
                     let tr = `<tr>
                         <td>${row.pid || ''}</td>
@@ -137,7 +142,6 @@
             .catch(err => console.error('Data Load Error:', err));
     }
 
-    // 4. სერჩის ფუნქცია
     function filterTable() {
         let input = document.getElementById('searchInput').value.toLowerCase();
         let rows = document.querySelectorAll('#tableBody tr');
