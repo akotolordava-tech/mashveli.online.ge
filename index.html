@@ -221,7 +221,7 @@
                 </div>
                 <div class="form-group">
                     <label data-key="lbl_phone">ტელეფონის ნომერი</label>
-                   <input type="text" id="clientPhone" required placeholder="+995 5XX XX XX XX">
+                    <input type="text" id="clientPhone" class="phone-input" value="+995 " required>
                 </div>
                 <div class="form-group">
                     <label data-key="lbl_pkg_price">არჩეული პაკეტი და ფასი</label>
@@ -250,7 +250,7 @@
                 </div>
                 <div class="form-group">
                     <label data-key="lbl_phone">ტელეფონის ნომერი</label>
-                    <input type="text" id="cabPhone" required placeholder="+995 5XX XX XX XX">
+                    <input type="text" id="cabPhone" class="phone-input" value="+995 " required>
                 </div>
                 <button type="submit" class="form-submit-btn" data-key="btn_login_req">შესვლის მოთხოვნა</button>
             </form>
@@ -267,7 +267,7 @@
                 <input type="password" id="adminStaticPassword">
             </div>
             <button class="form-submit-btn" onclick="verifyStaticPasswordAndSendCode()" data-key="adm_btn_pass">პაროლის შემოწმება და Telegram-კოდის მიღება 📩</button>
-            
+           
             <div id="codeEntryArea" style="display: none; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
                 <div class="form-group">
                     <label data-key="adm_lbl_code">შეიყვანეთ Telegram-ში მიღებული კოდი:</label>
@@ -283,9 +283,9 @@
         <div class="modal-content" style="max-width: 650px;">
             <button class="modal-close" onclick="closeAdminModal()">×</button>
             <h3 data-key="adm_panel_title">🛠️ ადმინისტრატორის პანელი</h3>
-            
+           
             <button type="button" onclick="openAdminUserDatabase()" class="form-submit-btn" style="background: #0d231a; color: #d9f96b; margin-bottom: 20px;" data-key="adm_btn_db">👥 მომხმარებელთა ერთიანი ბაზა (სრული სია) 🔍</button>
-            
+           
             <form onsubmit="saveAdminData(event)">
                 <div class="form-group">
                     <label data-key="adm_search_hint">მოძებნეთ მომხმარებელი პირადი ნომრით, მანქანით ან სახელით:</label>
@@ -347,7 +347,7 @@
                 <h3 style="margin-bottom: 0;" data-key="db_title">👥 მომხმარებელთა ბაზა</h3>
                 <button onclick="closeAdminUserDatabase()" style="background: #0d231a; color: #d9f96b; border: none; padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer;" data-key="db_back_btn">← უკან დაბრუნება</button>
             </div>
-            
+           
             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                 <button id="tabActiveUsers" onclick="switchDbTab('active')" style="flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" data-key="db_tab_active">აქტიური მომხმარებლები (<span id="activeUsersCount">0</span>)</button>
                 <button id="tabTrashUsers" onclick="switchDbTab('trash')" style="flex: 1; padding: 10px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer;" data-key="db_tab_trash">ნაგვის ურნა (<span id="trashUsersCount">0</span>)</button>
@@ -524,10 +524,10 @@
     </div>
 
     <script>
-        const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4"; 
-        const chatId = "8233255349"; 
+        const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4";
+        const chatId = "8233255349";
         const ADMIN_SECRET_PASSWORD = "სკანდიდაფხოდი";
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXnr_BZk9GA3i291mXFdQjmFGOhiFny7C4tMUaz_CzXfMXDYl2IGj1h_L7abfsdkqn/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_XEkYRIodzID1KBFUElLxBY2RpFH6NLKLViFjHpT_32WijeUfuZ-McmCQaZ0sdSUj/exec';
 
         let currentLang = 'GEO';
         let generatedAdminCode = "";
@@ -877,8 +877,8 @@
         function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
         function openCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'flex'; }
         function closeCabinetLogin() { document.getElementById('cabinetLoginModal').style.display = 'none'; }
-        function closeCabinetDashboard() { 
-            document.getElementById('cabinetDashboard').style.display = 'none'; 
+        function closeCabinetDashboard() {
+            document.getElementById('cabinetDashboard').style.display = 'none';
             if(countdownInterval) clearInterval(countdownInterval);
         }
 
@@ -1039,90 +1039,23 @@
         }
 
         let foundUsersCache = [];
-        
-      function searchUserByPid() {
-  const query = document.getElementById('adminTargetPid').value.trim();
-  if (!query) {
-    alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!");
-    return;
-  }
+       
+        function searchUserByPid() {
+            const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
+            if (!query) { alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); return; }
 
-  foundUsersCache = [];
+            foundUsersCache = [];
+            const allUsers = getAllUsersUnified();
 
-  // 1. ჯერ ვძებნით სერვერიდან (fetch)
-  fetch(SCRIPT_URL + "?q=" + encodeURIComponent(query))
-    .then(response => response.json())
-    .then(data => {
-      if (data && data.length > 0) {
-        foundUsersCache = data;
-        processFoundUsers();
-      } else {
-        // 2. თუ სერვერმა ვერ იპოვა, ვძებნით localStorage-ში
-        let unifiedList = JSON.parse(localStorage.getItem('all_registered_users')) || [];
-        const allUsers = typeof getAllUsersUnified === 'function' ? getAllUsersUnified() : [];
-        
-        let combinedMap = new Map();
-        unifiedList.forEach(u => {
-          if (u && u.pid && u.car) {
-            combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
-          }
-        });
-        allUsers.forEach(u => {
-          if (u && u.pid && u.car) {
-            combinedMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
-          }
-        });
-
-        const searchPool = Array.from(combinedMap.values());
-        searchPool.forEach(val => {
-          if (val) {
-            const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
-            if (fullText.includes(query.toLowerCase())) {
-              if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car)) {
-                foundUsersCache.push(val);
-              }
-            }
-          }
-        });
-
-        processFoundUsers();
-      }
-    })
-    .catch(err => {
-      console.error("ძებნის შეცდომა:", err);
-      alert("მოხდა შეცდომა სერვერთან კავშირისას.");
-    });
-}
-
-function processFoundUsers() {
-  const selectwrapper = document.getElementById('carSelectwrapper');
-  const carSelector = document.getElementById('adminCarSelector');
-  carSelector.innerHTML = '';
-
-  if (foundUsersCache.length === 0) {
-    alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
-    selectwrapper.style.display = 'none';
-    return;
-  }
-
-  if (foundUsersCache.length === 1) {
-    selectwrapper.style.display = 'none';
-    if (typeof fillAdminFormWithUser === 'function') {
-      fillAdminFormWithUser(foundUsersCache[0]);
-    }
-  } else {
-    selectwrapper.style.display = 'block';
-    foundUsersCache.forEach((u, index) => {
-      const opt = document.createElement('option');
-      opt.value = index;
-      opt.textContent = `${u.name || ''} | 🚗 ${u.car || ''} | 🆔 ${u.pid || ''}`;
-      carSelector.appendChild(opt);
-    });
-    if (typeof fillAdminFormWithUser === 'function') {
-      fillAdminFormWithUser(foundUsersCache[0]);
-    }
-  }
-}
+            allUsers.forEach(val => {
+                if (val) {
+                    const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
+                    if (fullText.includes(query)) {
+                        if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car)) {
+                            foundUsersCache.push(val);
+                        }
+                    }
+                }
             });
 
             const selectWrapper = document.getElementById('carSelectWrapper');
@@ -1193,7 +1126,7 @@ function processFoundUsers() {
             const div = document.createElement('div');
             div.className = 'fine-item-box';
             div.style.cssText = "background: #17362a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #1a3e30; position: relative;";
-            
+           
             let previewArea = '';
             if (mediaUrl) {
                 previewArea = mediaType && mediaType.startsWith('video/')
@@ -1404,8 +1337,8 @@ function processFoundUsers() {
                 const card = document.createElement('div');
                 card.className = 'user-db-card';
                 const uniqueKey = u.pid + '_' + u.car;
-                const historyHTML = u.packageHistory && u.packageHistory.length > 0 
-                    ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 პაკეტების ისტორია: ${u.packageHistory.join(' ← ')}</div>` 
+                const historyHTML = u.packageHistory && u.packageHistory.length > 0
+                    ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 პაკეტების ისტორია: ${u.packageHistory.join(' ← ')}</div>`
                     : '';
 
                 if (currentDbTab === 'active') {
