@@ -1247,28 +1247,25 @@
             userData.noFine = noFineChecked;
             userData.fines = finesArray;
             userData.techStatus = techStatus;
+localStorage.setItem(storageKey, JSON.stringify(userData));
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+    }).then(() => {
+        alert("✅ მონაცემები წარმატებით განახლდა!");
+        closeAdminModal();
+    }).catch(err => console.error("Error:", err));
+}
 
-            localStorage.setItem(storageKey, JSON.stringify(userData));
-     fetch(SCRIPT_URL, {
-  method: 'POST',
-  mode: 'no-cors',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(userData)
-});
-
-            alert("✅ მონაცემები წარმატებით განახლდა!");
-            closeAdminModal();
-        }
-
-        function openAdminUserDatabase() {
-            closeAdminModal();
-            document.getElementById('adminDbModal').style.display = 'flex';
-            currentDbTab = 'active';
-            updateDbTabStyles();
-            renderUserDatabaseList();
-            if (dbLiveTimer) clearInterval(dbLiveTimer);
-            dbLiveTimer = setInterval(updateAllDbCountdowns, 1000);
-        }
+function openAdminUserDatabase() {
+    closeAdminModal();
+    document.getElementById('adminDbModal').style.display = 'flex';
+    currentDbTab = 'active';
+    updateDbTabStyles();
+}
+        
 
         function closeAdminUserDatabase() {
             document.getElementById('adminDbModal').style.display = 'none';
