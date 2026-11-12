@@ -286,37 +286,40 @@
            
             <button type="button" onclick="openAdminUserDatabase()" class="form-submit-btn" style="background: #0d231a; color: #d9f96b; margin-bottom: 20px;" data-key="adm_btn_db">👥 მომხმარებელთა ერთიანი ბაზა (სრული სია) 🔍</button>
            
-            <form onsubmit="saveAdminData(event)">
-                <div class="form-group">
-                    <label data-key="adm_search_hint">მოძებნეთ მომხმარებელი პირადი ნომრით, მანქანით ან სახელით:</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="adminTargetPid" placeholder="PID / Car / Name..." style="flex: 1;">
-                       <button type="button" onclick="searchUserByPid()" class="form-submit-btn" style="margin-top: 0; width: 120px;" data-key="btn_search">ძებნა 🔍</button>
+           <form onsubmit="saveAdminData(event)">
+  <div class="form-group">
+    <label data-key="adm_search_hint">მოძებნეთ მომხმარებელი პირადი ნომრით, მანქანით ან სახელით:</label>
+    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+      <input type="text" id="adminTargetPid" placeholder="PID / car / name..." style="flex: 1; min-width: 200px;">
+      <button type="button" onclick="searchUserByPid()" class="form-submit-btn" style="margin-top: 0; width: 120px;" data-key="btn_search">ძებნა 🔍</button>
+    </div>
+  </div>
 
-                <div class="form-group" id="carSelectWrapper" style="display: none;">
-                    <label data-key="adm_sel_car_lbl">აირჩიეთ ნაპოვნი მომხმარებელი / ავტომობილი:</label>
-                    <select id="adminCarSelector" onchange="onCarSelected(this.value)" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-weight: bold;"></select>
-                </div>
+  <div id="carSelectWrapper" style="display: none;">
+    <label data-key="adm_sel_car_lbl">აირჩიეთ მომხმარებლის ავტომობილი / ტელეფონნომერი:</label>
+    <select id="adminCarSelector" onchange="onCarSelected(this.value)" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ccc; font-weight: bold;"></select>
+  </div>
 
-                <div class="form-group">
-                    <label data-key="lbl_name">მომხმარებლის სახელი და გვარი</label>
-                    <input type="text" id="adminTargetName" required>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                    <div class="form-group">
-                        <label data-key="lbl_car">ავტომობილის ნომერი</label>
-                        <input type="text" id="adminTargetCar" class="uppercase-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label data-key="lbl_tech">ტექპასპორტის ნომერი</label>
-                        <input type="text" id="adminTargetTech" class="uppercase-input">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label data-key="lbl_phone">ტელეფონის ნომერი</label>
-                    <input type="text" id="adminTargetPhone">
-                </div>
+  <div class="form-group">
+    <label data-key="lbl_name">მომხმარებლის სახელი და გვარი:</label>
+    <input type="text" id="adminTargetName" required>
+  </div>
 
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <div class="form-group">
+      <label data-key="lbl_car">ავტომობილის სახელმწიფო ნომერი:</label>
+      <input type="text" id="adminTargetCar" class="uppercase-input" required>
+    </div>
+    <div class="form-group">
+      <label data-key="lbl_tech">ტექპასპორტის ნომერი:</label>
+      <input type="text" id="adminTargetTech" class="uppercase-input">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label data-key="lbl_phone">ტელეფონის ნომერი:</label>
+    <input type="text" id="adminTargetPhone">
+  </div>
                 <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
                     <input type="checkbox" id="adminNoFineCheck" onchange="toggleFineInputsState(this.checked)" style="width: 20px; height: 20px;">
                     <label for="adminNoFineCheck" style="margin-bottom: 0; font-weight: bold; color: #22c55e;" data-key="adm_nofine_lbl">ავტომობილზე ჯარიმა არ ფიქსირდება</label>
