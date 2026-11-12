@@ -1710,11 +1710,11 @@ function searchUserByPid() {
     days: "30"
   };
 
-  if (!userData.pid || !userData.name) {
+if (!userData.pid || !userData.name) {
     alert("გთხოვთ შეავსოთ პირადი ნომერი და სახელი!");
     return;
   }
-        
+
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
