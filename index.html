@@ -1484,20 +1484,39 @@
                 searchUserByPid();
             }
         }
-function searchUserByPid() {
-  const pid = document.getElementById('adminTargetPid').value.trim();
-  if (!pid) {
-    alert("გთხოვთ შეიყვანოთ პირადი ნომერი!");
+async function searchUserByPid() {
+  const pid = document.getElementById('adminTargetId').value.trim();
+  if (!pid) { 
+    alert("გთხოვთ შეიყვანოთ პირადი ნომერი!"); 
+    return; 
+  }
+
+  const allusers = await getAllUsersUnified();
+  // ვფილტრავთ ყველა ჩანაწერს, სადაც პირადი ნომერი ემთხვევა
+  foundUsersCache = allusers.filter(item => item && item.pid && String(item.pid).trim() === pid);
+
+  const selectwrapper = document.getElementById('carSelectwrapper');
+  const carSelector = document.getElementById('adminCarSelector');
+  carSelector.innerHTML = '';
+
+  if (foundUsersCache.length === 0) {
+    alert("❌ მონაცემები ამ პირადი ნომრით ვერ მოიძებნა.");
+    if (selectwrapper) selectwrapper.style.display = 'none';
     return;
   }
-  
-  const allusers = getallusersunified();
-  const found = allusers.find(item => item.pid && String(item.pid).trim() === pid);
-  
-  if (found) {
-    fillAdminFormWithUser(found);
+
+  if (foundUsersCache.length === 1) {
+    if (selectwrapper) selectwrapper.style.display = 'none';
+    fillAdminFormWithUser(foundUsersCache[0]);
   } else {
-    alert("❌ მონაცემები ამ პირადი ნომრით ვერ მოიძებნა.");
+    if (selectwrapper) selectwrapper.style.display = 'block';
+    foundUsersCache.forEach((u, index) => {
+      const opt = document.createElement('option');
+      opt.value = index;
+      opt.textContent = `👤 ${u.name || 'უცნობი'} | 🚗 ${u.car || 'მანქანა'} | 🆔 ${u.pid || ''}`;
+      carSelector.appendChild(opt);
+    });
+    fillAdminFormWithUser(foundUsersCache[0]);
   }
 }
         function openAdminUserDetail(uniqueKey) {
