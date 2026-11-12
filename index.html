@@ -250,7 +250,7 @@
                 </div>
                 <div class="form-group">
                     <label data-key="lbl_phone">ტელეფონის ნომერი</label>
-                    <input type="text" id="cabPhone" class="phone-input" value="+995 " required>
+                   <input type="tel" id="cabPhone" class="phone-input" maxlength="9" pattern="[0-9]{9}" inputmode="numeric" required placeholder="555123456">
                 </div>
                 <button type="submit" class="form-submit-btn" data-key="btn_login_req">შესვლის მოთხოვნა</button>
             </form>
