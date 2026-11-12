@@ -1047,46 +1047,48 @@
         let foundUsersCache = [];
        
      async function searchUserByPid() {
-  const query = document.getElementById('adminTargetId').value.trim();
+  const query = document.getElementById('adminTargetId').value.trim().toLowerCase();
   if (!query) { 
     alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); 
     return; 
   }
 
-  try {
-    const response = await fetch(SCRIPT_URL + "?q=" + encodeURIComponent(query));
-    const data = await response.json();
+  foundUsersCache = [];
+  const allusers = await getAllUsersUnified(); // იყენებს უკვე გამართულ ერთიან ფუნქციას
 
-    foundUsersCache = data || [];
-
-    const selectwrapper = document.getElementById('carSelectwrapper');
-    const carSelector = document.getElementById('adminCarSelector');
-    carSelector.innerHTML = '';
-
-    if (foundUsersCache.length === 0) {
-      alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
-      if (selectwrapper) selectwrapper.style.display = 'none';
-      return;
+  allusers.forEach(val => {
+    if (val) {
+      const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
+      if (fullText.includes(query)) {
+        if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car && u.tech === val.tech)) {
+          foundUsersCache.push(val);
+        }
+      }
     }
+  });
 
-    if (typeof fillAdminFormWithUser === 'function' && foundUsersCache.length > 0) {
-      fillAdminFormWithUser(foundUsersCache[0]);
-    }
+  const selectwrapper = document.getElementById('carSelectwrapper');
+  const carSelector = document.getElementById('adminCarSelector');
+  carSelector.innerHTML = '';
 
-    if (selectwrapper) {
-      selectwrapper.style.display = 'block';
-    }
+  if (foundUsersCache.length === 0) {
+    alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
+    if (selectwrapper) selectwrapper.style.display = 'none';
+    return;
+  }
 
-    foundUsersCache.forEach((val, index) => {
-      let opt = document.createElement('option');
+  if (foundUsersCache.length === 1) {
+    if (selectwrapper) selectwrapper.style.display = 'none';
+    fillAdminFormWithUser(foundUsersCache[0]);
+  } else {
+    if (selectwrapper) selectwrapper.style.display = 'block';
+    foundUsersCache.forEach((u, index) => {
+      const opt = document.createElement('option');
       opt.value = index;
-      opt.textContent = `${val.name || 'უცნობი'} - ${val.car || 'მანქანა'} (${val.pid || ''})`;
+      opt.textContent = `👤 ${u.name || 'უცნობი'} | 🚗 ${u.car || 'მანქანა'} | 🆔 ${u.pid || ''}`;
       carSelector.appendChild(opt);
     });
-
-  } catch (err) {
-    console.error("Search error:", err);
-    alert("შეცდომა მონაცემთა ძებნისას.");
+    fillAdminFormWithUser(foundUsersCache[0]);
   }
 }
         function onCarSelected(index) {
