@@ -1510,6 +1510,19 @@ async function searchUserByPid() {
     return;
   }
 
+  // ავტომატურად ვინახავთ ნაპოვნი მომხმარებელს localStorage-ში, რომ საერთო ბაზამაც დაინახოს
+  foundUsersCache.forEach(userObj => {
+    try {
+      let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+      const exists = list.some(item => String(item.pid) === String(userObj.pid) && String(item.car) === String(userObj.car));
+      if (!exists) {
+        list.push(userObj);
+        localStorage.setItem('all_registered_users', JSON.stringify(list));
+      }
+      localStorage.setItem('user_' + userObj.pid + '_' + userObj.car, JSON.stringify(userObj));
+    } catch(e) { console.log(e); }
+  });
+
   if (foundUsersCache.length === 1) {
     if (selectwrapper) selectwrapper.style.display = 'none';
     fillAdminFormWithUser(foundUsersCache[0]);
@@ -1522,6 +1535,10 @@ async function searchUserByPid() {
       if (carSelector) carSelector.appendChild(opt);
     });
     fillAdminFormWithUser(foundUsersCache[0]);
+  }
+  
+  if (typeof renderUserDatabaseList === 'function') {
+    renderUserDatabaseList();
   }
 }
         function openAdminUserDetail(uniqueKey) {
