@@ -1247,9 +1247,11 @@
             }).catch(err => console.error("Error:", err));
         }
 
-    function saveUserToUnifiedList(userObj) {
+ function saveUserToUnifiedList(userObj) {
+  if (!userObj || !userObj.pid || !userObj.car) return;
+
   let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
-  const index = list.findIndex(item => item && userObj && item.pid && userObj.pid && item.pid.toString().trim() === userObj.pid.toString().trim() && item.car.toUpperCase() === userObj.car.toUpperCase());
+  const index = list.findIndex(item => item && item.pid && item.pid.toString().trim() === userObj.pid.toString().trim() && item.car.toUpperCase() === userObj.car.toUpperCase());
   
   if (index >= 0) {
     list[index] = userObj;
@@ -1257,13 +1259,17 @@
     list.push(userObj);
   }
   
+  // ვინახავთ საერთო სიაში
   localStorage.setItem('all_registered_users', JSON.stringify(list));
+  
+  // ვინახავთ მკაცრად ინდივიდუალურადაც, რომ ბაზამ და ძებნამ მყისიერად დაინახოს
+  localStorage.setItem('user_' + userObj.pid.toString().trim() + '_' + userObj.car.toString().trim().toUpperCase(), JSON.stringify(userObj));
   
   // მყისიერად განვაახლოთ მომხმარებელთა ბაზის სია ეკრანზეც
   if (typeof renderUserDatabaseList === 'function') {
     renderUserDatabaseList();
   }
-}  
+}
 
     async function openAdminUserDatabase() {
   closeAdminModal();
