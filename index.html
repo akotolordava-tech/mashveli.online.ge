@@ -1056,8 +1056,9 @@
                 if (val) {
                     const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
                     if (fullText.includes(query)) {
-                        if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car)) {
-                            foundUsersCache.push(val);
+if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car && u.tech === val.tech)) {
+  foundUsersCache.push(val);
+}                         
                         }
                     }
                 }
