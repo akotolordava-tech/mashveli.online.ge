@@ -1469,27 +1469,49 @@ async function renderUserDatabaseList() {
             });
         }
 
-        function moveUserToTrash(uniqueKey) {
-            let allUsers = getAllUsersUnified();
-            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
-            if (u) {
-                u.isDeleted = true;
-                saveUserToUnifiedList(u);
-                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
-                renderUserDatabaseList();
-            }
-        }
+      function moveUserToTrash(uniqueKey) {
+  let allusers = getAllUsersUnified();
+  if (!Array.isArray(allusers)) allusers = [];
+  
+  const u = allusers.find(item => item && (item.pid + '_' + item.car) === uniqueKey);
+  if (u) {
+    u.isDeleted = true;
+    saveUserToUnifiedList(u);
+    localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
+    renderUserDatabaseList();
+  }
+}
 
-        function restoreUserFromTrash(uniqueKey) {
-            let allUsers = getAllUsersUnified();
-            const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
-            if (u) {
-                u.isDeleted = false;
-                saveUserToUnifiedList(u);
-                localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
-                renderUserDatabaseList();
-            }
-        }
+function restoreUserFromTrash(uniqueKey) {
+  let allusers = getAllUsersUnified();
+  if (!Array.isArray(allusers)) allusers = [];
+  
+  const u = allusers.find(item => item && (item.pid + '_' + item.car) === uniqueKey);
+  if (u) {
+    u.isDeleted = false;
+    saveUserToUnifiedList(u);
+    localStorage.setItem('user_' + u.pid + '_' + u.car, JSON.stringify(u));
+    renderUserDatabaseList();
+  }
+}
+
+function permanentlyDeleteUser(uniqueKey) {
+  if (confirm("ნამდვილად გსურთ ამ მომხმარებლის სამუდამოდ წაშლა?")) {
+    let allusers = getAllUsersUnified();
+    if (!Array.isArray(allusers)) allusers = [];
+    
+    const u = allusers.find(item => item && (item.pid + '_' + item.car) === uniqueKey);
+    if (u) {
+      localStorage.removeItem('user_' + u.pid + '_' + u.car);
+    }
+    
+    let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+    list = list.filter(item => item && (item.pid + '_' + item.car) !== uniqueKey);
+    localStorage.setItem('all_registered_users', JSON.stringify(list));
+    
+    renderUserDatabaseList();
+  }
+}
 
         function permanentlyDeleteUser(uniqueKey) {
             if (confirm("სამუდამოდ წაშალოთ მომხმარებელი?")) {
