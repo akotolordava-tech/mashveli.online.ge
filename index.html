@@ -1371,87 +1371,69 @@
 
   return Array.from(usersMap.values());
 }
+async function renderUserDatabaseList() {
+  let allusers = [];
+  try {
+    allusers = await getAllUsersUnified();
+  } catch (e) {
+    allusers = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+  }
+  
+  if (!Array.isArray(allusers)) allusers = [];
 
-        function renderUserDatabaseList() {
-            const allUsers = getAllUsersUnified();
-            const activeUsers = allUsers.filter(u => u.isDeleted !== true);
-            const trashUsers = allUsers.filter(u => u.isDeleted === true);
+  const activeUsers = allusers.filter(u => u && u.isDeleted !== true);
+  const trashUsers = allusers.filter(u => u && u.isDeleted === true);
 
-            document.getElementById('activeUsersCount').textContent = activeUsers.length;
-            document.getElementById('trashUsersCount').textContent = trashUsers.length;
+  const activeCountEl = document.getElementById('activeUsersCount');
+  const trashCountEl = document.getElementById('trashUsersCount');
+  if (activeCountEl) activeCountEl.textContent = activeUsers.length;
+  if (trashCountEl) trashCountEl.textContent = trashUsers.length;
 
-            const searchQuery = document.getElementById('dbSearchInput').value.toLowerCase().trim();
-            const targetList = currentDbTab === 'active' ? activeUsers : trashUsers;
-            const container = document.getElementById('dbUserCardsContainer');
-            container.innerHTML = '';
+  const searchInput = document.getElementById('dbSearchInput');
+  const searchQuery = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const targetList = currentDbTab === 'active' ? activeUsers : trashUsers;
+  const container = document.getElementById('dbUserCardsContainer');
+  if (!container) return;
+  
+  container.innerHTML = '';
 
-            const filtered = targetList.filter(u => {
-                const text = `${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`.toLowerCase();
-                return text.includes(searchQuery);
-            });
+  const filtered = targetList.filter(u => {
+    if (!u) return false;
+    const text = `${u.name || ''} ${u.pid || ''} ${u.car || ''} ${u.tech || ''} ${u.phone || ''} ${u.package || ''}`.toLowerCase();
+    return text.includes(searchQuery);
+  });
 
-            if (filtered.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: #b0c2bc; padding: 40px; font-size: 15px;">ჩანაწერები ვერ მოიძებნა.</div>`;
-                return;
-            }
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align: center; color: #b0c2bc; padding: 40px; font-size: 15px;">ჩანაწერები ვერ მოიძებნა</div>`;
+    return;
+  }
 
-            filtered.forEach(u => {
-                const card = document.createElement('div');
-                card.className = 'user-db-card';
-                const uniqueKey = u.pid + '_' + u.car;
-                const historyHTML = u.packageHistory && u.packageHistory.length > 0
-                    ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">🔄 პაკეტების ისტორია: ${u.packageHistory.join(' ← ')}</div>`
-                    : '';
+  filtered.forEach(u => {
+    const card = document.createElement('div');
+    card.className = 'user-db-card';
+    const uniqueKey = (u.pid || '') + '_' + (u.car || '');
+    
+    const historyHTML = u.packageHistory && u.packageHistory.length > 0 
+      ? `<div style="margin-top: 8px; font-size: 12px; color: #d9f96b;">📦 პაკეტების ისტორია: ${u.packageHistory.join(' - ')}</div>` 
+      : '';
 
-                if (currentDbTab === 'active') {
-                    card.innerHTML = `
-                        <div class="user-db-header">
-                            <div>
-                                <span style="font-size: 16px; font-weight: bold; color: #d9f96b;">👤 ${u.name || '—'}</span>
-                                <span style="font-size: 12px; background: #17362a; color: #b0c2bc; padding: 3px 8px; border-radius: 6px; margin-left: 8px;">ID: ${u.pid}</span>
-                            </div>
-                            <div style="font-weight: bold; color: #4ade80; font-size: 13px;">📦 ${u.package}</div>
-                        </div>
-                        <div class="user-db-grid">
-                            <div><b>მანქანა:</b> ${u.car}</div>
-                            <div><b>ტექპასპორტი:</b> ${u.tech || '—'}</div>
-                            <div><b>ტელეფონი:</b> ${u.phone || '—'}</div>
-                            <div><b>📅 რეგისტრაცია:</b> ${formatDateTime(u.timestamp)}</div>
-                            <div><b>დარჩენილია:</b> <span class="db-live-timer" data-start="${u.timestamp}" data-days="${u.days}" style="color: #d9f96b; font-weight: bold;">...</span></div>
-                        </div>
-                        ${historyHTML}
-                        <div class="user-db-actions">
-                            <button class="user-db-btn btn-view" onclick="openAdminUserDetail('${uniqueKey}')">👀 დეტალები</button>
-                            <button class="user-db-btn" onclick="selectUserToEdit('${uniqueKey}')" style="background: #17362a; color: #d9f96b; border: 1px solid #d9f96b;">✏️ რედაქტირება</button>
-                            <button class="user-db-btn btn-trash" onclick="moveUserToTrash('${uniqueKey}')">🗑️ ურნა</button>
-                        </div>
-                    `;
-                } else {
-                    card.innerHTML = `
-                        <div class="user-db-header">
-                            <div>
-                                <span style="font-size: 16px; font-weight: bold; color: #f87171;">🗑️ ${u.name || '—'}</span>
-                                <span style="font-size: 12px; background: #17362a; color: #b0c2bc; padding: 3px 8px; border-radius: 6px; margin-left: 8px;">ID: ${u.pid}</span>
-                            </div>
-                            <div style="font-size: 12px; color: #f87171;">წაშლილია</div>
-                        </div>
-                        <div class="user-db-grid">
-                            <div><b>მანქანა:</b> ${u.car}</div>
-                            <div><b>ტექპასპორტი:</b> ${u.tech || '—'}</div>
-                            <div><b>ტელეფონი:</b> ${u.phone || '—'}</div>
-                            <div><b>პაკეტი:</b> ${u.package}</div>
-                            <div><b>📅 რეგისტრაცია:</b> ${formatDateTime(u.timestamp)}</div>
-                        </div>
-                        <div class="user-db-actions">
-                            <button class="user-db-btn btn-restore" onclick="restoreUserFromTrash('${uniqueKey}')">🔄 აღდგენა</button>
-                            <button class="user-db-btn btn-perm-delete" onclick="permanentlyDeleteUser('${uniqueKey}')">❌ სამუდამოდ წაშლა</button>
-                        </div>
-                    `;
-                }
-                container.appendChild(card);
-            });
-            updateAllDbCountdowns();
-        }
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <div>
+          <div style="font-weight: bold; font-size: 16px; color: #fff;">👤 ${u.name || 'უცნობი'}</div>
+          <div style="font-size: 13px; color: #b0c2bc; margin-top: 4px;">🆔 პირადი: ${u.pid || '-'} | 🚗 მანქანა: ${u.car || '-'}</div>
+          <div style="font-size: 13px; color: #b0c2bc; margin-top: 2px;">📞 ტელ: ${u.phone || '-'} | 📄 ტექპასპორტი: ${u.tech || '-'}</div>
+          <div style="font-size: 13px; color: #d9f96b; margin-top: 4px;">⚡ პაკეტი: ${u.package || 'არ არის'} (${u.days || 0} დღე)</div>
+          ${historyHTML}
+        </div>
+        <div>
+          <button onclick="selectUserToEdit('${uniqueKey}')" class="admin-action-btn" style="padding: 6px 12px; background: #d9f96b; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">არჩევა</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
 
         function updateAllDbCountdowns() {
             const timerElements = document.querySelectorAll('.db-live-timer');
