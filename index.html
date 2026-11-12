@@ -1490,7 +1490,7 @@ function searchUserByPid() {
   }
   
   const allusers = getallusersunified();
-  const found = allusers.find(item => item.pid && item.pid.toString().trim() === pid);
+  const found = allusers.find(item => item.pid && String(item.pid).trim() === pid);
   
   if (found) {
     fillAdminFormWithUser(found);
