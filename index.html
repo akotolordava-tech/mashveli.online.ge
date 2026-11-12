@@ -1481,7 +1481,21 @@
                 searchUserByPid();
             }
         }
-
+function searchUserByPid() {
+  const pid = document.getElementById('adminTargetPid').value.trim();
+  if (!pid) {
+    alert("გთხოვთ შეიყვანოთ პირადი ნომერი!");
+    return;
+  }
+  const allUsers = getAllUsersUnified();
+  const found = allUsers.find(item => item.pid && item.pid.toString().trim() === pid);
+  
+  if (found) {
+    fillAdminFormWithUser(found);
+  } else {
+    alert("❌ მომხმარებელი ამ პირადი ნომრით ვერ მოიძებნა.");
+  }
+}
         function openAdminUserDetail(uniqueKey) {
             const allUsers = getAllUsersUnified();
             const u = allUsers.find(item => (item.pid + '_' + item.car) === uniqueKey);
