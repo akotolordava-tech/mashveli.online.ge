@@ -1247,16 +1247,23 @@
             }).catch(err => console.error("Error:", err));
         }
 
-        function saveUserToUnifiedList(userObj) {
-            let list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            const index = list.findIndex(item => item.pid.toString().trim() === userObj.pid.toString().trim() && item.car.toUpperCase() === userObj.car.toUpperCase());
-            if (index >= 0) {
-                list[index] = userObj;
-            } else {
-                list.push(userObj);
-            }
-            localStorage.setItem('all_registered_users', JSON.stringify(list));
-        }
+    function saveUserToUnifiedList(userObj) {
+  let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+  const index = list.findIndex(item => item && userObj && item.pid && userObj.pid && item.pid.toString().trim() === userObj.pid.toString().trim() && item.car.toUpperCase() === userObj.car.toUpperCase());
+  
+  if (index >= 0) {
+    list[index] = userObj;
+  } else {
+    list.push(userObj);
+  }
+  
+  localStorage.setItem('all_registered_users', JSON.stringify(list));
+  
+  // მყისიერად განვაახლოთ მომხმარებელთა ბაზის სია ეკრანზეც
+  if (typeof renderUserDatabaseList === 'function') {
+    renderUserDatabaseList();
+  }
+}  
 
     async function openAdminUserDatabase() {
   closeAdminModal();
