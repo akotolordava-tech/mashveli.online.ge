@@ -1046,7 +1046,7 @@
 
         let foundUsersCache = [];
        
-      async function searchUserByPid() {
+     async function searchUserByPid() {
   const query = document.getElementById('adminTargetId').value.trim();
   if (!query) { 
     alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); 
@@ -1080,7 +1080,7 @@
     foundUsersCache.forEach((val, index) => {
       let opt = document.createElement('option');
       opt.value = index;
-      opt.textContent = `${val.name} - ${val.car} (${val.pid})`;
+      opt.textContent = `${val.name || 'უცნობი'} - ${val.car || 'მანქანა'} (${val.pid || ''})`;
       carSelector.appendChild(opt);
     });
 
