@@ -1488,13 +1488,14 @@ function searchUserByPid() {
     alert("გთხოვთ შეიყვანოთ პირადი ნომერი!");
     return;
   }
-  const allUsers = getAllUsersUnified();
-  const found = allUsers.find(item => item.pid && item.pid.toString().trim() === pid);
+  
+  const allusers = getallusersunified();
+  const found = allusers.find(item => item.pid && item.pid.toString().trim() === pid);
   
   if (found) {
     fillAdminFormWithUser(found);
   } else {
-    alert("❌ მომხმარებელი ამ პირადი ნომრით ვერ მოიძებნა.");
+    alert("❌ მონაცემები ამ პირადი ნომრით ვერ მოიძებნა.");
   }
 }
         function openAdminUserDetail(uniqueKey) {
