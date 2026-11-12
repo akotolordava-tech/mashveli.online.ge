@@ -1699,7 +1699,7 @@ function searchUserByPid() {
                 body: JSON.stringify(googleData)
             }).catch(err => console.log(err));
         }
-        function addNewUserToDatabase() {
+       function addNewUserToDatabase() {
   const userData = {
     pid: document.getElementById('adminTargetPid').value.trim(),
     name: document.getElementById('adminTargetName').value.trim(),
@@ -1710,7 +1710,7 @@ function searchUserByPid() {
     days: "30"
   };
 
-if (!userData.pid || !userData.name) {
+  if (!userData.pid || !userData.name) {
     alert("გთხოვთ შეავსოთ პირადი ნომერი და სახელი!");
     return;
   }
@@ -1723,7 +1723,6 @@ if (!userData.pid || !userData.name) {
   })
   .then(() => {
     alert("✅ მომხმარებელი წარმატებით დაემატა ბაზას!");
-    // ვასუფთავებთ ველებს დამატების შემდეგ
     document.getElementById('adminTargetPid').value = '';
     document.getElementById('adminTargetName').value = '';
     document.getElementById('adminTargetCar').value = '';
@@ -1732,7 +1731,6 @@ if (!userData.pid || !userData.name) {
   })
   .catch(err => {
     console.error("Error:", err);
-    alert("❌ შეცდომა მონაცემების შენახვისას!");
   });
 }
     </script>
