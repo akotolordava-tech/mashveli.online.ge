@@ -1045,48 +1045,48 @@
 
         let foundUsersCache = [];
        
-        function searchUserByPid() {
-            const query = document.getElementById('adminTargetPid').value.trim().toLowerCase();
-            if (!query) { alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); return; }
+       async function searchUserByPid() {
+  const query = document.getElementById('adminTargetId').value.trim().toLowerCase();
+  if (!query) { alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); return; }
 
-            foundUsersCache = [];
-            const allUsers = getAllUsersUnified();
+  foundUsersCache = [];
+  const allUsers = await getAllUsersUnified(); // აქ დაემატა await
 
-            allUsers.forEach(val => {
-                if (val) {
-                    const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
-                    if (fullText.includes(query)) {
-if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car && u.tech === val.tech)) {
+  allUsers.forEach(val => {
+    if (val) {
+      const fullText = `${val.pid || ''} ${val.car || ''} ${val.phone || ''} ${val.name || ''} ${val.tech || ''}`.toLowerCase();
+      if (fullText.includes(query)) {
+        if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car && u.tech === val.tech)) {
           foundUsersCache.push(val);
         }
       }
     }
   });
 
-            const selectWrapper = document.getElementById('carSelectWrapper');
-            const carSelector = document.getElementById('adminCarSelector');
-            carSelector.innerHTML = '';
+  const selectWrapper = document.getElementById('carSelectwrapper');
+  const carSelector = document.getElementById('adminCarSelector');
+  carSelector.innerHTML = '';
 
-            if (foundUsersCache.length === 0) {
-                alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
-                selectWrapper.style.display = 'none';
-                return;
-            }
+  if (foundUsersCache.length === 0) {
+    alert("❌ ამ მონაცემებით მომხმარებელი ვერ მოიძებნა!");
+    selectWrapper.style.display = 'none';
+    return;
+  }
 
-            if (foundUsersCache.length === 1) {
-                selectWrapper.style.display = 'none';
-                fillAdminFormWithUser(foundUsersCache[0]);
-            } else {
-                selectWrapper.style.display = 'block';
-                foundUsersCache.forEach((u, index) => {
-                    const opt = document.createElement('option');
-                    opt.value = index;
-                    opt.textContent = `👤 ${u.name} | 🚗 ${u.car} | 🆔 ${u.pid}`;
-                    carSelector.appendChild(opt);
-                });
-                fillAdminFormWithUser(foundUsersCache[0]);
-            }
-        }
+  if (foundUsersCache.length === 1) {
+    selectWrapper.style.display = 'none';
+    fillAdminFormWithUser(foundUsersCache[0]);
+  } else {
+    selectWrapper.style.display = 'block';
+    foundUsersCache.forEach((u, index) => {
+      const opt = document.createElement('option');
+      opt.value = index;
+      opt.textContent = `${u.name || 'უცნობი'} — ${u.car || 'მანქანა'} (ტექ: ${u.tech || 'არ არის'})`;
+      carSelector.appendChild(opt);
+    });
+    fillAdminFormWithUser(foundUsersCache[0]);
+  }
+}
 
         function onCarSelected(index) {
             if (foundUsersCache[index]) fillAdminFormWithUser(foundUsersCache[index]);
@@ -1293,27 +1293,48 @@ if (!foundUsersCache.some(u => u.pid === val.pid && u.car === val.car && u.tech 
             return `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}, ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
         }
 
-        function getAllUsersUnified() {
-            let usersMap = new Map();
-            const list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-            list.forEach(u => {
-                if (u && u.pid && u.car) {
-                    usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
-                }
-            });
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key && key.startsWith('user_')) {
-                    try {
-                        const u = JSON.parse(localStorage.getItem(key));
-                        if (u && u.pid && u.car) {
-                            usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
-                        }
-                    } catch(e) {}
-                }
-            }
-            return Array.from(usersMap.values());
+   async function getAllUsersUnified() {
+  let usersMap = new Map();
+  
+  // 1. ჯერ ვკითხულობთ localStorage-დან (ადგილობრივი ქეში)
+  const list = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+  list.forEach(u => {
+    if (u && u.pid && u.car) {
+      usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
+    }
+  });
+
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('user_')) {
+      try {
+        const u = JSON.parse(localStorage.getItem(key));
+        if (u && u.pid && u.car) {
+          usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
         }
+      } catch(e) {}
+    }
+  }
+
+  // 2. ვცდილობთ მონაცემების წამოღებას პირდაპირ Google Sheets-იდან (Apps Script-ის SCRIPT_URL-ის გამოყენებით)
+  try {
+    if (typeof SCRIPT_URL !== 'undefined' && SCRIPT_URL) {
+      const response = await fetch(SCRIPT_URL);
+      const sheetData = await response.json();
+      if (Array.isArray(sheetData)) {
+        sheetData.forEach(u => {
+          if (u && u.pid && u.car) {
+            usersMap.set(u.pid.toString().trim() + '_' + u.car.toString().trim().toUpperCase(), u);
+          }
+        });
+      }
+    }
+  } catch (err) {
+    console.log("მოთხოვნა სერვერზე ვერ მოხერხდა, ვიყენებთ მხოლოდ ადგილობრივ მეხსიერებას:", err);
+  }
+
+  return Array.from(usersMap.values());
+}
 
         function renderUserDatabaseList() {
             const allUsers = getAllUsersUnified();
