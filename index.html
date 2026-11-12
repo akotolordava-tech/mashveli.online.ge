@@ -1485,19 +1485,24 @@
             }
         }
 async function searchUserByPid() {
-  const pid = document.getElementById('adminTargetId').value.trim();
+  const inputEl = document.getElementById('adminTargetId');
+  if (!inputEl) {
+    alert("საძიებო ველი ვერ მოიძებნა!");
+    return;
+  }
+  
+  const pid = inputEl.value.trim();
   if (!pid) { 
     alert("გთხოვთ შეიყვანოთ პირადი ნომერი!"); 
     return; 
   }
 
   const allusers = await getAllUsersUnified();
-  // ვფილტრავთ ყველა ჩანაწერს, სადაც პირადი ნომერი ემთხვევა
   foundUsersCache = allusers.filter(item => item && item.pid && String(item.pid).trim() === pid);
 
   const selectwrapper = document.getElementById('carSelectwrapper');
   const carSelector = document.getElementById('adminCarSelector');
-  carSelector.innerHTML = '';
+  if (carSelector) carSelector.innerHTML = '';
 
   if (foundUsersCache.length === 0) {
     alert("❌ მონაცემები ამ პირადი ნომრით ვერ მოიძებნა.");
@@ -1514,7 +1519,7 @@ async function searchUserByPid() {
       const opt = document.createElement('option');
       opt.value = index;
       opt.textContent = `👤 ${u.name || 'უცნობი'} | 🚗 ${u.car || 'მანქანა'} | 🆔 ${u.pid || ''}`;
-      carSelector.appendChild(opt);
+      if (carSelector) carSelector.appendChild(opt);
     });
     fillAdminFormWithUser(foundUsersCache[0]);
   }
