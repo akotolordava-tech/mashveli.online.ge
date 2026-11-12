@@ -1258,14 +1258,34 @@
             localStorage.setItem('all_registered_users', JSON.stringify(list));
         }
 
-        function openAdminUserDatabase() {
-            closeAdminModal();
-            document.getElementById('adminDbModal').style.display = 'flex';
-            currentDbTab = 'active';
-            updateDbTabStyles();
-            renderUserDatabaseList();
+    async function openAdminUserDatabase() {
+  closeAdminModal();
+  document.getElementById('adminDbModal').style.display = 'flex';
+  currentDbTab = 'active';
+  updateDbTabStyles();
+  
+  // ავტომატურად ვტვირთვათ და ვინახავთ Google Sheets-ის მონაცემებს ერთიან ბაზაში
+  try {
+    const allusers = await getAllUsersUnified();
+    if (Array.isArray(allusers) && allusers.length > 0) {
+      let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+      allusers.forEach(userObj => {
+        if (userObj && userObj.pid && userObj.car) {
+          const exists = list.some(item => String(item.pid) === String(userObj.pid) && String(item.car) === String(userObj.car));
+          if (!exists) {
+            list.push(userObj);
+          }
+          localStorage.setItem('user_' + userObj.pid + '_' + userObj.car, JSON.stringify(userObj));
         }
+      });
+      localStorage.setItem('all_registered_users', JSON.stringify(list));
+    }
+  } catch (e) {
+    console.log("Sync error:", e);
+  }
 
+  renderUserDatabaseList();
+}
         function closeAdminUserDatabase() {
             document.getElementById('adminDbModal').style.display = 'none';
             if (dbLiveTimer) clearInterval(dbLiveTimer);
