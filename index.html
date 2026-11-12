@@ -1491,54 +1491,78 @@ async function searchUserByPid() {
     return;
   }
   
-  const pid = inputEl.value.trim();
-  if (!pid) { 
-    alert("გთხოვთ შეიყვანოთ პირადი ნომერი!"); 
+  const query = inputEl.value.trim().toLowerCase();
+  if (!query) { 
+    alert("გთხოვთ შეიყვანოთ საძიებო ტექსტი!"); 
     return; 
   }
 
-  const allusers = await getAllUsersUnified();
-  foundUsersCache = allusers.filter(item => item && item.pid && String(item.pid).trim() === pid);
+  // ვიზუალური ინდიკატორი ძებნისას
+  const searchBtn = document.querySelector('button[onclick="searchUserByPid()"]') || inputEl.nextElementSibling;
+  const originalText = searchBtn ? searchBtn.innerHTML : '';
+  if (searchBtn) searchBtn.innerHTML = "ძებნა... ⏳";
 
-  const selectwrapper = document.getElementById('carSelectwrapper');
-  const carSelector = document.getElementById('adminCarSelector');
-  if (carSelector) carSelector.innerHTML = '';
+  try {
+    const allusers = await getAllUsersUnified();
+    
+    // უნივერსალური ძებნა: პირადი, მანქანა, ტექპასპორტი, ტელეფონი
+    foundUsersCache = allusers.filter(item => {
+      if (!item) return false;
+      const pid = item.pid ? String(item.pid).trim().toLowerCase() : '';
+      const car = item.car ? String(item.car).trim().toLowerCase() : '';
+      const tech = item.tech ? String(item.tech).trim().toLowerCase() : '';
+      const phone = item.phone ? String(item.phone).trim().toLowerCase() : '';
 
-  if (foundUsersCache.length === 0) {
-    alert("❌ მონაცემები ამ პირადი ნომრით ვერ მოიძებნა.");
-    if (selectwrapper) selectwrapper.style.display = 'none';
-    return;
-  }
-
-  // ავტომატურად ვინახავთ ნაპოვნი მომხმარებელს localStorage-ში, რომ საერთო ბაზამაც დაინახოს
-  foundUsersCache.forEach(userObj => {
-    try {
-      let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
-      const exists = list.some(item => String(item.pid) === String(userObj.pid) && String(item.car) === String(userObj.car));
-      if (!exists) {
-        list.push(userObj);
-        localStorage.setItem('all_registered_users', JSON.stringify(list));
-      }
-      localStorage.setItem('user_' + userObj.pid + '_' + userObj.car, JSON.stringify(userObj));
-    } catch(e) { console.log(e); }
-  });
-
-  if (foundUsersCache.length === 1) {
-    if (selectwrapper) selectwrapper.style.display = 'none';
-    fillAdminFormWithUser(foundUsersCache[0]);
-  } else {
-    if (selectwrapper) selectwrapper.style.display = 'block';
-    foundUsersCache.forEach((u, index) => {
-      const opt = document.createElement('option');
-      opt.value = index;
-      opt.textContent = `👤 ${u.name || 'უცნობი'} | 🚗 ${u.car || 'მანქანა'} | 🆔 ${u.pid || ''}`;
-      if (carSelector) carSelector.appendChild(opt);
+      return pid.includes(query) || car.includes(query) || tech.includes(query) || phone.includes(query);
     });
-    fillAdminFormWithUser(foundUsersCache[0]);
-  }
-  
-  if (typeof renderUserDatabaseList === 'function') {
-    renderUserDatabaseList();
+
+    const selectwrapper = document.getElementById('carSelectwrapper');
+    const carSelector = document.getElementById('adminCarSelector');
+    if (carSelector) carSelector.innerHTML = '';
+
+    if (foundUsersCache.length === 0) {
+      alert("❌ მონაცემები ამ მოთხოვნით ვერ მოიძებნა.");
+      if (selectwrapper) selectwrapper.style.display = 'none';
+      return;
+    }
+
+    // ავტომატურად ვინახავთ localStorage-ში, რომ საერთო ერთიანმა ბაზამაც დაინახოს
+    foundUsersCache.forEach(userObj => {
+      try {
+        let list = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+        const exists = list.some(item => String(item.pid) === String(userObj.pid) && String(item.car) === String(userObj.car));
+        if (!exists) {
+          list.push(userObj);
+          localStorage.setItem('all_registered_users', JSON.stringify(list));
+        }
+        localStorage.setItem('user_' + userObj.pid + '_' + userObj.car, JSON.stringify(userObj));
+      } catch(e) { console.log(e); }
+    });
+
+    if (foundUsersCache.length === 1) {
+      if (selectwrapper) selectwrapper.style.display = 'none';
+      fillAdminFormWithUser(foundUsersCache[0]);
+    } else {
+      if (selectwrapper) selectwrapper.style.display = 'block';
+      foundUsersCache.forEach((u, index) => {
+        const opt = document.createElement('option');
+        opt.value = index;
+        opt.textContent = `👤 ${u.name || 'უცნობი'} | 🚗 ${u.car || 'მანქანა'} | 🆔 ${u.pid || ''}`;
+        if (carSelector) carSelector.appendChild(opt);
+      });
+      fillAdminFormWithUser(foundUsersCache[0]);
+    }
+
+    // მყისიერად განვახლოთ მომხმარებელთა საერთო ბაზის სია
+    if (typeof renderUserDatabaseList === 'function') {
+      renderUserDatabaseList();
+    }
+
+  } catch (err) {
+    console.error("Search error:", err);
+    alert("მოხდა შეცდომა ძებნისას.");
+  } finally {
+    if (searchBtn) searchBtn.innerHTML = originalText;
   }
 }
         function openAdminUserDetail(uniqueKey) {
