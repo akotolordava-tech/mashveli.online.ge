@@ -959,58 +959,56 @@
             return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine image" /></a></div>`;
         }
 
-        function loadUserData(data) {
-            document.getElementById('profName').textContent = data.name;
-            document.getElementById('profPid').textContent = data.pid;
-            document.getElementById('profPhone').textContent = data.phone;
-            document.getElementById('dashMainCarBadge2').textContent = data.car;
-            document.getElementById('carCard1Title').textContent = data.car;
-            document.getElementById('carCard1Tech').textContent = data.tech || '—';
-            document.getElementById('userPackageSubtitle').innerHTML = `აქტიური პაკეტი: <b>${data.package}</b>`;
+  function loadUserData(data) {
+  document.getElementById('profName').textContent = data.name || '-';
+  document.getElementById('profPid').textContent = data.pid || '-';
+  document.getElementById('profPhone').textContent = data.phone || '-';
+  document.getElementById('dashMainCarBadge2').textContent = data.car || '-';
+  document.getElementById('carCard1Title').textContent = data.car || '-';
+  document.getElementById('carCard1Tech').textContent = data.tech || '-';
+  document.getElementById('userPackageSubtitle').innerHTML = `აქტიური პაკეტი: <b>${data.package || 'საწყისი პაკეტი (7 GEL)'}</b>`;
 
-            document.getElementById('processingNotice').style.display = 'none';
-            document.getElementById('realDataContainer').style.display = 'block';
+  document.getElementById('processingNotice').style.display = 'none';
+  document.getElementById('realDataContainer').style.display = 'block';
 
-            let finesArr = data.fines || [];
-            let totalSum = 0;
-            let finesHTML = "";
+  let finesArr = data.fines || [];
+  let totalSum = 0;
+  let finesHTML = "";
 
-            if (data.noFine === true || finesArr.length === 0) {
-                finesHTML = `
-                <div class="dash-card" style="justify-content: center; text-align: center; padding: 30px;">
-                    <div>
-                        <div style="font-size: 28px; margin-bottom: 8px;">🎉</div>
-                        <div style="font-size: 16px; font-weight: bold; color: #4ade80;">ავტომობილის სახელმწიფო ნომრით ${data.car} მიმდინარე ჯარიმა არ ფიქსირდება</div>
-                    </div>
-                </div>`;
-            } else {
-                finesArr.forEach(f => {
-                    totalSum += parseFloat(f.sum) || 0;
-                    const mediaElement = renderMediaHTML(f.mediaUrl, f.mediaType);
-                    finesHTML += `
-                    <div class="dash-card" style="flex-direction: column; align-items: stretch;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                            <div style="display: flex; align-items: center; gap: 15px;">
-                                <span class="car-badge">${data.car}</span>
-                                <div>
-                                    <div style="font-weight: bold; margin-bottom: 4px;">${f.desc}</div>
-                                    <div style="font-size: 12px; color: #b0c2bc;">📅 ${f.date} | ქვითარი: #${f.receiptNo || '—'}</div>
-                                </div>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 18px; font-weight: bold; color: #f87171; margin-bottom: 5px;">${f.sum}</div>
-                            </div>
-                        </div>
-                        ${mediaElement}
-                    </div>`;
-                });
-            }
+  if (data.noFine === true || finesArr.length === 0) {
+    finesHTML = `
+      <div class="dash-card" style="justify-content: center; text-align: center; padding: 30px; background: #17362a; border: 1px solid #1a3e30;">
+        <div>
+          <div style="font-size: 28px; margin-bottom: 8px;">🎉</div>
+          <div style="font-size: 15px; font-weight: bold; color: #4ade80;">ავტომობილზე (${data.car}) ჯარიმები არ ფიქსირდება</div>
+        </div>
+      </div>`;
+  } else {
+    finesArr.forEach(f => {
+      const amountNum = parseFloat((f.sum || '0').toString().replace(/[^0-9.]/g, '')) || 0;
+      totalSum += amountNum;
+      finesHTML += `
+        <div class="dash-card" style="flex-direction: column; align-items: stretch; background: #17362a; border: 1px solid #ef4444; margin-bottom: 15px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a3e30; padding-bottom: 10px; margin-bottom: 10px;">
+            <span style="font-weight: bold; color: #d9f96b; font-size: 15px;">🧾 ქვითარი: ${f.receiptNo || '-'}</span>
+            <span style="font-weight: bold; color: #f87171; font-size: 16px;">${f.sum || '0 GEL'}</span>
+          </div>
+          <div style="font-size: 13px; color: #e2e8f0; line-height: 1.7;">
+            <div>📅 <b>დაწერის თარიღი:</b> ${f.date || '-'}</div>
+            <div>📍 <b>დაწერის ადგილი:</b> ${f.location || '-'}</div>
+            <div>📝 <b>აღწერა:</b> ${f.desc || '-'}</div>
+          </div>
+          ${renderMediaHTML(f.mediaUrl, f.mediaType)}
+        </div>`;
+    });
+  }
 
-            document.getElementById('userDisplayFineSumHeader').textContent = totalSum + " GEL";
-            document.getElementById('userFinesListRender').innerHTML = finesHTML;
-            document.getElementById('userDisplayTechStatus').textContent = data.techStatus || "🔍 სტატუსი: ძალაშია";
-        }
+  const sumEl = document.getElementById('userDisplayFineSumHeader');
+  if (sumEl) sumEl.textContent = totalSum + ' GEL';
 
+  const listEl = document.getElementById('userFinesListRender');
+  if (listEl) listEl.innerHTML = finesHTML;
+}
         function startLiveCountdown(startTime, totalDays) {
             const expiryTime = new Date(startTime).getTime() + (totalDays * 24 * 60 * 60 * 1000);
             if(countdownInterval) clearInterval(countdownInterval);
@@ -1127,30 +1125,169 @@
     fillAdminFormWithUser(foundUsersCache[0]);
   }
 }
-        function onCarSelected(index) {
-            if (foundUsersCache[index]) fillAdminFormWithUser(foundUsersCache[index]);
+   let currentSelectedAdminUser = null;
+
+function onCarSelected(index) {
+  if (foundUsersCache[index]) {
+    fillAdminFormWithUser(foundUsersCache[index]);
+  }
+}
+
+function fillAdminFormWithUser(userData) {
+  currentSelectedAdminUser = userData;
+  document.getElementById('adminTargetName').value = userData.name || '';
+  document.getElementById('adminTargetCar').value = userData.car || '';
+  document.getElementById('adminTargetTech').value = userData.tech || '';
+  document.getElementById('adminTargetPhone').value = userData.phone || '';
+  document.getElementById('adminInputTechStatus').value = userData.techStatus || '🔍 სტატუსი: ძალაშია';
+  document.getElementById('adminNoFineCheck').checked = userData.noFine || false;
+  toggleFineInputsState(userData.noFine || false);
+
+  const finesContainer = document.getElementById('finesListContainer');
+  finesContainer.innerHTML = '';
+  if (userData.fines && userData.fines.length > 0) {
+    userData.fines.forEach(f => {
+      addNewFineFields(f.sum, f.desc, f.date, f.location, f.receiptNo, f.mediaUrl, f.mediaType);
+    });
+  } else if (!userData.noFine) {
+    addNewFineFields();
+  }
+}
+
+function toggleFineInputsState(isChecked) {
+  const wrapper = document.getElementById('finesSectionWrapper');
+  if (isChecked) {
+    wrapper.style.display = 'none';
+    document.getElementById('finesListContainer').innerHTML = '';
+  } else {
+    wrapper.style.display = 'block';
+    if (document.getElementById('finesListContainer').children.length === 0) {
+      addNewFineFields();
+    }
+  }
+}
+
+function addNewFineFields(sum = '', desc = '', date = '', location = '', receiptNo = '', mediaUrl = '', mediaType = '') {
+  const container = document.getElementById('finesListContainer');
+  const index = container.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'fine-item-box';
+  div.style.cssText = "background: #17362a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #1a3e30; position: relative;";
+
+  let previewArea = '';
+  if (mediaUrl) {
+    previewArea = mediaType && mediaType.startsWith('video/')
+      ? `<video src="${mediaUrl}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`
+      : `<img src="${mediaUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
+  }
+
+  div.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+      <span style="font-size: 12px; color: #d9f96b; font-weight: bold;">ჯარიმა #${index}</span>
+      <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-weight: bold;">წაშლა ✕</button>
+    </div>
+    <div class="form-group"><label>ჯარიმის თანხა (მაგ: 50 GEL)</label><input type="text" class="fine-sum" value="${sum}" placeholder="50 GEL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+    <div class="form-group"><label>ჯარიმის ქვითრის ნომერი</label><input type="text" class="fine-receipt" value="${receiptNo}" placeholder="პკ1224700" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+    <div class="form-group"><label>ჯარიმის დაწერის თარიღი</label><input type="text" class="fine-date" value="${date}" placeholder="13-11-2026" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+    <div class="form-group"><label>ჯარიმის დაწერის ადგილი</label><input type="text" class="fine-location" value="${location}" placeholder="თბილისი, ჭავჭავაძის გამზ." style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+    <div class="form-group"><label>ჯარიმის აღწერა</label><input type="text" class="fine-desc" value="${desc}" placeholder="სიჩქარის გადაჭარბება" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+    <div class="form-group" style="margin-bottom: 0;">
+      <label style="color: #d9f96b;">📸 ფოტოს/ვიდეოს ატვირთვა</label>
+      <input type="file" class="fine-file-input" accept="image/*,video/*" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30; padding: 8px;">
+      <input type="hidden" class="fine-media-url" value="${mediaUrl}">
+      <input type="hidden" class="fine-media-type" value="${mediaType}">
+      <div class="media-preview-box">${previewArea}</div>
+    </div>
+  `;
+  container.appendChild(div);
+
+  const fileInput = div.querySelector('.fine-file-input');
+  const mediaUrlInput = div.querySelector('.fine-media-url');
+  const mediaTypeInput = div.querySelector('.fine-media-type');
+  const previewContainer = div.querySelector('.media-preview-box');
+
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        mediaUrlInput.value = evt.target.result;
+        mediaTypeInput.value = file.type;
+        if (file.type.startsWith('video/')) {
+          previewContainer.innerHTML = `<video src="${evt.target.result}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`;
+        } else {
+          previewContainer.innerHTML = `<img src="${evt.target.result}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
         }
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
 
-        function fillAdminFormWithUser(userData) {
-            document.getElementById('adminTargetName').value = userData.name || '';
-            document.getElementById('adminTargetCar').value = userData.car || '';
-            document.getElementById('adminTargetTech').value = userData.tech || '';
-            document.getElementById('adminTargetPhone').value = userData.phone || '';
-            document.getElementById('adminInputTechStatus').value = userData.techStatus || '';
-            document.getElementById('adminNoFineCheck').checked = userData.noFine || false;
-            toggleFineInputsState(userData.noFine || false);
+function saveAdminData(event) {
+  event.preventDefault();
+  const rawSearchInput = document.getElementById('adminTargetId').value.toString().trim();
+  const targetPid = (currentSelectedAdminUser && currentSelectedAdminUser.pid) ? currentSelectedAdminUser.pid.toString().trim() : rawSearchInput;
+  const targetName = document.getElementById('adminTargetName').value.trim();
+  const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
+  const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
+  const targetPhone = document.getElementById('adminTargetPhone').value.trim();
+  const techStatus = document.getElementById('adminInputTechStatus').value;
+  const noFineChecked = document.getElementById('adminNoFineCheck').checked;
 
-            const finesContainer = document.getElementById('finesListContainer');
-            finesContainer.innerHTML = '';
-            if (userData.fines && userData.fines.length > 0) {
-                userData.fines.forEach(f => {
-                    addNewFineFields(f.sum, f.desc, f.date, f.receiptNo, f.mediaUrl, f.mediaType);
-                });
-            } else if (!userData.noFine) {
-                addNewFineFields();
-            }
-        }
+  if (!targetCar) { alert("❌ შეიყვანეთ მანქანის ნომერი!"); return; }
 
+  let finesArray = [];
+  if (!noFineChecked) {
+    document.querySelectorAll('.fine-item-box').forEach(box => {
+      finesArray.push({
+        sum: box.querySelector('.fine-sum').value,
+        receiptNo: box.querySelector('.fine-receipt').value,
+        date: box.querySelector('.fine-date').value,
+        location: box.querySelector('.fine-location').value,
+        desc: box.querySelector('.fine-desc').value,
+        mediaUrl: box.querySelector('.fine-media-url').value || '',
+        mediaType: box.querySelector('.fine-media-type').value || ''
+      });
+    });
+  }
+
+  const storageKey = 'user_' + targetPid + '_' + targetCar;
+  let userData = JSON.parse(localStorage.getItem(storageKey)) || currentSelectedAdminUser || {
+    pid: targetPid,
+    name: targetName,
+    car: targetCar,
+    tech: targetTech,
+    phone: targetPhone,
+    package: "საწყისი პაკეტი (7 GEL)",
+    days: 30,
+    timestamp: Date.now(),
+    packageHistory: []
+  };
+
+  userData.pid = targetPid;
+  userData.name = targetName;
+  userData.car = targetCar;
+  userData.tech = targetTech;
+  userData.phone = targetPhone;
+  userData.adminApproved = true;
+  userData.noFine = noFineChecked;
+  userData.fines = finesArray;
+  userData.techStatus = techStatus;
+
+  localStorage.setItem(storageKey, JSON.stringify(userData));
+  saveUserToUnifiedList(userData);
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userData)
+  }).then(() => {
+    alert("✅ მონაცემები წარმატებით განახლდა და მიება ავტომობილს: " + targetCar);
+    closeAdminModal();
+  }).catch(err => console.error("Error:", err));
+}    
         function toggleFineInputsState(isChecked) {
             const wrapper = document.getElementById('finesSectionWrapper');
             if (isChecked) {
@@ -1577,14 +1714,20 @@ async function permanentlyDeleteUser(uniqueKey, btnEl) {
 async function selectUserToEdit(uniqueKey) {
   let allusers = await getAllUsersUnified();
   if (!Array.isArray(allusers)) allusers = [];
-  
+
   const u = allusers.find(item => item && (item.pid + '_' + item.car) === uniqueKey);
   if (u) {
     closeAdminUserDatabase();
-    const targetInput = document.getElementById('adminTargetPid');
-    if (targetInput) targetInput.value = u.pid;
+    const targetInput = document.getElementById('adminTargetId');
+    if (targetInput) targetInput.value = u.pid || u.car;
     if (typeof searchUserByPid === 'function') {
-      searchUserByPid();
+      await searchUserByPid();
+      const idx = foundUsersCache.findIndex(item => (item.pid + '_' + item.car) === uniqueKey);
+      if (idx !== -1) {
+        const carSelector = document.getElementById('adminCarSelector');
+        if (carSelector) carSelector.value = idx;
+        fillAdminFormWithUser(foundUsersCache[idx]);
+      }
     }
   }
 }
