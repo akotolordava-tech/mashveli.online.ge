@@ -1,4 +1,4 @@
-არ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ka">
 <head>
     <meta charset="UTF-8">
@@ -1689,41 +1689,6 @@ window.addEventListener('storage', function(e) {
   });
 }
 
-function saveAdminData(event) {
-  event.preventDefault();
-  const rawSearchInput = document.getElementById('adminTargetId').value.toString().trim();
-  const targetPid = (currentSelectedAdminUser && currentSelectedAdminUser.pid) ? currentSelectedAdminUser.pid.toString().trim() : rawSearchInput;
-  const targetName = document.getElementById('adminTargetName').value.trim();
-  const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
-  const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
-  const targetPhone = document.getElementById('adminTargetPhone').value.trim();
-  const techStatus = document.getElementById('adminInputTechStatus').value;
-  const noFineChecked = document.getElementById('adminNoFineCheck').checked;
-
-  if (!targetCar) { alert("❌ შეიყვანეთ მანქანის ნომერი!"); return; }
-
-  let finesArray = [];
-  if (!noFineChecked) {
-    document.querySelectorAll('.fine-item-box').forEach(box => {
-      const hasDisc = box.querySelector('.fine-has-discount').checked;
-      finesArray.push({
-        receiptNo: box.querySelector('.fine-receipt').value.trim(),
-        carNo: box.querySelector('.fine-car').value.toUpperCase().trim(),
-        date: box.querySelector('.fine-date').value.trim(),
-        deliveryDate: box.querySelector('.fine-delivery').value.trim(),
-        hasDiscount: hasDisc,
-        discountDaysLeft: hasDisc ? box.querySelector('.fine-days-left').value.trim() : '0',
-        discountDeadline: hasDisc ? box.querySelector('.fine-deadline').value.trim() : '',
-        status: box.querySelector('.fine-status').value,
-        article: box.querySelector('.fine-article').value.trim(),
-        sum: box.querySelector('.fine-sum').value.trim(),
-        discountSum: hasDisc ? box.querySelector('.fine-discount-sum').value.trim() : '',
-        payableSum: box.querySelector('.fine-payable').value.trim(),
-        mediaUrl: box.querySelector('.fine-media-url').value || '',
-        mediaType: box.querySelector('.fine-media-type').value || ''
-      });
-    });
-  }
 
   const storageKey = 'user_' + targetPid + '_' + targetCar;
   let userData = JSON.parse(localStorage.getItem(storageKey)) || currentSelectedAdminUser || {
