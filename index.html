@@ -895,26 +895,62 @@
             if (element) element.classList.add('active');
         }
 
-        function handleCabinetLogin(event) {
-            event.preventDefault();
-            const pid = document.getElementById('cabPid').value.trim();
-            const car = document.getElementById('cabCar').value.trim().toUpperCase();
+      async function handleCabinetLogin(event) {
+  event.preventDefault();
+  const pid = document.getElementById('cabPid').value.trim();
+  const car = document.getElementById('cabCar').value.trim().toUpperCase();
+  const phoneInput = document.getElementById('cabPhone');
+  const phone = phoneInput ? phoneInput.value.trim() : '';
 
-            const allUsers = getAllUsersUnified();
-            const savedData = allUsers.find(u => u.pid.toString().trim() === pid && u.car.toUpperCase().trim() === car && u.isDeleted !== true);
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn ? submitBtn.innerHTML : '';
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '⏳ მოწმდება . . .';
+  }
 
-            if (!savedData) {
-                closeCabinetLogin();
-                alert(currentLang === 'ENG' ? "❌ Registration not found!" : (currentLang === 'RUS' ? "❌ Регистрация не найдена!" : "❌ ასეთი რეგისტრაცია ვერ მოიძებნა!"));
-                return;
-            }
+  let allUsers = [];
+  try {
+    allUsers = await getAllUsersUnified();
+  } catch (e) {
+    allUsers = JSON.parse(localStorage.getItem('all_registered_users')) || [];
+  }
+  if (!Array.isArray(allUsers)) allUsers = [];
 
-            loadUserData(savedData);
-            closeCabinetLogin();
-            document.getElementById('cabinetDashboard').style.display = 'block';
-            startLiveCountdown(savedData.timestamp, savedData.days);
-        }
+  const deletedKeys = JSON.parse(localStorage.getItem('deleted_user_keys')) || [];
+  const permDeleted = JSON.parse(localStorage.getItem('permanently_deleted_keys')) || [];
 
+  const savedData = allUsers.find(u => {
+    if (!u) return false;
+    const uPid = (u.pid || '').toString().trim();
+    const uCar = (u.car || '').toString().trim().toUpperCase();
+    const uPhone = (u.phone || '').toString().trim();
+    const uniqueKey = uPid + '_' + uCar;
+
+    if (u.isDeleted === true || deletedKeys.includes(uniqueKey) || permDeleted.includes(uniqueKey)) {
+      return false;
+    }
+
+    const phoneMatches = !phone || !uPhone || uPhone.endsWith(phone) || phone.endsWith(uPhone);
+    return uPid === pid && uCar === car && phoneMatches;
+  });
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
+  }
+
+  if (!savedData) {
+    closeCabinetLogin();
+    alert(currentLang === 'ENG' ? "❌ Registration not found!" : (currentLang === 'RUS' ? "❌ Регистрация не найдена!" : "❌ ასეთი რეგისტრაცია ვერ მოიძებნა!"));
+    return;
+  }
+
+  loadUserData(savedData);
+  closeCabinetLogin();
+  document.getElementById('cabinetDashboard').style.display = 'block';
+  startLiveCountdown(savedData.timestamp, savedData.days);
+}
         function renderMediaHTML(mediaUrl, mediaType) {
             if (!mediaUrl) return '';
             if (mediaType && mediaType.startsWith('video/')) {
