@@ -1635,59 +1635,7 @@ window.addEventListener('storage', function(e) {
     } catch (err) {}
   }
 });
-  function recalculateAdminFine(updateDeadlineFromDays = true) {
-    const isChecked = discountCheck.checked;
-    discountOpts.style.display = isChecked ? 'grid' : 'none';
-
-    const days = parseInt(daysLeftInput.value, 10);
-    if (updateDeadlineFromDays && isChecked && !isNaN(days) && days > 0) {
-      const targetDt = new Date();
-      targetDt.setDate(targetDt.getDate() + days);
-      const dd = String(targetDt.getDate()).padStart(2, '0');
-      const mm = String(targetDt.getMonth() + 1).padStart(2, '0');
-      const yyyy = targetDt.getFullYear();
-      deadlineInput.value = `${dd}.${mm}.${yyyy}`;
-    }
-
-    const num = parseFloat((sumInput.value || '').toString().replace(/[^0-9.]/g, ''));
-    if (!isNaN(num)) {
-      if (isChecked) {
-        const dSum = (num * 0.8).toFixed(2);
-        discInput.value = dSum;
-        payableInput.value = dSum;
-      } else {
-        discInput.value = '';
-        payableInput.value = num.toFixed(2);
-      }
-    }
-  }
-
-  discountCheck.addEventListener('change', () => recalculateAdminFine(true));
-  daysLeftInput.addEventListener('input', () => recalculateAdminFine(true));
-  sumInput.addEventListener('input', () => recalculateAdminFine(false));
-
-  const fileInput = div.querySelector('.fine-file-input');
-  const mediaUrlInput = div.querySelector('.fine-media-url');
-  const mediaTypeInput = div.querySelector('.fine-media-type');
-  const previewContainer = div.querySelector('.media-preview-box');
-
-  fileInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        mediaUrlInput.value = evt.target.result;
-        mediaTypeInput.value = file.type;
-        if (file.type.startsWith('video/')) {
-          previewContainer.innerHTML = `<video src="${evt.target.result}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`;
-        } else {
-          previewContainer.innerHTML = `<img src="${evt.target.result}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-
+ 
 
 
   
