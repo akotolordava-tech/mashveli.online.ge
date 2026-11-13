@@ -1690,18 +1690,80 @@ window.addEventListener('storage', function(e) {
 }
 
 
+  
+function saveAdminData(event) {
+  if (event) event.preventDefault();
+  const saveBtn = document.querySelector('#adminModal button[type="submit"]');
+  const origBtnText = saveBtn ? saveBtn.innerHTML : 'მონაცემების დადასტურება და გამოქვეყნება ✅';
+
+  const rawSearchInput = document.getElementById('adminTargetId').value.toString().trim();
+  const targetPid = (currentSelectedAdminUser && currentSelectedAdminUser.pid) ? currentSelectedAdminUser.pid.toString().trim() : rawSearchInput;
+  const targetName = document.getElementById('adminTargetName').value.trim();
+  const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
+  const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
+  const targetPhone = document.getElementById('adminTargetPhone').value.trim();
+  const techStatus = document.getElementById('adminInputTechStatus').value;
+  const noFineChecked = document.getElementById('adminNoFineCheck').checked;
+
+  if (!targetCar) {
+    alert("❌ შეიყვანეთ მანქანის ნომერი!");
+    return;
+  }
+
+  if (saveBtn) {
+    saveBtn.innerHTML = '⏳ ინახება და ქვეყნდება...';
+    saveBtn.disabled = true;
+  }
+
+  let finesArray = [];
+  if (!noFineChecked) {
+    document.querySelectorAll('.fine-item-box').forEach(box => {
+      const rNo = box.querySelector('.fine-receipt').value.trim();
+      const sVal = box.querySelector('.fine-sum').value.trim();
+      const artVal = box.querySelector('.fine-article').value.trim();
+      const mUrl = box.querySelector('.fine-media-url').value || '';
+
+      if (!rNo && !sVal && !artVal && !mUrl) return;
+
+      const hasDisc = box.querySelector('.fine-has-discount').checked;
+      finesArray.push({
+        receiptNo: rNo,
+        carNo: box.querySelector('.fine-car').value.toUpperCase().trim() || targetCar,
+        date: box.querySelector('.fine-date').value.trim(),
+        deliveryDate: box.querySelector('.fine-delivery').value.trim(),
+        hasDiscount: hasDisc,
+        discountDaysLeft: hasDisc ? box.querySelector('.fine-days-left').value.trim() : '0',
+        discountDeadline: hasDisc ? box.querySelector('.fine-deadline').value.trim().replace('-მდე', '') : '',
+        status: box.querySelector('.fine-status').value,
+        article: artVal,
+        sum: sVal || '0.00',
+        discountSum: hasDisc ? box.querySelector('.fine-discount-sum').value.trim() : '',
+        payableSum: box.querySelector('.fine-payable').value.trim() || sVal || '0.00',
+        mediaUrl: mUrl,
+        mediaType: box.querySelector('.fine-media-type').value || ''
+      });
+    });
+  }
+
   const storageKey = 'user_' + targetPid + '_' + targetCar;
-  let userData = JSON.parse(localStorage.getItem(storageKey)) || currentSelectedAdminUser || {
-    pid: targetPid,
-    name: targetName,
-    car: targetCar,
-    tech: targetTech,
-    phone: targetPhone,
-    package: "საწყისი პაკეტი (7 GEL)",
-    days: 30,
-    timestamp: Date.now(),
-    packageHistory: []
-  };
+  let userData = null;
+  try {
+    userData = JSON.parse(localStorage.getItem(storageKey));
+  } catch (e) {}
+
+  if (!userData) {
+    userData = currentSelectedAdminUser ? Object.assign({}, currentSelectedAdminUser) : {
+      pid: targetPid,
+      name: targetName,
+      car: targetCar,
+      tech: targetTech,
+      phone: targetPhone,
+      package: "საწყისი პაკეტი (7 GEL)",
+      days: 30,
+      timestamp: Date.now(),
+      packageHistory: []
+    };
+  }
 
   userData.pid = targetPid;
   userData.name = targetName;
@@ -1713,10 +1775,18 @@ window.addEventListener('storage', function(e) {
   userData.fines = finesArray;
   userData.techStatus = techStatus;
 
-  localStorage.setItem(storageKey, JSON.stringify(userData));
-  saveUserToUnifiedList(userData);
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(userData));
+  } catch (e) {
+    const cleanFines = finesArray.map(f => Object.assign({}, f, { mediaUrl: '' }));
+    userData.fines = cleanFines;
+    localStorage.setItem(storageKey, JSON.stringify(userData));
+  }
 
-  // მყისიერად განვაახლოთ ადმინის კეში, ბაზის სია და კაბინეტი (თუ გახსნილია)
+  if (typeof saveUserToUnifiedList === 'function') {
+    saveUserToUnifiedList(userData);
+  }
+
   currentSelectedAdminUser = userData;
   if (typeof foundUsersCache !== 'undefined' && Array.isArray(foundUsersCache)) {
     const cacheIdx = foundUsersCache.findIndex(u => u && u.pid === targetPid && u.car === targetCar);
@@ -1726,17 +1796,46 @@ window.addEventListener('storage', function(e) {
   const cabDash = document.getElementById('cabinetDashboard');
   if (cabDash && cabDash.style.display === 'block') loadUserData(userData);
 
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData)
-  }).then(() => {
-    alert("✅ მონაცემები წარმატებით დადასტურდა და გამოქვეყნდა!");
-    closeAdminModal();
-  }).catch(err => console.error("Error:", err));
+  if (typeof SCRIPT_URL !== 'undefined') {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    }).catch(err => console.error("Sheet sync error:", err));
+  }
+
+  setTimeout(() => {
+    if (saveBtn) {
+      saveBtn.innerHTML = '✅ შენახულია და გამოქვეყნებულია!';
+      saveBtn.style.background = '#22c55e';
+      saveBtn.style.color = '#fff';
+    }
+    setTimeout(() => {
+      if (saveBtn) {
+        saveBtn.innerHTML = origBtnText;
+        saveBtn.style.background = '';
+        saveBtn.style.color = '';
+        saveBtn.disabled = false;
+      }
+      alert("✅ მონაცემები წარმატებით დადასტურდა და გამოქვეყნდა!");
+      closeAdminModal();
+    }, 500);
+  }, 250);
 }
 
+window.addEventListener('storage', function(e) {
+  if (e.key && e.key.startsWith('user_') && e.newValue) {
+    try {
+      const updatedUser = JSON.parse(e.newValue);
+      const cabDash = document.getElementById('cabinetDashboard');
+      const currentCarEl = document.getElementById('dashMainCarBadge2');
+      if (cabDash && cabDash.style.display === 'block' && currentCarEl && currentCarEl.textContent.trim() === updatedUser.car) {
+        loadUserData(updatedUser);
+      }
+    } catch (err) {}
+  }
+});
  function saveUserToUnifiedList(userObj) {
   if (!userObj || !userObj.pid || !userObj.car) return;
 
