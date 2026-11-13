@@ -959,7 +959,15 @@
             return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine image" /></a></div>`;
         }
 
-  function loadUserData(data) {
+function parseGeoDate(dateStr) {
+  const parts = (dateStr || '').trim().split('.');
+  if (parts.length !== 3) return null;
+  const dt = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+  dt.setHours(23, 59, 59, 999);
+  return isNaN(dt.getTime()) ? null : dt;
+}
+
+function loadUserData(data) {
   document.getElementById('profName').textContent = data.name || '-';
   document.getElementById('profPid').textContent = data.pid || '-';
   document.getElementById('profPhone').textContent = data.phone || '-';
@@ -974,6 +982,7 @@
   let finesArr = data.fines || [];
   let totalSum = 0;
   let finesHTML = "";
+  const now = new Date();
 
   if (data.noFine === true || finesArr.length === 0) {
     finesHTML = `
@@ -985,18 +994,95 @@
       </div>`;
   } else {
     finesArr.forEach(f => {
-      const amountNum = parseFloat((f.sum || '0').toString().replace(/[^0-9.]/g, '')) || 0;
-      totalSum += amountNum;
+      const isPaid = f.status === 'გადახდილია';
+      const fullNum = parseFloat((f.sum || '0').toString().replace(/[^0-9.]/g, '')) || 0;
+      const hasDiscount = f.hasDiscount !== false;
+
+      let endDt = f.discountDeadline ? parseGeoDate(f.discountDeadline) : null;
+      if (!endDt && f.date) {
+        const baseDt = parseGeoDate(f.date);
+        if (baseDt) {
+          baseDt.setDate(baseDt.getDate() + 10);
+          endDt = baseDt;
+        }
+      }
+
+      let isExpired = false;
+      let discountNoteHTML = '';
+      if (hasDiscount && endDt) {
+        const diffDays = Math.ceil((endDt - now) / (1000 * 60 * 60 * 24));
+        const dd = String(endDt.getDate()).padStart(2, '0');
+        const mm = String(endDt.getMonth() + 1).padStart(2, '0');
+        const yyyy = endDt.getFullYear();
+        const deadlineStr = f.discountDeadline || `${dd}.${mm}.${yyyy}`;
+
+        if (diffDays <= 0) {
+          isExpired = true;
+          discountNoteHTML = `<div style="color: #94a3b8; font-size: 12px;">${deadlineStr}-მდე ვადა ამოიწურა</div>`;
+        } else {
+          discountNoteHTML = `<div style="color: #f87171; font-size: 12px; font-weight: bold;">${deadlineStr}-მდე<br>-20% ფასდაკლება (დარჩა ${diffDays} დღე)</div>`;
+        }
+      }
+
+      const discountActive = hasDiscount && !isExpired;
+      const discNum = parseFloat((f.discountSum || '').toString().replace(/[^0-9.]/g, ''));
+      const activePayableNum = discountActive ? (!isNaN(discNum) ? discNum : fullNum * 0.8) : fullNum;
+
+      if (!isPaid) {
+        totalSum += activePayableNum;
+      }
+
       finesHTML += `
-        <div class="dash-card" style="flex-direction: column; align-items: stretch; background: #17362a; border: 1px solid #ef4444; margin-bottom: 15px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #1a3e30; padding-bottom: 10px; margin-bottom: 10px;">
-            <span style="font-weight: bold; color: #d9f96b; font-size: 15px;">🧾 ქვითარი: ${f.receiptNo || '-'}</span>
-            <span style="font-weight: bold; color: #f87171; font-size: 16px;">${f.sum || '0 GEL'}</span>
-          </div>
-          <div style="font-size: 13px; color: #e2e8f0; line-height: 1.7;">
-            <div>📅 <b>დაწერის თარიღი:</b> ${f.date || '-'}</div>
-            <div>📍 <b>დაწერის ადგილი:</b> ${f.location || '-'}</div>
-            <div>📝 <b>აღწერა:</b> ${f.desc || '-'}</div>
+        <div class="dash-card" style="flex-direction: column; align-items: stretch; background: #17362a; border: 1px solid ${isPaid ? '#4ade80' : '#ef4444'}; margin-bottom: 18px; padding: 20px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; font-size: 14px; line-height: 1.5;">
+            
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">ქვითრის სერია-ნომერი:</div>
+              <div style="font-weight: bold; color: #fff; font-size: 15px;">${f.receiptNo || '-'}</div>
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">ავტომობილის სახ. ნომერი:</div>
+              <div style="font-weight: bold; color: #d9f96b; font-size: 15px;">${f.carNo || data.car || '-'}</div>
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">თარიღი:</div>
+              <div style="font-weight: bold; color: #fff;">${f.date || '-'}</div>
+              ${discountNoteHTML}
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">ჩაბარების თარიღი:</div>
+              <div style="font-weight: bold; color: #fff;">${f.deliveryDate || '-'}</div>
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">მუხლი:</div>
+              <div style="font-weight: bold; color: #fff;">${f.article || f.desc || '-'}</div>
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">მდგომარეობა:</div>
+              <div style="font-weight: bold; color: ${isPaid ? '#4ade80' : '#f87171'};">
+                ${isPaid ? 'გადახდილია' : 'გადაუხდელია'}
+              </div>
+              <div style="color: #f87171; font-size: 12px;">გამოქვეყნებულია</div>
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">თანხა:</div>
+              <div style="font-weight: bold; color: #fff;">${fullNum.toFixed(2)} GEL</div>
+              ${discountActive ? `<div style="color: #f87171; font-weight: bold;">${activePayableNum.toFixed(2)} GEL</div>` : ''}
+            </div>
+
+            <div>
+              <div style="color: #94a3b8; font-size: 12px;">გადასახდელი თანხა:</div>
+              <div style="font-weight: bold; color: ${isPaid ? '#4ade80' : '#d9f96b'}; font-size: 17px;">
+                ${isPaid ? '0.00 GEL' : activePayableNum.toFixed(2) + ' GEL'}
+              </div>
+            </div>
+
           </div>
           ${renderMediaHTML(f.mediaUrl, f.mediaType)}
         </div>`;
@@ -1004,7 +1090,7 @@
   }
 
   const sumEl = document.getElementById('userDisplayFineSumHeader');
-  if (sumEl) sumEl.textContent = totalSum + ' GEL';
+  if (sumEl) sumEl.textContent = totalSum.toFixed(2) + ' GEL';
 
   const listEl = document.getElementById('userFinesListRender');
   if (listEl) listEl.innerHTML = finesHTML;
@@ -1127,6 +1213,8 @@
 }
    let currentSelectedAdminUser = null;
 
+let currentSelectedAdminUser = null;
+
 function onCarSelected(index) {
   if (foundUsersCache[index]) {
     fillAdminFormWithUser(foundUsersCache[index]);
@@ -1147,7 +1235,7 @@ function fillAdminFormWithUser(userData) {
   finesContainer.innerHTML = '';
   if (userData.fines && userData.fines.length > 0) {
     userData.fines.forEach(f => {
-      addNewFineFields(f.sum, f.desc, f.date, f.location, f.receiptNo, f.mediaUrl, f.mediaType);
+      addNewFineFields(f);
     });
   } else if (!userData.noFine) {
     addNewFineFields();
@@ -1167,12 +1255,28 @@ function toggleFineInputsState(isChecked) {
   }
 }
 
-function addNewFineFields(sum = '', desc = '', date = '', location = '', receiptNo = '', mediaUrl = '', mediaType = '') {
+function addNewFineFields(fineObj = {}) {
   const container = document.getElementById('finesListContainer');
   const index = container.children.length + 1;
   const div = document.createElement('div');
   div.className = 'fine-item-box';
   div.style.cssText = "background: #17362a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #1a3e30; position: relative;";
+
+  const defaultCar = document.getElementById('adminTargetCar') ? document.getElementById('adminTargetCar').value : '';
+  const receiptNo = fineObj.receiptNo || '';
+  const carNo = fineObj.carNo || defaultCar;
+  const date = fineObj.date || '';
+  const hasDiscount = fineObj.hasDiscount !== undefined ? fineObj.hasDiscount : true;
+  const discountDaysLeft = fineObj.discountDaysLeft !== undefined ? fineObj.discountDaysLeft : '10';
+  const discountDeadline = fineObj.discountDeadline || '';
+  const deliveryDate = fineObj.deliveryDate || '';
+  const article = fineObj.article || fineObj.desc || '';
+  const status = fineObj.status || 'გადაუხდელია';
+  const sum = fineObj.sum || '';
+  const discountSum = fineObj.discountSum || '';
+  const payableSum = fineObj.payableSum || '';
+  const mediaUrl = fineObj.mediaUrl || '';
+  const mediaType = fineObj.mediaType || '';
 
   let previewArea = '';
   if (mediaUrl) {
@@ -1183,14 +1287,78 @@ function addNewFineFields(sum = '', desc = '', date = '', location = '', receipt
 
   div.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-      <span style="font-size: 12px; color: #d9f96b; font-weight: bold;">ჯარიმა #${index}</span>
+      <span style="font-size: 13px; color: #d9f96b; font-weight: bold;">ჯარიმა #${index}</span>
       <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-weight: bold;">წაშლა ✕</button>
     </div>
-    <div class="form-group"><label>ჯარიმის თანხა (მაგ: 50 GEL)</label><input type="text" class="fine-sum" value="${sum}" placeholder="50 GEL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-    <div class="form-group"><label>ჯარიმის ქვითრის ნომერი</label><input type="text" class="fine-receipt" value="${receiptNo}" placeholder="პკ1224700" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-    <div class="form-group"><label>ჯარიმის დაწერის თარიღი</label><input type="text" class="fine-date" value="${date}" placeholder="13-11-2026" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-    <div class="form-group"><label>ჯარიმის დაწერის ადგილი</label><input type="text" class="fine-location" value="${location}" placeholder="თბილისი, ჭავჭავაძის გამზ." style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-    <div class="form-group"><label>ჯარიმის აღწერა</label><input type="text" class="fine-desc" value="${desc}" placeholder="სიჩქარის გადაჭარბება" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="form-group">
+        <label>ქვითრის სერია-ნომერი:</label>
+        <input type="text" class="fine-receipt" value="${receiptNo}" placeholder="ავ023092209" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+      </div>
+      <div class="form-group">
+        <label>ავტომობილის სახ. ნომერი:</label>
+        <input type="text" class="fine-car" value="${carNo}" placeholder="AT011OL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="form-group">
+        <label>თარიღი (მაგ: 09.11.2026):</label>
+        <input type="text" class="fine-date" value="${date}" placeholder="09.11.2026" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+      </div>
+      <div class="form-group">
+        <label>ჩაბარების თარიღი:</label>
+        <input type="text" class="fine-delivery" value="${deliveryDate}" placeholder="არასავალდებულო" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
+      </div>
+    </div>
+
+    <div style="background: #0d231a; border: 1px solid #d9f96b; border-radius: 10px; padding: 12px; margin-bottom: 14px;">
+      <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 0; color: #d9f96b; font-weight: bold;">
+        <input type="checkbox" class="fine-has-discount" ${hasDiscount ? 'checked' : ''} style="width: 18px; height: 18px;">
+        <span>ეკუთვნის -20% ფასდაკლება</span>
+      </label>
+      <div class="fine-discount-options" style="display: ${hasDiscount ? 'grid' : 'none'}; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="font-size: 12px;">რამდენ დღეში ამოეწურება (დღე):</label>
+          <input type="number" class="fine-days-left" value="${discountDaysLeft}" min="0" max="30" placeholder="10" style="background: #17362a; color: #fff; border: 1px solid #1a3e30;">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label style="font-size: 12px;">ფასდაკლების ბოლო თარიღი:</label>
+          <input type="text" class="fine-deadline" value="${discountDeadline}" placeholder="19.11.2026" style="background: #17362a; color: #f87171; border: 1px solid #1a3e30;">
+        </div>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+      <div class="form-group">
+        <label>მუხლი / აღწერა:</label>
+        <input type="text" class="fine-article" value="${article}" placeholder="ასკ 125-ე მუხლის მე-6 ნაწილი" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+      </div>
+      <div class="form-group">
+        <label>მდგომარეობა:</label>
+        <select class="fine-status" style="width: 100%; padding: 12px; border-radius: 10px; background: #0d231a; color: #fff; border: 1px solid #1a3e30; font-weight: bold;">
+          <option value="გადაუხდელია" ${status === 'გადაუხდელია' ? 'selected' : ''}>❌ გადაუხდელია</option>
+          <option value="გადახდილია" ${status === 'გადახდილია' ? 'selected' : ''}>✅ გადახდილია</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+      <div class="form-group">
+        <label>თანხა (სრული):</label>
+        <input type="text" class="fine-sum" value="${sum}" placeholder="50.00" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+      </div>
+      <div class="form-group">
+        <label>-20% თანხა:</label>
+        <input type="text" class="fine-discount-sum" value="${discountSum}" placeholder="40.00" style="background: #0d231a; color: #f87171; border: 1px solid #1a3e30;">
+      </div>
+      <div class="form-group">
+        <label>გადასახდელი თანხა:</label>
+        <input type="text" class="fine-payable" value="${payableSum}" placeholder="40.00" style="background: #0d231a; color: #d9f96b; border: 1px solid #1a3e30; font-weight: bold;" required>
+      </div>
+    </div>
+
     <div class="form-group" style="margin-bottom: 0;">
       <label style="color: #d9f96b;">📸 ფოტოს/ვიდეოს ატვირთვა</label>
       <input type="file" class="fine-file-input" accept="image/*,video/*" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30; padding: 8px;">
@@ -1200,6 +1368,68 @@ function addNewFineFields(sum = '', desc = '', date = '', location = '', receipt
     </div>
   `;
   container.appendChild(div);
+
+  const dateInput = div.querySelector('.fine-date');
+  const discountCheck = div.querySelector('.fine-has-discount');
+  const discountOpts = div.querySelector('.fine-discount-options');
+  const daysLeftInput = div.querySelector('.fine-days-left');
+  const deadlineInput = div.querySelector('.fine-deadline');
+  const sumInput = div.querySelector('.fine-sum');
+  const discInput = div.querySelector('.fine-discount-sum');
+  const payableInput = div.querySelector('.fine-payable');
+
+  dateInput.addEventListener('input', function() {
+    const baseDt = parseGeoDate(dateInput.value);
+    if (baseDt) {
+      const endDt = new Date(baseDt);
+      endDt.setDate(endDt.getDate() + 10);
+      const dd = String(endDt.getDate()).padStart(2, '0');
+      const mm = String(endDt.getMonth() + 1).padStart(2, '0');
+      const yyyy = endDt.getFullYear();
+      deadlineInput.value = `${dd}.${mm}.${yyyy}`;
+
+      const diffDays = Math.ceil((endDt - new Date()) / (1000 * 60 * 60 * 24));
+      if (diffDays <= 0) {
+        daysLeftInput.value = 0;
+        discountCheck.checked = false;
+      } else {
+        daysLeftInput.value = diffDays;
+        discountCheck.checked = true;
+      }
+      recalculateAdminFine(false);
+    }
+  });
+
+  function recalculateAdminFine(updateDeadlineFromDays = true) {
+    const isChecked = discountCheck.checked;
+    discountOpts.style.display = isChecked ? 'grid' : 'none';
+
+    const days = parseInt(daysLeftInput.value, 10);
+    if (updateDeadlineFromDays && isChecked && !isNaN(days) && days > 0) {
+      const targetDt = new Date();
+      targetDt.setDate(targetDt.getDate() + days);
+      const dd = String(targetDt.getDate()).padStart(2, '0');
+      const mm = String(targetDt.getMonth() + 1).padStart(2, '0');
+      const yyyy = targetDt.getFullYear();
+      deadlineInput.value = `${dd}.${mm}.${yyyy}`;
+    }
+
+    const num = parseFloat((sumInput.value || '').toString().replace(/[^0-9.]/g, ''));
+    if (!isNaN(num)) {
+      if (isChecked) {
+        const dSum = (num * 0.8).toFixed(2);
+        discInput.value = dSum;
+        payableInput.value = dSum;
+      } else {
+        discInput.value = '';
+        payableInput.value = num.toFixed(2);
+      }
+    }
+  }
+
+  discountCheck.addEventListener('change', () => recalculateAdminFine(true));
+  daysLeftInput.addEventListener('input', () => recalculateAdminFine(true));
+  sumInput.addEventListener('input', () => recalculateAdminFine(false));
 
   const fileInput = div.querySelector('.fine-file-input');
   const mediaUrlInput = div.querySelector('.fine-media-url');
@@ -1240,12 +1470,20 @@ function saveAdminData(event) {
   let finesArray = [];
   if (!noFineChecked) {
     document.querySelectorAll('.fine-item-box').forEach(box => {
+      const hasDisc = box.querySelector('.fine-has-discount').checked;
       finesArray.push({
-        sum: box.querySelector('.fine-sum').value,
-        receiptNo: box.querySelector('.fine-receipt').value,
-        date: box.querySelector('.fine-date').value,
-        location: box.querySelector('.fine-location').value,
-        desc: box.querySelector('.fine-desc').value,
+        receiptNo: box.querySelector('.fine-receipt').value.trim(),
+        carNo: box.querySelector('.fine-car').value.toUpperCase().trim(),
+        date: box.querySelector('.fine-date').value.trim(),
+        deliveryDate: box.querySelector('.fine-delivery').value.trim(),
+        hasDiscount: hasDisc,
+        discountDaysLeft: hasDisc ? box.querySelector('.fine-days-left').value.trim() : '0',
+        discountDeadline: hasDisc ? box.querySelector('.fine-deadline').value.trim() : '',
+        status: box.querySelector('.fine-status').value,
+        article: box.querySelector('.fine-article').value.trim(),
+        sum: box.querySelector('.fine-sum').value.trim(),
+        discountSum: hasDisc ? box.querySelector('.fine-discount-sum').value.trim() : '',
+        payableSum: box.querySelector('.fine-payable').value.trim(),
         mediaUrl: box.querySelector('.fine-media-url').value || '',
         mediaType: box.querySelector('.fine-media-type').value || ''
       });
@@ -1278,147 +1516,26 @@ function saveAdminData(event) {
   localStorage.setItem(storageKey, JSON.stringify(userData));
   saveUserToUnifiedList(userData);
 
+  // მყისიერად განვაახლოთ ადმინის კეში, ბაზის სია და კაბინეტი (თუ გახსნილია)
+  currentSelectedAdminUser = userData;
+  if (typeof foundUsersCache !== 'undefined' && Array.isArray(foundUsersCache)) {
+    const cacheIdx = foundUsersCache.findIndex(u => u && u.pid === targetPid && u.car === targetCar);
+    if (cacheIdx !== -1) foundUsersCache[cacheIdx] = userData;
+  }
+  if (typeof renderUserDatabaseList === 'function') renderUserDatabaseList();
+  const cabDash = document.getElementById('cabinetDashboard');
+  if (cabDash && cabDash.style.display === 'block') loadUserData(userData);
+
   fetch(SCRIPT_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(userData)
   }).then(() => {
-    alert("✅ მონაცემები წარმატებით განახლდა და მიება ავტომობილს: " + targetCar);
+    alert("✅ მონაცემები წარმატებით დადასტურდა და გამოქვეყნდა!");
     closeAdminModal();
   }).catch(err => console.error("Error:", err));
-}    
-        function toggleFineInputsState(isChecked) {
-            const wrapper = document.getElementById('finesSectionWrapper');
-            if (isChecked) {
-                wrapper.style.display = 'none';
-                document.getElementById('finesListContainer').innerHTML = '';
-            } else {
-                wrapper.style.display = 'block';
-                if(document.getElementById('finesListContainer').children.length === 0) {
-                    addNewFineFields();
-                }
-            }
-        }
-
-        function addNewFineFields(sum='', desc='', date='', receiptNo='', mediaUrl='', mediaType='') {
-            const container = document.getElementById('finesListContainer');
-            const index = container.children.length + 1;
-            const div = document.createElement('div');
-            div.className = 'fine-item-box';
-            div.style.cssText = "background: #17362a; padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #1a3e30; position: relative;";
-           
-            let previewArea = '';
-            if (mediaUrl) {
-                previewArea = mediaType && mediaType.startsWith('video/')
-                    ? `<video src="${mediaUrl}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`
-                    : `<img src="${mediaUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
-            }
-
-            div.innerHTML = `
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <span style="font-size: 12px; color: #d9f96b; font-weight: bold;">Fine #${index}</span>
-                    <button type="button" onclick="this.parentElement.parentElement.remove()" style="background: transparent; border: none; color: #ef4444; cursor: pointer; font-weight: bold;">Delete ✕</button>
-                </div>
-                <div class="form-group"><label>Fine Amount (e.g. 50 GEL)</label><input type="text" class="fine-sum" value="${sum}" placeholder="50 GEL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-                <div class="form-group"><label>Fine Description</label><input type="text" class="fine-desc" value="${desc}" placeholder="Speeding" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-                <div class="form-group"><label>Fine Date</label><input type="text" class="fine-date" value="${date}" placeholder="02-06-2026" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-                <div class="form-group"><label>Receipt Number</label><input type="text" class="fine-receipt" value="${receiptNo}" placeholder="3ჯ1224700" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required></div>
-                <div class="form-group" style="margin-bottom: 0;">
-                    <label style="color: #d9f96b;">📸 ფოტოს/ვიდეოს ატვირთვა</label>
-                    <input type="file" class="fine-file-input" accept="image/*,video/*" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30; padding: 8px;">
-                    <input type="hidden" class="fine-media-url" value="${mediaUrl}">
-                    <input type="hidden" class="fine-media-type" value="${mediaType}">
-                    <div class="media-preview-box">${previewArea}</div>
-                </div>
-            `;
-            container.appendChild(div);
-
-            const fileInput = div.querySelector('.fine-file-input');
-            const mediaUrlInput = div.querySelector('.fine-media-url');
-            const mediaTypeInput = div.querySelector('.fine-media-type');
-            const previewContainer = div.querySelector('.media-preview-box');
-
-            fileInput.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        mediaUrlInput.value = evt.target.result;
-                        mediaTypeInput.value = file.type;
-                        if (file.type.startsWith('video/')) {
-                            previewContainer.innerHTML = `<video src="${evt.target.result}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`;
-                        } else {
-                            previewContainer.innerHTML = `<img src="${evt.target.result}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
-                        }
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        function saveAdminData(event) {
-            event.preventDefault();
-            const targetPid = document.getElementById('adminTargetPid').value.toString().trim();
-            const targetName = document.getElementById('adminTargetName').value.trim();
-            const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
-            const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
-            const targetPhone = document.getElementById('adminTargetPhone').value.trim();
-            const techStatus = document.getElementById('adminInputTechStatus').value;
-            const noFineChecked = document.getElementById('adminNoFineCheck').checked;
-
-            if (!targetCar) { alert("❌ შეიყვანეთ მანქანის ნომერი!"); return; }
-
-            let finesArray = [];
-            if (!noFineChecked) {
-                document.querySelectorAll('.fine-item-box').forEach(box => {
-                    finesArray.push({
-                        sum: box.querySelector('.fine-sum').value,
-                        desc: box.querySelector('.fine-desc').value,
-                        date: box.querySelector('.fine-date').value,
-                        receiptNo: box.querySelector('.fine-receipt').value,
-                        mediaUrl: box.querySelector('.fine-media-url').value || '',
-                        mediaType: box.querySelector('.fine-media-type').value || ''
-                    });
-                });
-            }
-
-            const storageKey = 'user_' + targetPid + '_' + targetCar;
-            let userData = JSON.parse(localStorage.getItem(storageKey)) || {
-                pid: targetPid,
-                name: targetName,
-                car: targetCar,
-                tech: targetTech,
-                phone: targetPhone,
-                package: "საწყისი პაკეტი (7 GEL)",
-                days: 30,
-                timestamp: Date.now(),
-                packageHistory: []
-            };
-
-            userData.pid = targetPid;
-            userData.name = targetName;
-            userData.car = targetCar;
-            userData.tech = targetTech;
-            userData.phone = targetPhone;
-            userData.adminApproved = true;
-            userData.noFine = noFineChecked;
-            userData.fines = finesArray;
-            userData.techStatus = techStatus;
-
-            localStorage.setItem(storageKey, JSON.stringify(userData));
-            saveUserToUnifiedList(userData);
-
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(userData)
-            }).then(() => {
-                alert("✅ მონაცემები წარმატებით განახლდა!");
-                closeAdminModal();
-            }).catch(err => console.error("Error:", err));
-        }
+}
 
  function saveUserToUnifiedList(userObj) {
   if (!userObj || !userObj.pid || !userObj.car) return;
