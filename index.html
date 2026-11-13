@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+არ<!DOCTYPE html>
 <html lang="ka">
 <head>
     <meta charset="UTF-8">
@@ -1281,8 +1281,8 @@ function addNewFineFields(fineObj = {}) {
   let previewArea = '';
   if (mediaUrl) {
     previewArea = mediaType && mediaType.startsWith('video/')
-      ? `<video src="${mediaUrl}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;"></video>`
-      : `<img src="${mediaUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px;" />`;
+      ? `<video src="${mediaUrl}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;"></video>`
+      : `<img src="${mediaUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;" />`;
   }
 
   div.innerHTML = `
@@ -1294,18 +1294,18 @@ function addNewFineFields(fineObj = {}) {
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
       <div class="form-group">
         <label>ქვითრის სერია-ნომერი:</label>
-        <input type="text" class="fine-receipt" value="${receiptNo}" placeholder="ავ023092209" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+        <input type="text" class="fine-receipt" value="${receiptNo}" placeholder="ავ023092209" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
       </div>
       <div class="form-group">
         <label>ავტომობილის სახ. ნომერი:</label>
-        <input type="text" class="fine-car" value="${carNo}" placeholder="AT011OL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+        <input type="text" class="fine-car" value="${carNo}" placeholder="AT011OL" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
       </div>
     </div>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
       <div class="form-group">
         <label>თარიღი (მაგ: 09.11.2026):</label>
-        <input type="text" class="fine-date" value="${date}" placeholder="09.11.2026" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+        <input type="text" class="fine-date" value="${date}" placeholder="09.11.2026" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
       </div>
       <div class="form-group">
         <label>ჩაბარების თარიღი:</label>
@@ -1333,7 +1333,7 @@ function addNewFineFields(fineObj = {}) {
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
       <div class="form-group">
         <label>მუხლი / აღწერა:</label>
-        <input type="text" class="fine-article" value="${article}" placeholder="ასკ 125-ე მუხლის მე-6 ნაწილი" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+        <input type="text" class="fine-article" value="${article}" placeholder="ასკ 125-ე მუხლის მე-6 ნაწილი" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
       </div>
       <div class="form-group">
         <label>მდგომარეობა:</label>
@@ -1347,7 +1347,7 @@ function addNewFineFields(fineObj = {}) {
     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
       <div class="form-group">
         <label>თანხა (სრული):</label>
-        <input type="text" class="fine-sum" value="${sum}" placeholder="50.00" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;" required>
+        <input type="text" class="fine-sum" value="${sum}" placeholder="50.00" style="background: #0d231a; color: #fff; border: 1px solid #1a3e30;">
       </div>
       <div class="form-group">
         <label>-20% თანხა:</label>
@@ -1355,7 +1355,7 @@ function addNewFineFields(fineObj = {}) {
       </div>
       <div class="form-group">
         <label>გადასახდელი თანხა:</label>
-        <input type="text" class="fine-payable" value="${payableSum}" placeholder="40.00" style="background: #0d231a; color: #d9f96b; border: 1px solid #1a3e30; font-weight: bold;" required>
+        <input type="text" class="fine-payable" value="${payableSum}" placeholder="40.00" style="background: #0d231a; color: #d9f96b; border: 1px solid #1a3e30; font-weight: bold;">
       </div>
     </div>
 
@@ -1365,6 +1365,9 @@ function addNewFineFields(fineObj = {}) {
       <input type="hidden" class="fine-media-url" value="${mediaUrl}">
       <input type="hidden" class="fine-media-type" value="${mediaType}">
       <div class="media-preview-box">${previewArea}</div>
+      <button type="button" class="remove-media-btn" style="display: ${mediaUrl ? 'inline-block' : 'none'}; margin-top: 8px; background: #ef4444; color: #fff; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer;">
+        🗑 ფოტო/ვიდეოს წაშლა
+      </button>
     </div>
   `;
   container.appendChild(div);
@@ -1400,6 +1403,238 @@ function addNewFineFields(fineObj = {}) {
     }
   });
 
+  function recalculateAdminFine(updateDeadlineFromDays = true) {
+    const isChecked = discountCheck.checked;
+    discountOpts.style.display = isChecked ? 'grid' : 'none';
+
+    const days = parseInt(daysLeftInput.value, 10);
+    if (updateDeadlineFromDays && isChecked && !isNaN(days) && days > 0) {
+      const targetDt = new Date();
+      targetDt.setDate(targetDt.getDate() + days);
+      const dd = String(targetDt.getDate()).padStart(2, '0');
+      const mm = String(targetDt.getMonth() + 1).padStart(2, '0');
+      const yyyy = targetDt.getFullYear();
+      deadlineInput.value = `${dd}.${mm}.${yyyy}`;
+    }
+
+    const num = parseFloat((sumInput.value || '').toString().replace(/[^0-9.]/g, ''));
+    if (!isNaN(num)) {
+      if (isChecked) {
+        const dSum = (num * 0.8).toFixed(2);
+        discInput.value = dSum;
+        payableInput.value = dSum;
+      } else {
+        discInput.value = '';
+        payableInput.value = num.toFixed(2);
+      }
+    }
+  }
+
+  discountCheck.addEventListener('change', () => recalculateAdminFine(true));
+  daysLeftInput.addEventListener('input', () => recalculateAdminFine(true));
+  sumInput.addEventListener('input', () => recalculateAdminFine(false));
+
+  const fileInput = div.querySelector('.fine-file-input');
+  const mediaUrlInput = div.querySelector('.fine-media-url');
+  const mediaTypeInput = div.querySelector('.fine-media-type');
+  const previewContainer = div.querySelector('.media-preview-box');
+  const removeMediaBtn = div.querySelector('.remove-media-btn');
+
+  removeMediaBtn.addEventListener('click', function() {
+    fileInput.value = '';
+    mediaUrlInput.value = '';
+    mediaTypeInput.value = '';
+    previewContainer.innerHTML = '';
+    removeMediaBtn.style.display = 'none';
+  });
+
+  fileInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.type.startsWith('video/')) {
+      if (file.size > 2.5 * 1024 * 1024) {
+        alert("⚠️ ვიდეო 2.5MB-ზე დიდია. აირჩიეთ შედარებით მცირე ვიდეო.");
+        fileInput.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        mediaUrlInput.value = evt.target.result;
+        mediaTypeInput.value = file.type;
+        previewContainer.innerHTML = `<video src="${evt.target.result}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;"></video>`;
+        removeMediaBtn.style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxW = 650;
+          const scale = img.width > maxW ? (maxW / img.width) : 1;
+          canvas.width = img.width * scale;
+          canvas.height = img.height * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.65);
+          mediaUrlInput.value = compressedDataUrl;
+          mediaTypeInput.value = 'image/jpeg';
+          previewContainer.innerHTML = `<img src="${compressedDataUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;" />`;
+          removeMediaBtn.style.display = 'inline-block';
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+function saveAdminData(event) {
+  if (event) event.preventDefault();
+  const saveBtn = document.querySelector('#adminModal button[type="submit"]');
+  const origBtnText = saveBtn ? saveBtn.innerHTML : 'მონაცემების დადასტურება და გამოქვეყნება ✅';
+
+  const rawSearchInput = document.getElementById('adminTargetId').value.toString().trim();
+  const targetPid = (currentSelectedAdminUser && currentSelectedAdminUser.pid) ? currentSelectedAdminUser.pid.toString().trim() : rawSearchInput;
+  const targetName = document.getElementById('adminTargetName').value.trim();
+  const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
+  const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
+  const targetPhone = document.getElementById('adminTargetPhone').value.trim();
+  const techStatus = document.getElementById('adminInputTechStatus').value;
+  const noFineChecked = document.getElementById('adminNoFineCheck').checked;
+
+  if (!targetCar) {
+    alert("❌ შეიყვანეთ მანქანის ნომერი!");
+    return;
+  }
+
+  if (saveBtn) {
+    saveBtn.innerHTML = '⏳ ინახება და ქვეყნდება...';
+    saveBtn.disabled = true;
+  }
+
+  let finesArray = [];
+  if (!noFineChecked) {
+    document.querySelectorAll('.fine-item-box').forEach(box => {
+      const rNo = box.querySelector('.fine-receipt').value.trim();
+      const sVal = box.querySelector('.fine-sum').value.trim();
+      const artVal = box.querySelector('.fine-article').value.trim();
+      const mUrl = box.querySelector('.fine-media-url').value || '';
+
+      if (!rNo && !sVal && !artVal && !mUrl) return;
+
+      const hasDisc = box.querySelector('.fine-has-discount').checked;
+      finesArray.push({
+        receiptNo: rNo,
+        carNo: box.querySelector('.fine-car').value.toUpperCase().trim() || targetCar,
+        date: box.querySelector('.fine-date').value.trim(),
+        deliveryDate: box.querySelector('.fine-delivery').value.trim(),
+        hasDiscount: hasDisc,
+        discountDaysLeft: hasDisc ? box.querySelector('.fine-days-left').value.trim() : '0',
+        discountDeadline: hasDisc ? box.querySelector('.fine-deadline').value.trim().replace('-მდე', '') : '',
+        status: box.querySelector('.fine-status').value,
+        article: artVal,
+        sum: sVal || '0.00',
+        discountSum: hasDisc ? box.querySelector('.fine-discount-sum').value.trim() : '',
+        payableSum: box.querySelector('.fine-payable').value.trim() || sVal || '0.00',
+        mediaUrl: mUrl,
+        mediaType: box.querySelector('.fine-media-type').value || ''
+      });
+    });
+  }
+
+  const storageKey = 'user_' + targetPid + '_' + targetCar;
+  let userData = null;
+  try {
+    userData = JSON.parse(localStorage.getItem(storageKey));
+  } catch (e) {}
+
+  if (!userData) {
+    userData = currentSelectedAdminUser ? Object.assign({}, currentSelectedAdminUser) : {
+      pid: targetPid,
+      name: targetName,
+      car: targetCar,
+      tech: targetTech,
+      phone: targetPhone,
+      package: "საწყისი პაკეტი (7 GEL)",
+      days: 30,
+      timestamp: Date.now(),
+      packageHistory: []
+    };
+  }
+
+  userData.pid = targetPid;
+  userData.name = targetName;
+  userData.car = targetCar;
+  userData.tech = targetTech;
+  userData.phone = targetPhone;
+  userData.adminApproved = true;
+  userData.noFine = noFineChecked;
+  userData.fines = finesArray;
+  userData.techStatus = techStatus;
+
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(userData));
+  } catch (e) {
+    const cleanFines = finesArray.map(f => Object.assign({}, f, { mediaUrl: '' }));
+    userData.fines = cleanFines;
+    localStorage.setItem(storageKey, JSON.stringify(userData));
+  }
+
+  if (typeof saveUserToUnifiedList === 'function') {
+    saveUserToUnifiedList(userData);
+  }
+
+  currentSelectedAdminUser = userData;
+  if (typeof foundUsersCache !== 'undefined' && Array.isArray(foundUsersCache)) {
+    const cacheIdx = foundUsersCache.findIndex(u => u && u.pid === targetPid && u.car === targetCar);
+    if (cacheIdx !== -1) foundUsersCache[cacheIdx] = userData;
+  }
+  if (typeof renderUserDatabaseList === 'function') renderUserDatabaseList();
+  const cabDash = document.getElementById('cabinetDashboard');
+  if (cabDash && cabDash.style.display === 'block') loadUserData(userData);
+
+  if (typeof SCRIPT_URL !== 'undefined') {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    }).catch(err => console.error("Sheet sync error:", err));
+  }
+
+  setTimeout(() => {
+    if (saveBtn) {
+      saveBtn.innerHTML = '✅ შენახულია და გამოქვეყნებულია!';
+      saveBtn.style.background = '#22c55e';
+      saveBtn.style.color = '#fff';
+    }
+    setTimeout(() => {
+      if (saveBtn) {
+        saveBtn.innerHTML = origBtnText;
+        saveBtn.style.background = '';
+        saveBtn.style.color = '';
+        saveBtn.disabled = false;
+      }
+      alert("✅ მონაცემები წარმატებით დადასტურდა და გამოქვეყნდა!");
+      closeAdminModal();
+    }, 500);
+  }, 250);
+}
+
+window.addEventListener('storage', function(e) {
+  if (e.key && e.key.startsWith('user_') && e.newValue) {
+    try {
+      const updatedUser = JSON.parse(e.newValue);
+      const cabDash = document.getElementById('cabinetDashboard');
+      const currentCarEl = document.getElementById('dashMainCarBadge2');
+      if (cabDash && cabDash.style.display === 'block' && currentCarEl && currentCarEl.textContent.trim() === updatedUser.car) {
+        loadUserData(updatedUser);
+      }
+    } catch (err) {}
+  }
+});
   function recalculateAdminFine(updateDeadlineFromDays = true) {
     const isChecked = discountCheck.checked;
     discountOpts.style.display = isChecked ? 'grid' : 'none';
