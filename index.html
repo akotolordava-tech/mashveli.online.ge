@@ -951,13 +951,17 @@
   document.getElementById('cabinetDashboard').style.display = 'block';
   startLiveCountdown(savedData.timestamp, savedData.days);
 }
-        function renderMediaHTML(mediaUrl, mediaType) {
+    function renderMediaHTML(mediaUrl, mediaType) {
             if (!mediaUrl) return '';
-            if (mediaType && mediaType.startsWith('video/')) {
+            const isDrivePreview = mediaUrl.includes('drive.google.com') && mediaUrl.includes('/preview');
+            if (isDrivePreview) {
+                return `<div style="margin-top: 10px;"><iframe src="${mediaUrl}" style="width:100%; height:240px; border-radius:10px; border:1px solid #244734; background:#000;" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
+            }
+            if ((mediaType && mediaType.startsWith('video/')) || mediaUrl.startsWith('data:video/')) {
                 return `<div style="margin-top: 10px;"><video src="${mediaUrl}" controls class="fine-media-preview"></video></div>`;
             }
             return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine image" /></a></div>`;
-        }
+        }   
 
 function parseGeoDate(dateStr) {
   const parts = (dateStr || '').trim().split('.');
@@ -1574,17 +1578,21 @@ function saveAdminData(event) {
   userData.fines = finesArray;
   userData.techStatus = techStatus;
 
-  try {
-    localStorage.setItem(storageKey, JSON.stringify(userData));
-  } catch (e) {
-    const cleanFines = finesArray.map(f => Object.assign({}, f, { mediaUrl: '' }));
-    userData.fines = cleanFines;
-    localStorage.setItem(storageKey, JSON.stringify(userData));
-  }
+ try {
+      localStorage.setItem(storageKey, JSON.stringify(userData));
+    } catch (e) {
+      const lightCopy = Object.assign({}, userData, { fines: finesArray.map(f => Object.assign({}, f, { mediaUrl: '' })) });
+      try { localStorage.setItem(storageKey, JSON.stringify(lightCopy)); } catch (e2) {}
+    }
 
-  if (typeof saveUserToUnifiedList === 'function') {
-    saveUserToUnifiedList(userData);
-  }
+    if (typeof saveUserToUnifiedList === 'function') {
+      try {
+        saveUserToUnifiedList(userData);
+      } catch (e) {
+        const lightCopy = Object.assign({}, userData, { fines: finesArray.map(f => Object.assign({}, f, { mediaUrl: '' })) });
+        try { saveUserToUnifiedList(lightCopy); } catch (e2) {}
+      }
+    }
 
   currentSelectedAdminUser = userData;
   if (typeof foundUsersCache !== 'undefined' && Array.isArray(foundUsersCache)) {
