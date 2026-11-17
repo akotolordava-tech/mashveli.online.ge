@@ -2287,18 +2287,88 @@ async function searchUserByPid() {
             }
         }
 
-        function sendChatMessage() {
-            const input = document.getElementById('chatInputText');
-            const text = input.value.trim();
-            if (!text) return;
-            const area = document.getElementById('chatMessagesArea');
-            area.innerHTML += `<div class="msg" style="background: #17362a; color: #fff; align-self: flex-end;">${text}</div>`;
-            input.value = '';
-            setTimeout(() => {
-                area.innerHTML += `<div class="msg support">მადლობა შეტყობინებისთვის. ოპერატორი მალე გიპასუხებთ.</div>`;
-                area.scrollTop = area.scrollHeight;
-            }, 1000);
+       const CHAT_SCRIPT_URL = 'აქ_ჩასვი_შენი_APPS_SCRIPT_EXEC_ბმული';
+let displayedReplyIds = new Set();
+
+function getActiveCabinetUser() {
+    const carBadge = document.getElementById('dashMainCarBadge2');
+    const currentCar = carBadge ? carBadge.textContent.trim() : '';
+    const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
+
+    if (currentCar) {
+        const found = allUsers.find(u => u && u.car && u.car.toString().trim() === currentCar);
+        if (found) return found;
+    }
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('user_')) {
+            try {
+                const parsed = JSON.parse(localStorage.getItem(k));
+                if (parsed && (!currentCar || parsed.car === currentCar)) return parsed;
+            } catch (e) {}
         }
+    }
+    return allUsers[0] || {};
+}
+
+function sendChatMessage() {
+    const input = document.getElementById('chatInputText');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const area = document.getElementById('chatMessagesArea');
+    area.innerHTML += `<div class="msg" style="background: #17362a; color: #fff; align-self: flex-end;">${text}</div>`;
+    area.scrollTop = area.scrollHeight;
+    input.value = '';
+
+    const user = getActiveCabinetUser();
+
+    fetch(CHAT_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'send_chat',
+            text: text,
+            user: {
+                name: user.name || '',
+                pid: user.pid || '',
+                phone: user.phone || '',
+                car: user.car || '',
+                tech: user.tech || ''
+            }
+        })
+    }).catch(err => console.error('Chat send error:', err));
+}
+
+// ყოველ 4 წამში ამოწმებს ოპერატორის (შენს) პასუხს ტელეგრამიდან
+setInterval(() => {
+    const cabDash = document.getElementById('cabinetDashboard');
+    if (!cabDash || cabDash.style.display !== 'block') return;
+
+    const user = getActiveCabinetUser();
+    const sessionKey = (user.pid || user.car || 'guest').toString().trim();
+    if (!sessionKey || sessionKey === 'guest') return;
+
+    fetch(`${CHAT_SCRIPT_URL}?action=get_replies&session=${encodeURIComponent(sessionKey)}`)
+        .then(r => r.json())
+        .then(data => {
+            if (data && data.status === 'success' && Array.isArray(data.replies)) {
+                const area = document.getElementById('chatMessagesArea');
+                if (!area) return;
+                let added = false;
+                data.replies.forEach(rep => {
+                    if (!displayedReplyIds.has(rep.id)) {
+                        displayedReplyIds.add(rep.id);
+                        area.innerHTML += `<div class="msg support">${rep.text}</div>`;
+                        added = true;
+                    }
+                });
+                if (added) area.scrollTop = area.scrollHeight;
+            }
+        })
+        .catch(() => {});
+}, 4000);
 
         document.addEventListener('keydown', function(e) {
             if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'a') {
