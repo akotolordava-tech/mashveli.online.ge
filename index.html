@@ -1452,46 +1452,76 @@ function addNewFineFields(fineObj = {}) {
     removeMediaBtn.style.display = 'none';
   });
 
-  fileInput.addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (file.type.startsWith('video/')) {
-      if (file.size > 2.5 * 1024 * 1024) {
-        alert("⚠️ ვიდეო 2.5MB-ზე დიდია. აირჩიეთ შედარებით მცირე ვიდეო.");
-        fileInput.value = '';
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        mediaUrlInput.value = evt.target.result;
-        mediaTypeInput.value = file.type;
-        previewContainer.innerHTML = `<video src="${evt.target.result}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;"></video>`;
-        removeMediaBtn.style.display = 'inline-block';
-      };
-      reader.readAsDataURL(file);
-    } else {
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const maxW = 650;
-          const scale = img.width > maxW ? (maxW / img.width) : 1;
-          canvas.width = img.width * scale;
-          canvas.height = img.height * scale;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.65);
-          mediaUrlInput.value = compressedDataUrl;
-          mediaTypeInput.value = 'image/jpeg';
-          previewContainer.innerHTML = `<img src="${compressedDataUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;" />`;
-          removeMediaBtn.style.display = 'inline-block';
-        };
-        img.src = evt.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
+  const MEDIA_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
+
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 15 * 1024 * 1024) {
+                alert("⚠️ ფაილი 15MB-ზე დიდია. აირჩიეთ შედარებით მცირე ფაილი.");
+                fileInput.value = '';
+                return;
+            }
+
+            previewContainer.innerHTML = `<div style="color: #d9f96b; font-size: 13px; margin-top: 8px;">⏳ იტვირთება სერვერზე, გთხოვთ დაელოდოთ...</div>`;
+
+            const uploadToDrive = (dataUrl, mime, name) => {
+                fetch(MEDIA_UPLOAD_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: 'upload_fine_media',
+                        base64: dataUrl,
+                        mimeType: mime,
+                        fileName: name
+                    })
+                })
+                .then(res => res.json())
+                .then(result => {
+                    if (result.status === 'success' && result.url) {
+                        mediaUrlInput.value = result.url;
+                        mediaTypeInput.value = mime;
+                        if (mime.startsWith('video/')) {
+                            previewContainer.innerHTML = `<iframe src="${result.url}" style="width:100%; height:180px; margin-top:10px; border-radius:8px; border:none;" allow="autoplay"></iframe><div style="color:#4ade80; font-size:12px; margin-top:4px;">✅ ვიდეო ატვირთულია</div>`;
+                        } else {
+                            previewContainer.innerHTML = `<img src="${result.url}" style="max-width:100%; max-height:150px; margin-top:10px; border-radius:8px; display:block;" /><div style="color:#4ade80; font-size:12px; margin-top:4px;">✅ ფოტო ატვირთულია</div>`;
+                        }
+                        removeMediaBtn.style.display = 'inline-block';
+                    } else {
+                        previewContainer.innerHTML = `<div style="color:#ff6b6b; font-size:12px;">❌ ატვირთვა ვერ მოხერხდა</div>`;
+                    }
+                })
+                .catch(() => {
+                    previewContainer.innerHTML = `<div style="color:#ff6b6b; font-size:12px;">❌ სერვერთან კავშირის შეცდომა</div>`;
+                });
+            };
+
+            if (file.type.startsWith('video/')) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    uploadToDrive(evt.target.result, file.type, file.name);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const maxW = 1000;
+                        const scale = img.width > maxW ? (maxW / img.width) : 1;
+                        canvas.width = img.width * scale;
+                        canvas.height = img.height * scale;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                        uploadToDrive(compressedDataUrl, 'image/jpeg', file.name);
+                    };
+                    img.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 }
 
 function saveAdminData(event) {
