@@ -2320,26 +2320,53 @@ async function searchUserByPid() {
   const CHAT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
 const TG_BOT_TOKEN = '8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4';
 
-function getChatStorageKey() {
-    const u = JSON.parse(localStorage.getItem('mashveli_user') || '{}');
-    const session = (u.pid || u.car || 'guest').toString().trim();
-    return 'mashveli_chat_history_' + session;
+function getActiveChatUser() {
+    if (typeof currentUser !== 'undefined' && currentUser) return currentUser;
+    const raw = localStorage.getItem('currentLoggedUser') || localStorage.getItem('mashveli_user') || localStorage.getItem('last_mobile_order');
+    if (raw) {
+        try { return JSON.parse(raw); } catch (e) {}
+    }
+    for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('user_')) {
+            try { return JSON.parse(localStorage.getItem(k)); } catch (e) {}
+        }
+    }
+    return {};
 }
 
 function getCurrentSessionId() {
-    const u = JSON.parse(localStorage.getItem('mashveli_user') || '{}');
+    const u = getActiveChatUser();
     return (u.pid || u.car || 'guest').toString().trim();
 }
 
+function getChatStorageKey() {
+    return 'mashveli_chat_history_' + getCurrentSessionId();
+}
+
+function getChatContainer() {
+    return document.getElementById('chatMessages')
+        || document.getElementById('chatHistory')
+        || document.getElementById('supportChatMessages')
+        || document.querySelector('#cabChatSection [style*="overflow-y"]')
+        || document.querySelector('#tab-chat [style*="overflow-y"]');
+}
+
+function getChatInputBox() {
+    return document.getElementById('chatInput')
+        || document.getElementById('supportChatInput')
+        || document.querySelector('#cabChatSection input[type="text"]')
+        || document.querySelector('#tab-chat input[type="text"]');
+}
+
 function renderChatMessage(text, isUser, save = true) {
-    const chatBox = document.getElementById('chatMessages');
+    const chatBox = getChatContainer();
     if (!chatBox) return;
 
     const msgDiv = document.createElement('div');
-    msgDiv.className = isUser ? 'chat-msg user' : 'chat-msg admin';
     msgDiv.style.cssText = isUser
-        ? 'align-self: flex-end; background: #2d4233; color: #fff; padding: 10px 14px; border-radius: 12px 12px 2px 12px; max-width: 78%; font-size: 14px; line-height: 1.4; word-break: break-word;'
-        : 'align-self: flex-start; background: #1e2923; color: #e2e8f0; padding: 10px 14px; border-radius: 12px 12px 12px 2px; max-width: 78%; font-size: 14px; line-height: 1.4; border: 1px solid rgba(163,230,53,0.2); word-break: break-word;';
+        ? 'align-self: flex-end; margin-left: auto; background: #2d4233; color: #fff; padding: 10px 14px; border-radius: 12px 12px 2px 12px; max-width: 78%; width: fit-content; font-size: 14px; line-height: 1.4; word-break: break-word; margin-bottom: 8px;'
+        : 'align-self: flex-start; margin-right: auto; background: #1e2923; color: #e2e8f0; padding: 10px 14px; border-radius: 12px 12px 12px 2px; max-width: 78%; width: fit-content; font-size: 14px; line-height: 1.4; border: 1px solid rgba(163,230,53,0.2); word-break: break-word; margin-bottom: 8px;';
     msgDiv.textContent = text;
     chatBox.appendChild(msgDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -2353,7 +2380,7 @@ function renderChatMessage(text, isUser, save = true) {
 }
 
 function loadSavedChatHistory() {
-    const chatBox = document.getElementById('chatMessages');
+    const chatBox = getChatContainer();
     if (!chatBox || chatBox.dataset.loaded === '1') return;
     chatBox.dataset.loaded = '1';
 
@@ -2363,7 +2390,7 @@ function loadSavedChatHistory() {
 }
 
 function sendChatMessage() {
-    const input = document.getElementById('chatInput');
+    const input = getChatInputBox();
     if (!input) return;
     const text = input.value.trim();
     if (!text) return;
@@ -2372,7 +2399,7 @@ function sendChatMessage() {
     renderChatMessage(text, true, true);
     input.value = '';
 
-    const u = JSON.parse(localStorage.getItem('mashveli_user') || '{}');
+    const u = getActiveChatUser();
 
     fetch(CHAT_SCRIPT_URL, {
         method: 'POST',
@@ -2386,9 +2413,12 @@ function sendChatMessage() {
     }).catch(() => {});
 }
 
+window.sendSupportMessage = sendChatMessage;
+window.sendChatMessage = sendChatMessage;
+
 // ყოველ 3 წამში ტელეგრამიდან პირდაპირ წამოიღებს Reply პასუხებს
 setInterval(() => {
-    const chatBox = document.getElementById('chatMessages');
+    const chatBox = getChatContainer();
     if (!chatBox) return;
     loadSavedChatHistory();
 
