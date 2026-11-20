@@ -2317,7 +2317,7 @@ async function searchUserByPid() {
             }
         }
 
-  const CHAT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
+ const CHAT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
 const TG_BOT_TOKEN = '8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4';
 
 function getActiveChatUser() {
@@ -2344,26 +2344,12 @@ function getChatStorageKey() {
     return 'mashveli_chat_history_' + getCurrentSessionId();
 }
 
-function getChatContainer() {
-    return document.getElementById('chatMessages')
-        || document.getElementById('chatHistory')
-        || document.getElementById('supportChatMessages')
-        || document.querySelector('#cabChatSection [style*="overflow-y"]')
-        || document.querySelector('#tab-chat [style*="overflow-y"]');
-}
-
-function getChatInputBox() {
-    return document.getElementById('chatInput')
-        || document.getElementById('supportChatInput')
-        || document.querySelector('#cabChatSection input[type="text"]')
-        || document.querySelector('#tab-chat input[type="text"]');
-}
-
 function renderChatMessage(text, isUser, save = true) {
-    const chatBox = getChatContainer();
+    const chatBox = document.getElementById('chatMessagesArea');
     if (!chatBox) return;
 
     const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'msg user' : 'msg support';
     msgDiv.style.cssText = isUser
         ? 'align-self: flex-end; margin-left: auto; background: #2d4233; color: #fff; padding: 10px 14px; border-radius: 12px 12px 2px 12px; max-width: 78%; width: fit-content; font-size: 14px; line-height: 1.4; word-break: break-word; margin-bottom: 8px;'
         : 'align-self: flex-start; margin-right: auto; background: #1e2923; color: #e2e8f0; padding: 10px 14px; border-radius: 12px 12px 12px 2px; max-width: 78%; width: fit-content; font-size: 14px; line-height: 1.4; border: 1px solid rgba(163,230,53,0.2); word-break: break-word; margin-bottom: 8px;';
@@ -2380,7 +2366,7 @@ function renderChatMessage(text, isUser, save = true) {
 }
 
 function loadSavedChatHistory() {
-    const chatBox = getChatContainer();
+    const chatBox = document.getElementById('chatMessagesArea');
     if (!chatBox || chatBox.dataset.loaded === '1') return;
     chatBox.dataset.loaded = '1';
 
@@ -2390,7 +2376,7 @@ function loadSavedChatHistory() {
 }
 
 function sendChatMessage() {
-    const input = getChatInputBox();
+    const input = document.getElementById('chatInputText');
     if (!input) return;
     const text = input.value.trim();
     if (!text) return;
@@ -2413,12 +2399,20 @@ function sendChatMessage() {
     }).catch(() => {});
 }
 
-window.sendSupportMessage = sendChatMessage;
 window.sendChatMessage = sendChatMessage;
+window.sendSupportMessage = sendChatMessage;
+
+// Enter ღილაკზე დაჭერითაც გაიგზავნოს
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && document.activeElement && document.activeElement.id === 'chatInputText') {
+        e.preventDefault();
+        sendChatMessage();
+    }
+});
 
 // ყოველ 3 წამში ტელეგრამიდან პირდაპირ წამოიღებს Reply პასუხებს
 setInterval(() => {
-    const chatBox = getChatContainer();
+    const chatBox = document.getElementById('chatMessagesArea');
     if (!chatBox) return;
     loadSavedChatHistory();
 
