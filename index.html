@@ -1608,7 +1608,7 @@ function addNewFineFields(fineObj = {}) {
                 });
             };
 
-            if (file.type.startsWith('video/')) {
+  if (file.type.startsWith('video/')) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
                     uploadToDrive(evt.target.result, file.type, file.name);
@@ -1634,32 +1634,7 @@ function addNewFineFields(fineObj = {}) {
                 reader.readAsDataURL(file);
             }
         });
-}
-
-function saveAdminData(event) {
-  if (event) event.preventDefault();
-  const saveBtn = document.querySelector('#adminModal button[type="submit"]');
-  const origBtnText = saveBtn ? saveBtn.innerHTML : 'მონაცემების დადასტურება და გამოქვეყნება ✅';
-
-  const rawSearchInput = document.getElementById('adminTargetId').value.toString().trim();
-  const targetPid = (currentSelectedAdminUser && currentSelectedAdminUser.pid) ? currentSelectedAdminUser.pid.toString().trim() : rawSearchInput;
-  const targetName = document.getElementById('adminTargetName').value.trim();
-  const targetCar = document.getElementById('adminTargetCar').value.toUpperCase().trim();
-  const targetTech = document.getElementById('adminTargetTech').value.toUpperCase().trim();
-  const targetPhone = document.getElementById('adminTargetPhone').value.trim();
-  const techStatus = document.getElementById('adminInputTechStatus').value;
-  const noFineChecked = document.getElementById('adminNoFineCheck').checked;
-
-  if (!targetCar) {
-    alert("❌ შეიყვანეთ მანქანის ნომერი!");
-    return;
-  }
-
-  if (saveBtn) {
-    saveBtn.innerHTML = '⏳ ინახება და ქვეყნდება...';
-    saveBtn.disabled = true;
-  }
-
+}         
   let finesArray = [];
   if (!noFineChecked) {
     document.querySelectorAll('.fine-item-box').forEach(box => {
