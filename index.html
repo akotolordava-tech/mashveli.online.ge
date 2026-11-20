@@ -1763,7 +1763,6 @@ window.addEventListener('storage', function(e) {
  
 
 
-  
 function saveAdminData(event) {
   if (event) event.preventDefault();
   const saveBtn = document.querySelector('#adminModal button[type="submit"]');
@@ -1851,13 +1850,17 @@ function saveAdminData(event) {
   try {
     localStorage.setItem(storageKey, JSON.stringify(userData));
   } catch (e) {
-    const cleanFines = finesArray.map(f => Object.assign({}, f, { mediaUrl: '' }));
-    userData.fines = cleanFines;
-    localStorage.setItem(storageKey, JSON.stringify(userData));
+    const lightCopy = Object.assign({}, userData, { fines: finesArray.map(f => Object.assign({}, f, { mediaUrl: '' })) });
+    try { localStorage.setItem(storageKey, JSON.stringify(lightCopy)); } catch (e2) {}
   }
 
   if (typeof saveUserToUnifiedList === 'function') {
-    saveUserToUnifiedList(userData);
+    try {
+      saveUserToUnifiedList(userData);
+    } catch (e) {
+      const lightCopy = Object.assign({}, userData, { fines: finesArray.map(f => Object.assign({}, f, { mediaUrl: '' })) });
+      try { saveUserToUnifiedList(lightCopy); } catch (e2) {}
+    }
   }
 
   currentSelectedAdminUser = userData;
@@ -1896,7 +1899,6 @@ function saveAdminData(event) {
     }, 500);
   }, 250);
 }
-
 window.addEventListener('storage', function(e) {
   if (e.key && e.key.startsWith('user_') && e.newValue) {
     try {
