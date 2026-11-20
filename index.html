@@ -951,17 +951,17 @@
   document.getElementById('cabinetDashboard').style.display = 'block';
   startLiveCountdown(savedData.timestamp, savedData.days);
 }
-    function renderMediaHTML(mediaUrl, mediaType) {
+ function renderMediaHTML(mediaUrl, mediaType) {
             if (!mediaUrl) return '';
             const isDrivePreview = mediaUrl.includes('drive.google.com') && mediaUrl.includes('/preview');
             if (isDrivePreview) {
-                return `<div style="margin-top: 10px;"><iframe src="${mediaUrl}" style="width:100%; height:240px; border-radius:10px; border:1px solid #244734; background:#000;" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
+                return `<div style="margin-top:12px;"><iframe src="${mediaUrl}" style="width:100%; height:420px; border-radius:12px; border:1px solid #244734; background:#000;" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
             }
             if ((mediaType && mediaType.startsWith('video/')) || mediaUrl.startsWith('data:video/')) {
-                return `<div style="margin-top: 10px;"><video src="${mediaUrl}" controls class="fine-media-preview"></video></div>`;
+                return `<div style="margin-top:12px;"><video src="${mediaUrl}" controls playsinline style="width:100%; max-height:460px; border-radius:12px; background:#000; object-fit:contain;"></video></div>`;
             }
-            return `<div style="margin-top: 10px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" class="fine-media-preview" alt="Fine image" /></a></div>`;
-        }   
+            return `<div style="margin-top:12px;"><a href="${mediaUrl}" target="_blank"><img src="${mediaUrl}" style="width:100%; max-height:460px; border-radius:12px; object-fit:contain; background:#000;" alt="Fine image" /></a></div>`;
+        }  
 
 function parseGeoDate(dateStr) {
   const parts = (dateStr || '').trim().split('.');
@@ -1283,11 +1283,11 @@ function addNewFineFields(fineObj = {}) {
   const mediaType = fineObj.mediaType || '';
 
   let previewArea = '';
-  if (mediaUrl) {
-    previewArea = mediaType && mediaType.startsWith('video/')
-      ? `<video src="${mediaUrl}" controls style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;"></video>`
-      : `<img src="${mediaUrl}" style="max-width: 100%; max-height: 150px; margin-top: 10px; border-radius: 8px; display: block;" />`;
-  }
+ if (mediaUrl) {
+            previewArea = mediaType && mediaType.startsWith('video/')
+                ? `<video src="${mediaUrl}" controls playsinline style="width: 100%; max-height: 320px; margin-top: 10px; border-radius: 8px; display: block; background: #000; object-fit: contain;"></video>`
+                : `<img src="${mediaUrl}" style="width: 100%; max-height: 320px; margin-top: 10px; border-radius: 8px; display: block; background: #000; object-fit: contain;" />`;
+        }
 
   div.innerHTML = `
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
