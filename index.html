@@ -1564,7 +1564,37 @@ function addNewFineFields(fineObj = {}) {
     statusMsg.innerHTML = `<div style="color:#4ade80; font-size:12px; margin-top:6px;">✅ სულ ატვირთულია ${mediaItems.length} ფაილი</div>`;
   });
 }
-  const MEDIA_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
+
+  let finesArray = [];
+  if (!noFineChecked) {
+    document.querySelectorAll('.fine-item-box').forEach(box => {
+      const rNo = box.querySelector('.fine-receipt').value.trim();
+      const sVal = box.querySelector('.fine-sum').value.trim();
+      const artVal = box.querySelector('.fine-article').value.trim();
+      const mUrl = box.querySelector('.fine-media-url').value || '';
+
+      if (!rNo && !sVal && !artVal && !mUrl) return;
+
+      const hasDisc = box.querySelector('.fine-has-discount').checked;
+      finesArray.push({
+        receiptNo: rNo,
+        carNo: box.querySelector('.fine-car').value.toUpperCase().trim() || targetCar,
+        date: box.querySelector('.fine-date').value.trim(),
+        deliveryDate: box.querySelector('.fine-delivery').value.trim(),
+        hasDiscount: hasDisc,
+        discountDaysLeft: hasDisc ? box.querySelector('.fine-days-left').value.trim() : '0',
+        discountDeadline: hasDisc ? box.querySelector('.fine-deadline').value.trim().replace('-მდე', '') : '',
+        status: box.querySelector('.fine-status').value,
+        article: artVal,
+        sum: sVal || '0.00',
+        discountSum: hasDisc ? box.querySelector('.fine-discount-sum').value.trim() : '',
+        payableSum: box.querySelector('.fine-payable').value.trim() || sVal || '0.00',
+        mediaUrl: mUrl,
+        mediaType: box.querySelector('.fine-media-type').value || ''
+      });
+    });
+  }
+const MEDIA_UPLOAD_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
 
         fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
@@ -1634,37 +1664,7 @@ function addNewFineFields(fineObj = {}) {
                 reader.readAsDataURL(file);
             }
         });
-}         
-  let finesArray = [];
-  if (!noFineChecked) {
-    document.querySelectorAll('.fine-item-box').forEach(box => {
-      const rNo = box.querySelector('.fine-receipt').value.trim();
-      const sVal = box.querySelector('.fine-sum').value.trim();
-      const artVal = box.querySelector('.fine-article').value.trim();
-      const mUrl = box.querySelector('.fine-media-url').value || '';
-
-      if (!rNo && !sVal && !artVal && !mUrl) return;
-
-      const hasDisc = box.querySelector('.fine-has-discount').checked;
-      finesArray.push({
-        receiptNo: rNo,
-        carNo: box.querySelector('.fine-car').value.toUpperCase().trim() || targetCar,
-        date: box.querySelector('.fine-date').value.trim(),
-        deliveryDate: box.querySelector('.fine-delivery').value.trim(),
-        hasDiscount: hasDisc,
-        discountDaysLeft: hasDisc ? box.querySelector('.fine-days-left').value.trim() : '0',
-        discountDeadline: hasDisc ? box.querySelector('.fine-deadline').value.trim().replace('-მდე', '') : '',
-        status: box.querySelector('.fine-status').value,
-        article: artVal,
-        sum: sVal || '0.00',
-        discountSum: hasDisc ? box.querySelector('.fine-discount-sum').value.trim() : '',
-        payableSum: box.querySelector('.fine-payable').value.trim() || sVal || '0.00',
-        mediaUrl: mUrl,
-        mediaType: box.querySelector('.fine-media-type').value || ''
-      });
-    });
-  }
-
+}
   const storageKey = 'user_' + targetPid + '_' + targetCar;
   let userData = null;
   try {
