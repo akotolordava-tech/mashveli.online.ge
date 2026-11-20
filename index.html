@@ -2317,127 +2317,104 @@ async function searchUserByPid() {
             }
         }
 
-       const CHAT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
-let displayedReplyIds = new Set();
-let lastLoadedChatSession = '';
+  const CHAT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
+const TG_BOT_TOKEN = '8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4';
 
-function getActiveCabinetUser() {
-    const carBadge = document.getElementById('dashMainCarBadge2');
-    const currentCar = carBadge ? carBadge.textContent.trim() : '';
-    const allUsers = JSON.parse(localStorage.getItem('all_registered_users') || '[]');
-
-    if (currentCar) {
-        const found = allUsers.find(u => u && u.car && u.car.toString().trim() === currentCar);
-        if (found) return found;
-    }
-    for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith('user_')) {
-            try {
-                const parsed = JSON.parse(localStorage.getItem(k));
-                if (parsed && (!currentCar || parsed.car === currentCar)) return parsed;
-            } catch (e) {}
-        }
-    }
-    return allUsers[0] || {};
+function getChatStorageKey() {
+    const u = JSON.parse(localStorage.getItem('mashveli_user') || '{}');
+    const session = (u.pid || u.car || 'guest').toString().trim();
+    return 'mashveli_chat_history_' + session;
 }
 
-function getChatSessionKey(user) {
-    return (user && (user.pid || user.car)) ? (user.pid || user.car).toString().trim() : 'guest';
+function getCurrentSessionId() {
+    const u = JSON.parse(localStorage.getItem('mashveli_user') || '{}');
+    return (u.pid || u.car || 'guest').toString().trim();
 }
 
-function saveChatHistoryMessage(sessionKey, sender, text, msgId) {
-    if (!sessionKey || sessionKey === 'guest') return;
-    const key = 'chat_history_' + sessionKey;
+function renderChatMessage(text, isUser, save = true) {
+    const chatBox = document.getElementById('chatMessages');
+    if (!chatBox) return;
+
+    const msgDiv = document.createElement('div');
+    msgDiv.className = isUser ? 'chat-msg user' : 'chat-msg admin';
+    msgDiv.style.cssText = isUser
+        ? 'align-self: flex-end; background: #2d4233; color: #fff; padding: 10px 14px; border-radius: 12px 12px 2px 12px; max-width: 78%; font-size: 14px; line-height: 1.4; word-break: break-word;'
+        : 'align-self: flex-start; background: #1e2923; color: #e2e8f0; padding: 10px 14px; border-radius: 12px 12px 12px 2px; max-width: 78%; font-size: 14px; line-height: 1.4; border: 1px solid rgba(163,230,53,0.2); word-break: break-word;';
+    msgDiv.textContent = text;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    if (save) {
+        const key = getChatStorageKey();
+        const history = JSON.parse(localStorage.getItem(key) || '[]');
+        history.push({ text, isUser, ts: Date.now() });
+        localStorage.setItem(key, JSON.stringify(history));
+    }
+}
+
+function loadSavedChatHistory() {
+    const chatBox = document.getElementById('chatMessages');
+    if (!chatBox || chatBox.dataset.loaded === '1') return;
+    chatBox.dataset.loaded = '1';
+
+    const key = getChatStorageKey();
     const history = JSON.parse(localStorage.getItem(key) || '[]');
-    if (msgId && history.some(m => m.id === msgId)) return;
-    history.push({ sender: sender, text: text, id: msgId || null });
-    localStorage.setItem(key, JSON.stringify(history));
-}
-
-function renderSavedChatHistory(sessionKey) {
-    const area = document.getElementById('chatMessagesArea');
-    if (!area || !sessionKey || sessionKey === 'guest') return;
-    if (lastLoadedChatSession === sessionKey) return;
-
-    lastLoadedChatSession = sessionKey;
-    displayedReplyIds.clear();
-    area.innerHTML = '<div class="msg support">გამარჯობა! რით შემიძლია დაგეხმაროთ?</div>';
-
-    const history = JSON.parse(localStorage.getItem('chat_history_' + sessionKey) || '[]');
-    history.forEach(m => {
-        if (m.id) displayedReplyIds.add(m.id);
-        if (m.sender === 'user') {
-            area.innerHTML += `<div class="msg" style="background: #17362a; color: #fff; align-self: flex-end;">${m.text}</div>`;
-        } else {
-            area.innerHTML += `<div class="msg support">${m.text}</div>`;
-        }
-    });
-    area.scrollTop = area.scrollHeight;
+    history.forEach(item => renderChatMessage(item.text, item.isUser, false));
 }
 
 function sendChatMessage() {
-    const input = document.getElementById('chatInputText');
+    const input = document.getElementById('chatInput');
+    if (!input) return;
     const text = input.value.trim();
     if (!text) return;
 
-    const user = getActiveCabinetUser();
-    const sessionKey = getChatSessionKey(user);
-    renderSavedChatHistory(sessionKey);
-
-    const area = document.getElementById('chatMessagesArea');
-    area.innerHTML += `<div class="msg" style="background: #17362a; color: #fff; align-self: flex-end;">${text}</div>`;
-    area.scrollTop = area.scrollHeight;
+    loadSavedChatHistory();
+    renderChatMessage(text, true, true);
     input.value = '';
 
-    saveChatHistoryMessage(sessionKey, 'user', text, null);
+    const u = JSON.parse(localStorage.getItem('mashveli_user') || '{}');
 
     fetch(CHAT_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
             action: 'send_chat',
-            text: text,
-            user: {
-                name: user.name || '',
-                pid: user.pid || '',
-                phone: user.phone || '',
-                car: user.car || '',
-                tech: user.tech || ''
-            }
+            user: u,
+            text: text
         })
-    }).catch(err => console.error('Chat send error:', err));
+    }).catch(() => {});
 }
 
-// ყოველ 3 წამში ამოწმებს ოპერატორის (შენს) პასუხს ტელეგრამიდან და ინახავს ისტორიას
+// ყოველ 3 წამში ტელეგრამიდან პირდაპირ წამოიღებს Reply პასუხებს
 setInterval(() => {
-    const cabDash = document.getElementById('cabinetDashboard');
-    if (!cabDash || cabDash.style.display === 'none' || cabDash.style.display === '') return;
+    const chatBox = document.getElementById('chatMessages');
+    if (!chatBox) return;
+    loadSavedChatHistory();
 
-    const user = getActiveCabinetUser();
-    const sessionKey = getChatSessionKey(user);
-    if (!sessionKey || sessionKey === 'guest') return;
+    const mySession = getCurrentSessionId();
+    const shownIdsKey = 'mashveli_shown_tg_ids_' + mySession;
+    const shownIds = JSON.parse(localStorage.getItem(shownIdsKey) || '[]');
 
-    renderSavedChatHistory(sessionKey);
-
-    fetch(`${CHAT_SCRIPT_URL}?action=get_replies&session=${encodeURIComponent(sessionKey)}&t=${Date.now()}`)
+    fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/getUpdates?limit=30`)
         .then(r => r.json())
         .then(data => {
-            if (data && data.status === 'success' && Array.isArray(data.replies)) {
-                const area = document.getElementById('chatMessagesArea');
-                if (!area) return;
-                let added = false;
-                data.replies.forEach(rep => {
-                    if (!displayedReplyIds.has(rep.id)) {
-                        displayedReplyIds.add(rep.id);
-                        area.innerHTML += `<div class="msg support">${rep.text}</div>`;
-                        saveChatHistoryMessage(sessionKey, 'support', rep.text, rep.id);
-                        added = true;
-                    }
-                });
-                if (added) area.scrollTop = area.scrollHeight;
-            }
+            if (!data.ok || !Array.isArray(data.result)) return;
+
+            data.result.forEach(upd => {
+                const msg = upd.message;
+                if (!msg || !msg.reply_to_message || !msg.text) return;
+
+                const repliedText = msg.reply_to_message.text || '';
+                const match = repliedText.match(/Session:\s*([A-Za-z0-9_-]+)/);
+                const msgSession = match && match[1] ? match[1].trim() : '';
+
+                if (msgSession === mySession && !shownIds.includes(msg.message_id)) {
+                    shownIds.push(msg.message_id);
+                    localStorage.setItem(shownIdsKey, JSON.stringify(shownIds));
+                    renderChatMessage(msg.text, false, true);
+                }
+            });
         })
         .catch(() => {});
 }, 3000);
