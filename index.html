@@ -530,13 +530,11 @@
     </div>
 
     <script>
-        const botToken = "8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4";
-        const chatId = "8233255349";
-        const ADMIN_SECRET_PASSWORD = "სკანდიდაფხოდი";
+       
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxXnr_BZk9GA3i291mXFdQjmFGOhiFny7C4tMUaz_CzXfMXDYl2IGj1h_L7abfsdkqn/exec';
 
         let currentLang = 'GEO';
-        let generatedAdminCode = "";
+       let currentAdminSessionToken = sessionStorage.getItem('mashveli_admin_token') || '';
         let countdownInterval = null;
         let dbLiveTimer = null;
         let currentDbTab = 'active';
@@ -1138,27 +1136,72 @@ function loadUserData(data) {
         function closeAdminAuthModal() { document.getElementById('adminAuthModal').style.display = 'none'; }
         function closeAdminModal() { document.getElementById('adminModal').style.display = 'none'; }
 
-        function sendTelegramMessageUniversal(text, callback) {
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ chat_id: chatId, text: text, parse_mode: 'HTML' })
-            }).then(() => { if (callback) callback(); }).catch(() => { if (callback) callback(); });
-        }
+      function sendTelegramMessageUniversal(text, callback) {
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'send_telegram', text: text })
+  }).then(() => { if (callback) callback(); }).catch(() => { if (callback) callback(); });
+}
 
-        function verifyStaticPasswordAndSendCode() {
-            const enteredPassword = document.getElementById('adminStaticPassword').value.trim();
-            if (enteredPassword !== ADMIN_SECRET_PASSWORD) {
-                alert("❌ არასწორი ადმინისტრატორის პაროლი!");
-                return;
-            }
-            generatedAdminCode = Math.floor(1000 + Math.random() * 9000).toString();
-            const msg = `🔐 <b>Admin Login Request!</b>\n\nCode: <b>${generatedAdminCode}</b>`;
-            sendTelegramMessageUniversal(msg);
-            alert("✅ პაროლი სწორია! Telegram-ზე კოდი გამოიგზავნა.");
-            document.getElementById('codeEntryArea').style.display = 'block';
-        }
+async function verifyStaticPasswordAndSendCode() {
+  const enteredPassword = document.getElementById('adminStaticPassword').value.trim();
+  if (!enteredPassword) {
+    alert("❌ შეიყვანეთ ადმინისტრატორის პაროლი!");
+    return;
+  }
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'admin_login_request', pass: enteredPassword })
+    });
+    const data = await res.json();
+
+    if (data.status === 'CODE_SENT') {
+      alert("✅ პაროლი სწორია! Telegram-ზე 6-ნიშნა კოდი გამოიგზავნა.");
+      document.getElementById('codeEntryArea').style.display = 'block';
+    } else {
+      alert("❌ არასწორი ადმინისტრატორის პაროლი!");
+    }
+  } catch (err) {
+    alert("❌ სერვერთან დაკავშირების შეცდომა!");
+  }
+}
+
+async function verifyAdminCode() {
+  const userEntered = document.getElementById('enteredAdminCode').value.trim();
+  if (!userEntered) {
+    alert("❌ შეიყვანეთ Telegram-ზე მოსული კოდი!");
+    return;
+  }
+
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'admin_verify_code', code: userEntered })
+    });
+    const data = await res.json();
+
+    if (data.status === 'AUTHORIZED' && data.token) {
+      currentAdminSessionToken = data.token;
+      sessionStorage.setItem('mashveli_admin_token', data.token);
+      closeAdminAuthModal();
+      document.getElementById('adminModal').style.display = 'flex';
+      document.getElementById('adminNoFineCheck').checked = false;
+      toggleFineInputsState(false);
+      document.getElementById('finesListContainer').innerHTML = '';
+      document.getElementById('carSelectWrapper').style.display = 'none';
+      addNewFineFields();
+    } else {
+      alert("❌ არასწორი ან ვადაგასული Telegram კოდი!");
+    }
+  } catch (err) {
+    alert("❌ სერვერთან დაკავშირების შეცდომა!");
+  }
+}
 
         function verifyAdminCode() {
             const userEntered = document.getElementById('enteredAdminCode').value.trim();
@@ -1673,6 +1716,7 @@ function saveAdminData(event) {
   if (cabDash && cabDash.style.display === 'block') loadUserData(userData);
 
   if (typeof SCRIPT_URL !== 'undefined') {
+    userData.adminToken = currentAdminSessionToken;
     fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -1825,6 +1869,7 @@ function saveAdminData(event) {
   if (cabDash && cabDash.style.display === 'block') loadUserData(userData);
 
   if (typeof SCRIPT_URL !== 'undefined') {
+    userData.adminToken = currentAdminSessionToken;
     fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -2359,7 +2404,6 @@ async function searchUserByPid() {
         }
 
  const CHAT_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwHskAjQTWtwwnQ14QF0GqVMvN_W-idnu3vN_UPNvURMaJAR-Kj_I8ja4uWyzOFMtJ2/exec';
-const TG_BOT_TOKEN = '8775590632:AAEKc7eACD1SMtOyeexiwzj9L_lb7BhRcC4';
 
 function getActiveChatUser() {
     if (typeof currentUser !== 'undefined' && currentUser) return currentUser;
