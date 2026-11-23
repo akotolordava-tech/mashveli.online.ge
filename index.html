@@ -1203,20 +1203,7 @@ async function verifyAdminCode() {
   }
 }
 
-        function verifyAdminCode() {
-            const userEntered = document.getElementById('enteredAdminCode').value.trim();
-            if (userEntered === generatedAdminCode && generatedAdminCode !== "") {
-                closeAdminAuthModal();
-                document.getElementById('adminModal').style.display = 'flex';
-                document.getElementById('adminNoFineCheck').checked = false;
-                toggleFineInputsState(false);
-                document.getElementById('finesListContainer').innerHTML = '';
-                document.getElementById('carSelectWrapper').style.display = 'none';
-                addNewFineFields();
-            } else {
-                alert("❌ არასწორი Telegram კოდია!");
-            }
-        }
+   
 
         let foundUsersCache = [];
        
