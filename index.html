@@ -101,7 +101,104 @@
         .footer-bottom { background-color: #11221b; color: #889990; text-align: center; padding: 20px; font-size: 13px; }
     </style>
 </head>
+    <script>
+const wcTranslations = {
+    GEO: {
+        title: "მოგესალმებით mashveli.online.ge-ზე",
+        main: "ჩვენ ვართ <b>mashveli.online.ge</b>, სადაც ჯარიმებისა და ტექინსპექტირების ვადების კონტროლს შეძლებთ, აგრეთვე შეგიძლიათ სხვა ავტო-მომსახურების სერვისები მიიღოთ.",
+        privacy: "მომსახურების მისაღებად თქვენ გვაძლევთ უფლებას, შევინახოთ და დავამუშაოთ თქვენი პერსონალური ინფორმაცია (პირადი ნომერი, ავტომობილის ნომერი, ტელეფონი) ჯარიმებისა და ტექინსპექტირების შემოწმების მიზნით.",
+        read: "<b>გავეცანი</b> — წავიკითხე და გავეცანი პლატფორმის მუშაობის წესებსა და პირობებს.",
+        agree: "<b>ვეთანხმები</b> — ვაძლევ თანხმობას ჩემი პერსონალური მონაცემების შენახვასა და შემოწმებაზე.",
+        btn: "გაგრძელება"
+    },
+    ENG: {
+        title: "Welcome to mashveli.online.ge",
+        main: "We are <b>mashveli.online.ge</b>, where you can monitor traffic fines and periodic technical inspection deadlines, as well as access other roadside assistance services.",
+        privacy: "To use our services, you authorize us to store and process your personal information (Personal ID, vehicle plate number, phone number) for checking traffic fines and technical inspection status.",
+        read: "<b>I have read</b> — I have read and understood the platform's terms and conditions.",
+        agree: "<b>I agree</b> — I consent to the storage and processing of my personal data for verification purposes.",
+        btn: "Continue"
+    },
+    RUS: {
+        title: "Добро пожаловать на mashveli.online.ge",
+        main: "Мы — <b>mashveli.online.ge</b>, где вы можете контролировать штрафы и сроки техосмотра, а также воспользоваться другими автоуслугами.",
+        privacy: "Для получения услуг вы даете нам право хранить и обрабатывать вашу персональную информацию (личный номер, госномер автомобиля, телефон) с целью проверки штрафов и техосмотра.",
+        read: "<b>Ознакомлен(а)</b> — Я прочитал(а) и ознакомился(лась) с правилами и условиями платформы.",
+        agree: "<b>Согласен(на)</b> — Даю согласие на хранение и проверку моих персональных данных.",
+        btn: "Продолжить"
+    }
+};
+
+function toggleWelcomeContinueBtn() {
+    const readChecked = document.getElementById('wcCheckRead').checked;
+    const agreeChecked = document.getElementById('wcCheckAgree').checked;
+    const btn = document.getElementById('wcContinueBtn');
+    if (readChecked && agreeChecked) {
+        btn.disabled = false;
+        btn.style.background = '#d9f96b';
+        btn.style.color = '#0b1c12';
+        btn.style.cursor = 'pointer';
+    } else {
+        btn.disabled = true;
+        btn.style.background = '#2d3e34';
+        btn.style.color = '#7a8f82';
+        btn.style.cursor = 'not-allowed';
+    }
+}
+
+function acceptWelcomeConsent() {
+    if (!document.getElementById('wcCheckRead').checked || !document.getElementById('wcCheckAgree').checked) return;
+    localStorage.setItem('mashveli_consent_accepted_v1', 'true');
+    document.getElementById('welcomeConsentModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('mashveli_consent_accepted_v1') !== 'true') {
+        const lang = (typeof currentLang !== 'undefined' && wcTranslations[currentLang]) ? currentLang : 'GEO';
+        const t = wcTranslations[lang];
+        document.getElementById('wcTitle').innerHTML = t.title;
+        document.getElementById('wcMainText').innerHTML = t.main;
+        document.getElementById('wcPrivacyNote').innerHTML = t.privacy;
+        document.getElementById('wcLabelRead').innerHTML = t.read;
+        document.getElementById('wcLabelAgree').innerHTML = t.agree;
+        document.getElementById('wcContinueBtn').innerText = t.btn;
+        document.getElementById('welcomeConsentModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+});
+</script>
 <body>
+    <!-- მისალმებისა და თანხმობის ფანჯარა -->
+<div id="welcomeConsentModal" style="display: none; position: fixed; inset: 0; background: rgba(5, 14, 9, 0.92); backdrop-filter: blur(8px); z-index: 99999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #102418; border: 1px solid rgba(217, 249, 107, 0.35); border-radius: 20px; max-width: 520px; width: 100%; padding: 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); color: #ffffff; font-family: inherit;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px;">
+            <span style="font-size: 24px;">🛡️</span>
+            <h3 id="wcTitle" style="margin: 0; font-size: 20px; color: #d9f96b; font-weight: 700;">მოგესალმებით mashveli.online.ge-ზე</h3>
+        </div>
+        <p id="wcMainText" style="font-size: 15px; line-height: 1.6; color: #e2e8f0; margin-bottom: 14px;">
+            ჩვენ ვართ <b>mashveli.online.ge</b>, სადაც ჯარიმებისა და ტექინსპექტირების ვადების კონტროლს შეძლებთ, აგრეთვე შეგიძლიათ სხვა ავტო-მომსახურების სერვისები მიიღოთ.
+        </p>
+        <div style="background: rgba(255, 255, 255, 0.05); border-left: 3px solid #d9f96b; padding: 12px 14px; border-radius: 8px; font-size: 13.5px; line-height: 1.55; color: #cbd5e1; margin-bottom: 20px;">
+            <span id="wcPrivacyNote">
+                მომსახურების მისაღებად თქვენ გვაძლევთ უფლებას, შევინახოთ და დავამუშაოთ თქვენი პერსონალური ინფორმაცია (პირადი ნომერი, ავტომობილის ნომერი, ტელეფონი) ჯარიმებისა და ტექინსპექტირების შემოწმების მიზნით.
+            </span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px;">
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 14.5px; color: #f8fafc; user-select: none;">
+                <input type="checkbox" id="wcCheckRead" onchange="toggleWelcomeContinueBtn()" style="width: 19px; height: 19px; margin-top: 2px; accent-color: #d9f96b; cursor: pointer;">
+                <span id="wcLabelRead"><b>გავეცანი</b> — წავიკითხე და გავეცანი პლატფორმის მუშაობის წესებსა და პირობებს.</span>
+            </label>
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 14.5px; color: #f8fafc; user-select: none;">
+                <input type="checkbox" id="wcCheckAgree" onchange="toggleWelcomeContinueBtn()" style="width: 19px; height: 19px; margin-top: 2px; accent-color: #d9f96b; cursor: pointer;">
+                <span id="wcLabelAgree"><b>ვეთანხმები</b> — ვაძლევ თანხმობას ჩემი პერსონალური მონაცემების შენახვასა და შემოწმებაზე.</span>
+            </label>
+        </div>
+        <button id="wcContinueBtn" onclick="acceptWelcomeConsent()" disabled style="width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 16px; font-weight: 700; background: #2d3e34; color: #7a8f82; cursor: not-allowed; transition: all 0.25s ease;">
+            გაგრძელება
+        </button>
+    </div>
+</div>
     <header>
         <div class="header-left">
           <a href="#" id="footerText" class="logo">🚗 Driver Assistant</a>
