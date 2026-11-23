@@ -2492,10 +2492,10 @@ setInterval(() => {
     const shownIdsKey = 'mashveli_shown_tg_ids_' + mySession;
     const shownIds = JSON.parse(localStorage.getItem(shownIdsKey) || '[]');
 
-    fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/getUpdates?limit=30`)
-        .then(r => r.json())
-        .then(data => {
-            if (!data.ok || !Array.isArray(data.result)) return;
+  fetch(CHAT_SCRIPT_URL)
+  .then(r => r.json())
+  .then(data => {
+    if (!data.ok || !Array.isArray(data.result)) return;
 
             data.result.forEach(upd => {
                 const msg = upd.message;
